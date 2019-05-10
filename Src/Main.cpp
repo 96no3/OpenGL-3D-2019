@@ -3,22 +3,26 @@
 */
 #include <iostream>
 
+#define STACK_SIZE 10
+
+/**
+* スタッククラスの実装
+*/
 class Stack {
 public:
-
 	void push(int num) {
-		sArray[count] = num;
-		count++;
+		sArray[dataSize] = num;
+		dataSize < STACK_SIZE ? dataSize++ : STACK_SIZE;
 	}
 
 	int pop() {	
-		count > 0 ? count-- : 0;		
-		return sArray[count];
+		dataSize > 0 ? dataSize-- : 0;
+		return sArray[dataSize];
 	}	
 
 private:
-	unsigned int sArray[10];
-	unsigned count = 0;
+	int sArray[STACK_SIZE];
+	unsigned dataSize = 0;
 };
 
 
