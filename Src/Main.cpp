@@ -11,17 +11,17 @@
 class Stack {
 public:
 	void push(int num) {
-		sArray[dataSize] = num;
+		stackArray[dataSize] = num;
 		dataSize < STACK_SIZE ? dataSize++ : STACK_SIZE;
 	}
 
 	int pop() {	
 		dataSize > 0 ? dataSize-- : 0;
-		return sArray[dataSize];
+		return stackArray[dataSize];
 	}	
 
 private:
-	int sArray[STACK_SIZE];
+	int stackArray[STACK_SIZE];
 	unsigned dataSize = 0;
 };
 
