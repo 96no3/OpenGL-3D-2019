@@ -4,6 +4,7 @@
 #include "MainGameScene.h"
 #include "StateScene.h"
 #include "GameOverScene.h"
+#include "GLFWEW.h"
 
 ///**
 //* コンストラクタ.
@@ -14,14 +15,16 @@
 * プレイヤーの入力を処理する.
 */
 void MainGameScene::ProcessInput() {
-	if (!flag) {
-		flag = true;
-		SceneStack::Instance().Push(std::make_shared<StateScene>());
+	GLFWEW::Window& window = GLFWEW::Window::Instance();
+	if (window.GetGamePad().buttonDown & GamePad::START) {
+		if (!flag) {
+			flag = true;
+			SceneStack::Instance().Push(std::make_shared<StateScene>());
+		}
+		else {
+			SceneStack::Instance().Replace(std::make_shared<GameOverScene>());
+		}
 	}
-	else {
-		SceneStack::Instance().Replace(std::make_shared<GameOverScene>());
-	}
-	
 }
 
 ///**

@@ -3,6 +3,7 @@
 */
 #include "TitleScene.h"
 #include "MainGameScene.h"
+#include "GLFWEW.h"
 
 ///**
 //* コンストラクタ.
@@ -13,7 +14,10 @@
 * プレイヤーの入力を処理する.
 */
 void TitleScene::ProcessInput() {
-	SceneStack::Instance().Replace(std::make_shared<MainGameScene>());
+	GLFWEW::Window & window = GLFWEW::Window::Instance();
+	if (window.GetGamePad().buttonDown & GamePad::START) {
+		SceneStack::Instance().Replace(std::make_shared<MainGameScene>());
+	}
 }
 
 ///**

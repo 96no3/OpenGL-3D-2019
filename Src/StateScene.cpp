@@ -2,6 +2,7 @@
 * @file StateScene.cpp
 */
 #include "StateScene.h"
+#include "GLFWEW.h"
 
 ///**
 //* コンストラクタ.
@@ -12,7 +13,10 @@
 * プレイヤーの入力を処理する.
 */
 void StateScene::ProcessInput() {
-	SceneStack::Instance().Pop();
+	GLFWEW::Window& window = GLFWEW::Window::Instance();
+	if (window.GetGamePad().buttonDown & GamePad::START) {
+		SceneStack::Instance().Pop();
+	}
 }
 
 ///**
