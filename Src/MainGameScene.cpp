@@ -16,15 +16,21 @@
 */
 void MainGameScene::ProcessInput() {
 	GLFWEW::Window& window = GLFWEW::Window::Instance();
-	if (window.GetGamePad().buttonDown & GamePad::START) {
-		if (!flag) {
-			flag = true;
-			SceneStack::Instance().Push(std::make_shared<StateScene>());
-		}
-		else {
-			SceneStack::Instance().Replace(std::make_shared<GameOverScene>());
-		}
+	if (window.GetGamePad().buttonDown & GamePad::X) {
+		SceneStack::Instance().Push(std::make_shared<StateScene>());
 	}
+	else if (window.GetGamePad().buttonDown & GamePad::START) {
+		SceneStack::Instance().Replace(std::make_shared<GameOverScene>());
+	}
+	
+	/*if (!flag) {
+		flag = true;
+		SceneStack::Instance().Push(std::make_shared<StateScene>());
+	}
+	else {
+		SceneStack::Instance().Replace(std::make_shared<GameOverScene>());
+	}*/
+	
 }
 
 ///**

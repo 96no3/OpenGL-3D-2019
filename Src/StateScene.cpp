@@ -14,7 +14,7 @@
 */
 void StateScene::ProcessInput() {
 	GLFWEW::Window& window = GLFWEW::Window::Instance();
-	if (window.GetGamePad().buttonDown & GamePad::START) {
+	if (window.GetGamePad().buttonDown & GamePad::X) {
 		SceneStack::Instance().Pop();
 	}
 }

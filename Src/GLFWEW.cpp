@@ -227,8 +227,8 @@ namespace GLFWEW {
 			}keyMap[] = {
 				{ GLFW_KEY_A, GamePad::A },
 				{ GLFW_KEY_S, GamePad::B },
-				{ GLFW_KEY_Q, GamePad::X },
-				{ GLFW_KEY_W, GamePad::Y },
+				{ GLFW_KEY_X, GamePad::X },
+				{ GLFW_KEY_C, GamePad::Y },
 				{ GLFW_KEY_E, GamePad::L },
 				{ GLFW_KEY_R, GamePad::R },
 				{ GLFW_KEY_ENTER, GamePad::START },
