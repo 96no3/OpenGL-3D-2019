@@ -133,9 +133,9 @@ void SceneStack::Pop(){
 	}
 	Current().Stop();
 	Current().Finalize();
-	const std::string SceneName = Current().Name();
+	const std::string sceneName = Current().Name();
 	stack.pop_back();
-	std::cout << "「シーン　ポップ」" << SceneName << "\n";
+	std::cout << "「シーン　ポップ」" << sceneName << "\n";
 	if (!stack.empty()) {
 		Current().Play();
 	}
@@ -147,18 +147,18 @@ void SceneStack::Pop(){
 * @param p 新しいシーン.
 */
 void SceneStack::Replace(ScenePtr p){
-	std::string SceneName = "(Empty)";
+	std::string sceneName = "(Empty)";
 	if (stack.empty()) {
 		std::cout << "「シーン　リプレース」[警告]シーンスタックが空です." << "\n";
 	}
 	else {
-		SceneName = Current().Name();
+		sceneName = Current().Name();
 		Current().Stop();
 		Current().Finalize();
 		stack.pop_back();
 	}
 	stack.push_back(p);
-	std::cout << "「シーン　リプレース」" << SceneName << "->" << p->Name() << "\n";
+	std::cout << "「シーン　リプレース」" << sceneName << "->" << p->Name() << "\n";
 	Current().Initialize();
 	Current().Play();
 }
@@ -206,11 +206,15 @@ bool SceneStack::Empty() const{
 * @param deltaTime 前回の更新からの経過時間（秒）.
 */
 void SceneStack::Update(float deltaTime){
-	for (ScenePtr& e : stack) {
-		e->ProcessInput();
+	
+	if (!Empty()) {
+		Current().ProcessInput();
 	}
+
 	for (ScenePtr& e : stack) {
-		e->Update(deltaTime);
+		if (e->IsActive()) {
+			e->Update(deltaTime);
+		}		
 	}
 }
 
