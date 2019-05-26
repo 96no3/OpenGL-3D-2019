@@ -132,7 +132,7 @@
     <ClCompile Include="Src\Scene.cpp" />
     <ClCompile Include="Src\Shader.cpp" />
     <ClCompile Include="Src\Sprite.cpp" />
-    <ClCompile Include="Src\StateScene.cpp" />
+    <ClCompile Include="Src\StatusScene.cpp" />
     <ClCompile Include="Src\Texture.cpp" />
     <ClCompile Include="Src\TitleScene.cpp" />
   </ItemGroup>
@@ -146,7 +146,7 @@
     <ClInclude Include="Src\Scene.h" />
     <ClInclude Include="Src\Shader.h" />
     <ClInclude Include="Src\Sprite.h" />
-    <ClInclude Include="Src\StateScene.h" />
+    <ClInclude Include="Src\StatusScene.h" />
     <ClInclude Include="Src\Texture.h" />
     <ClInclude Include="Src\TitleScene.h" />
   </ItemGroup>

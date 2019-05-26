@@ -29,9 +29,6 @@
     <ClCompile Include="Src\MainGameScene.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="Src\StateScene.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
     <ClCompile Include="Src\GameOverScene.cpp">
       <Filter>Src</Filter>
     </ClCompile>
@@ -50,6 +47,9 @@
     <ClCompile Include="Src\Shader.cpp">
       <Filter>Src</Filter>
     </ClCompile>
+    <ClCompile Include="Src\StatusScene.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Scene.h">
@@ -59,9 +59,6 @@
       <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="Src\MainGameScene.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\StateScene.h">
       <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="Src\GameOverScene.h">
@@ -86,6 +83,9 @@
       <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="Src\Shader.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\StatusScene.h">
       <Filter>Src</Filter>
     </ClInclude>
   </ItemGroup>

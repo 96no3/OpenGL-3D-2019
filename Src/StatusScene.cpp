@@ -1,18 +1,18 @@
 /**
-* @file StateScene.cpp
+* @file StatusScene.cpp
 */
-#include "StateScene.h"
+#include "StatusScene.h"
 #include "GLFWEW.h"
 
 ///**
 //* コンストラクタ.
 //*/
-//StateScene::StateScene() :Scene("StateScene") {}
+//StatusScene::StatusScene() :Scene("StatusScene") {}
 
 /**
 * プレイヤーの入力を処理する.
 */
-void StateScene::ProcessInput() {
+void StatusScene::ProcessInput() {
 	GLFWEW::Window& window = GLFWEW::Window::Instance();
 	if (window.GetGamePad().buttonDown & GamePad::X) {
 		SceneStack::Instance().Pop();

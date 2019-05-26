@@ -22,7 +22,7 @@ bool TitleScene::Initialize()
 	GLenum result = glGetError();
 	sprites.reserve(100);
 
-	Sprite spr(Texture::Image2D::Create("Res/Images/TitleBack.tga"));
+	Sprite spr(Texture::Image2D::Create("Res/Images/TitleBg.tga"));
 
 	spr.Scale(glm::vec2(2));
 	sprites.push_back(spr);
