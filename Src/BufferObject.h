@@ -3,7 +3,7 @@
 */
 #ifndef BUFFEROBJECT_H_INCLUDED
 #define BUFFEROBJECT_H_INCLUDED
-#include "GL/glew.h"
+#include <GL/glew.h>
 
 /**
 * 汎用バッファオブジェクト（VBO,IBOなど）
@@ -18,8 +18,8 @@ public:
 	bool Create(GLenum target, GLsizeiptr size, const GLvoid* data = nullptr, GLenum usage = GL_STATIC_DRAW);
 	bool BufferSubData(GLintptr offset, GLsizeiptr size, const GLvoid* data);
 	void Destroy();
-	GLuint Id() { return id; }
-	GLsizeiptr Size() { return size; }
+	GLuint Id() const { return id; }
+	GLsizeiptr Size() const { return size; }
 
 private:
 	GLenum target = 0;	///< バッファの種類.

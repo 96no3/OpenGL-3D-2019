@@ -15,7 +15,7 @@
 * @retval true  çÏê¨ê¨å˜.
 * @retval false çÏê¨é∏îs.
 */
-bool BufferObject::Create(GLenum target, GLsizeiptr size, const GLvoid* data = nullptr, GLenum usage = GL_STATIC_DRAW) {
+bool BufferObject::Create(GLenum target, GLsizeiptr size, const GLvoid* data, GLenum usage) {
 	Destroy();
 	glGenBuffers(1, &id);
 	glBindBuffer(target, id);
@@ -148,7 +148,7 @@ void VertexArrayObject::Unbind() const {
 *
 * @sa Bind(), Unbind(), ResetVertexAttribPointer()
 */
-void VertexArrayObject::VertexAttribPointer(GLuint index, GLint size,	GLenum type, GLboolean normalized,
+void VertexArrayObject::VertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized,
 											GLsizei stride, size_t offset) const {
 	glEnableVertexAttribArray(index);
 	glVertexAttribPointer(index, size, type, normalized, stride, reinterpret_cast<GLvoid*>(offset));
@@ -164,4 +164,5 @@ void VertexArrayObject::ResetVertexAttribPointer() const {
 	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &maxAttr);
 	for (int i = 0; i < maxAttr; ++i) {
 		glDisableVertexAttribArray(i);
+	}
 }

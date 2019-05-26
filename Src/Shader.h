@@ -3,7 +3,7 @@
 */
 #ifndef SHADER_H_INCLUDED
 #define SHADER_H_INCLUDED
-#include <GL/glew.h>
+#include <gl/glew.h>
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 #include <memory>
@@ -16,7 +16,7 @@ namespace Shader {
 	using ProgramPtr = std::shared_ptr<Program>;
 
 	GLuint Build(const GLchar* vsCode, const GLchar* fsCode);
-	GLuint BuildFromFile(const char* vsPath, const char* fsPath);
+	GLuint BuildFromFile(const GLchar* vsPath, const GLchar* fsPath);
 
 	// ŠÂ‹«Œõ.
 	struct AmbientLight {

@@ -79,6 +79,10 @@ namespace GLFWEW {
 			std::cerr << "ERROR: GLEWの初期化に失敗しました." << std::endl;
 			return false;
 		}
+
+		width = w;
+		height = h;
+
 		// OpenGLの情報をコンソールウィンドウへ出力する.
 		const GLubyte* renderer = glGetString(GL_RENDERER);
 		std::cout << "Renderer: " << renderer << std::endl;

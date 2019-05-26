@@ -123,7 +123,7 @@ namespace Shader {
 	*
 	* @return	作成したプログラム・オブジェクト.
 	*/
-	GLuint BuildFromFile(const char* vsPath, const char* fsPath) {
+	GLuint BuildFromFile(const GLchar* vsPath, const GLchar* fsPath) {
 		const std::vector<GLchar> vsCode = ReadFile(vsPath);
 		const std::vector<GLchar> fsCode = ReadFile(fsPath);
 		return Build(vsCode.data(), fsCode.data());

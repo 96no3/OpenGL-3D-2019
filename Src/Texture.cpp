@@ -34,7 +34,7 @@ namespace Texture {
 
 		const GLenum result = glGetError();
 		if (result != GL_NO_ERROR) {
-			std::cerr << "ERROR: テクスチャの作成に失敗(0x" << std::hex << result << ").";
+			std::cerr << "ERROR: テクスチャの作成に失敗(0x" << std::hex << result << ").\n";
 			glBindTexture(GL_TEXTURE_2D, 0);
 			glDeleteTextures(1, &id);
 			return 0;

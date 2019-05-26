@@ -60,9 +60,7 @@ bool SpriteRenderer::Init(size_t maxSpriteCount, const char* vsPath, const char*
 	vao.VertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), offsetof(Vertex, color));
 	vao.VertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), offsetof(Vertex, texCoord));
 	vao.Unbind();
-
 	program = Shader::Program::Create(vsPath, fsPath);
-
 	primitives.reserve(64); // 32個では足りないことがあるかもしれないので64個予約.
 
 	// 初期化過程のどれかのオブジェクトの作成に失敗していたら、この関数自体も失敗とする.
@@ -128,7 +126,7 @@ bool SpriteRenderer::AddVertices(const Sprite& sprite){
 
 	v[3].position = transform * glm::vec4(-halfSize.x, halfSize.y, 0, 1);
 	v[3].color = sprite.Color();
-	v[3].texCoord = glm::vec2(rect.origin.x, +rect.origin.y + rect.size.y);
+	v[3].texCoord = glm::vec2(rect.origin.x, rect.origin.y + rect.size.y);
 
 	vertices.insert(vertices.end(), v, v + 4);
 

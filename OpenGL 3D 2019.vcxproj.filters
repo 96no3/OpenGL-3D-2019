@@ -9,6 +9,12 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="Res\Shaders">
+      <UniqueIdentifier>{e8ebaeb8-267b-4673-b27d-a7a89cee45ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Res\Images">
+      <UniqueIdentifier>{842add0b-5a02-4151-b3b1-5c776ba68d76}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -85,5 +91,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Res\Shaders\Sprite.vert">
+      <Filter>Res\Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\Sprite.frag">
+      <Filter>Res\Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Res\Images\TitleBg.tga">
+      <Filter>Res\Images</Filter>
+    </Image>
   </ItemGroup>
 </Project>

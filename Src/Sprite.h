@@ -41,7 +41,7 @@ public:
 	const glm::vec2& Scale() const { return scale; }
 
 	// 色の設定・取得
-	void Color(const glm::vec4 c) { color = c; }
+	void Color(const glm::vec4& c) { color = c; }
 	const glm::vec4& Color() const { return color; }
 
 	// 矩形の設定・取得

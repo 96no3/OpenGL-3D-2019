@@ -21,16 +21,16 @@ namespace GLFWEW{
 		bool ShouldClose() const;
 		void SwapBuffers() const;
 
-		int Width() const { return width; }
-		int Height() const { return height; }
-		void ResetDeltaTime();
+		//void ResetDeltaTime();
 
 		void InitTimer();
 		void UpdateTimer();
 		double DeltaTime() const;
+		int Width() const { return width; }
+		int Height() const { return height; }
 
 		bool IsKeyPressed(int key) const;
-		bool KeyPressed(int key) const;
+		//bool KeyPressed(int key) const;
 		const GamePad& GetGamePad() const;
 
 		/*glm::vec2 MousePosition() const;
