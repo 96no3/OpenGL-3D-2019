@@ -64,7 +64,7 @@ bool SpriteRenderer::Init(size_t maxSpriteCount, const char* vsPath, const char*
 	primitives.reserve(64); // 32個では足りないことがあるかもしれないので64個予約.
 
 	// 初期化過程のどれかのオブジェクトの作成に失敗していたら、この関数自体も失敗とする.
-	if (!vbo.Id() || !ibo.Id() || !vao.Id() || program->IsNull()) {
+	if (!vbo.Id() || !ibo.Id() || !vao.Id() || !program->IsNull()) {
 		return false;
 	}
 

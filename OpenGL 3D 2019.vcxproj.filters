@@ -44,10 +44,10 @@
     <ClCompile Include="Src\Sprite.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Shader.cpp">
+    <ClCompile Include="Src\StatusScene.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="Src\StatusScene.cpp">
+    <ClCompile Include="Src\Shader.cpp">
       <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -82,10 +82,10 @@
     <ClInclude Include="Src\Sprite.h">
       <Filter>Src</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Shader.h">
+    <ClInclude Include="Src\StatusScene.h">
       <Filter>Src</Filter>
     </ClInclude>
-    <ClInclude Include="Src\StatusScene.h">
+    <ClInclude Include="Src\Shader.h">
       <Filter>Src</Filter>
     </ClInclude>
   </ItemGroup>
