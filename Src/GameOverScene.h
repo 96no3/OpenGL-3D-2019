@@ -5,6 +5,7 @@
 #define GAMEOVERSCENE_H_INCLUDED
 #include "Scene.h"
 #include "Sprite.h"
+#include "Font.h"
 
 /**
 * ゲームオーバー画面.
@@ -23,6 +24,7 @@ public:
 private:
 	std::vector<Sprite> sprites;
 	SpriteRenderer spriteRenderer;
+	FontRenderer fontRenderer;
 };
 
 #endif // GAMEOVERSCENE_H_INCLUDED

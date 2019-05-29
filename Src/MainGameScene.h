@@ -5,6 +5,7 @@
 #define MAINGAMESCENE_H_INCLUDED
 #include "Scene.h"
 #include "Sprite.h"
+#include "Font.h"
 
 /**
 * ƒƒCƒ“ƒQ[ƒ€‰æ–Ê.
@@ -23,6 +24,7 @@ public:
 private:
 	std::vector<Sprite> sprites;
 	SpriteRenderer spriteRenderer;
+	FontRenderer fontRenderer;
 };
 
 #endif // MAINGAMESCENE_H_INCLUDED

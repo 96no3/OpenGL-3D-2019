@@ -4,10 +4,26 @@
 #include "StatusScene.h"
 #include "GLFWEW.h"
 
-///**
-//* コンストラクタ.
-//*/
-//StatusScene::StatusScene() :Scene("StatusScene") {}
+/**
+* コンストラクタ.
+*/
+StatusScene::StatusScene() :Scene("StatusScene") {
+
+}
+
+/**
+* シーンを初期化する.
+*
+* @retval true  初期化成功.
+* @retval false 初期化失敗. ゲーム進行不可につき、プログラムを終了すること.
+*/
+bool StatusScene::Initialize()
+{
+	fontRenderer.Init(1000);
+	fontRenderer.LoadFromFile("Res/Fonts/font.fnt");
+
+	return true;
+}
 
 /**
 * プレイヤーの入力を処理する.
@@ -19,20 +35,26 @@ void StatusScene::ProcessInput() {
 	}
 }
 
-///**
-//* シーンを更新する.
-//*
-//* @param deltaTime  前回の更新からの経過時間(秒).
-//*/
-//void StateScene::Update(float deltaTime) {
-//}
-//
-///**
-//* シーンを描画する.
-//*/
-//void StateScene::Render() {
-//}
-//
+/**
+* シーンを更新する.
+*
+* @param deltaTime  前回の更新からの経過時間(秒).
+*/
+void StatusScene::Update(float deltaTime) {
+	fontRenderer.BeginUpdate();
+	fontRenderer.AddString(glm::vec2(-600, 0), L"ステータス画面");
+	fontRenderer.EndUpdate();
+}
+
+/**
+* シーンを描画する.
+*/
+void StatusScene::Render() {
+	GLFWEW::Window& window = GLFWEW::Window::Instance();
+	const glm::vec2 screenSize(window.Width(), window.Height());
+	fontRenderer.Draw(screenSize);
+}
+
 ///**
 //* シーンを破棄する.
 //*/
