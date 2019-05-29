@@ -28,11 +28,17 @@ public:
 	void Draw(const glm::vec2&) const;
 	float LineHeight() const;
 
+	// 色の設定・取得
+	void Color(const glm::vec4& c) { color = c; }
+	const glm::vec4& Color() const { return color; }
+
 private:
 	SpriteRenderer spriteRenderer;  ///< 描画に使用するスプライトレンダラー.
 	std::vector<Texture::Image2DPtr> textures; ///< フォントテクスチャリスト.
 	float lineHeight = 0;  ///< 行の高さ.
 	float base = 0;        ///< 行の上部からベースラインまでの距離.
+
+	glm::vec4 color = glm::vec4(1); ///< フォントを描画するときの色.	
 
 	/// 文字情報.
 	struct CharacterInfo

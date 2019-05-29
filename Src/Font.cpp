@@ -162,6 +162,7 @@ bool FontRenderer::AddString(const glm::vec2& position, const wchar_t* str)
 			Sprite sprite(textures[info.page]);
 			sprite.Position(spritePos);
 			sprite.Rectangle({ info.uv,info.size });
+			sprite.Color(color);
 			if (!spriteRenderer.AddVertices(sprite)) {
 				return false;
 			}
