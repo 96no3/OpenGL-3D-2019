@@ -15,21 +15,18 @@
     <Filter Include="Res\Images">
       <UniqueIdentifier>{842add0b-5a02-4151-b3b1-5c776ba68d76}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Scenes">
+      <UniqueIdentifier>{a8646453-9e0a-4fa7-a6ba-a010227a3096}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Res\Fonts">
+      <UniqueIdentifier>{d8c645ce-7e90-4d73-8acf-3cdb59db448d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
       <Filter>Src</Filter>
     </ClCompile>
     <ClCompile Include="Src\Scene.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\TitleScene.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\MainGameScene.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\GameOverScene.cpp">
       <Filter>Src</Filter>
     </ClCompile>
     <ClCompile Include="Src\GLFWEW.cpp">
@@ -44,24 +41,27 @@
     <ClCompile Include="Src\Sprite.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="Src\StatusScene.cpp">
+    <ClCompile Include="Src\Shader.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Shader.cpp">
+    <ClCompile Include="Src\GameOverScene.cpp">
+      <Filter>Src\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\MainGameScene.cpp">
+      <Filter>Src\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\StatusScene.cpp">
+      <Filter>Src\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\TitleScene.cpp">
+      <Filter>Src\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Font.cpp">
       <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Scene.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\TitleScene.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\MainGameScene.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\GameOverScene.h">
       <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="Src\GamePad.h">
@@ -82,10 +82,22 @@
     <ClInclude Include="Src\Sprite.h">
       <Filter>Src</Filter>
     </ClInclude>
-    <ClInclude Include="Src\StatusScene.h">
+    <ClInclude Include="Src\Shader.h">
       <Filter>Src</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Shader.h">
+    <ClInclude Include="Src\GameOverScene.h">
+      <Filter>Src\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\MainGameScene.h">
+      <Filter>Src\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\StatusScene.h">
+      <Filter>Src\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\TitleScene.h">
+      <Filter>Src\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Font.h">
       <Filter>Src</Filter>
     </ClInclude>
   </ItemGroup>
@@ -97,10 +109,16 @@
     <None Include="Res\Shaders\Sprite.frag">
       <Filter>Res\Shaders</Filter>
     </None>
+    <None Include="Res\fonts\font.fnt">
+      <Filter>Res\Fonts</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Res\Images\TitleBg.tga">
       <Filter>Res\Images</Filter>
+    </Image>
+    <Image Include="Res\fonts\font_0.tga">
+      <Filter>Res\Fonts</Filter>
     </Image>
   </ItemGroup>
 </Project>

@@ -125,6 +125,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Src\BufferObject.cpp" />
+    <ClCompile Include="Src\Font.cpp" />
     <ClCompile Include="Src\GameOverScene.cpp" />
     <ClCompile Include="Src\GLFWEW.cpp" />
     <ClCompile Include="Src\Main.cpp" />
@@ -138,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\BufferObject.h" />
+    <ClInclude Include="Src\Font.h" />
     <ClInclude Include="Src\GameOverScene.h" />
     <ClInclude Include="Src\GamePad.h" />
     <ClInclude Include="Src\Geometry.h" />
@@ -152,10 +154,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Res\fonts\font.fnt" />
     <None Include="Res\Shaders\Sprite.frag" />
     <None Include="Res\Shaders\Sprite.vert" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Res\fonts\font_0.tga" />
     <Image Include="Res\Images\TitleBg.tga" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -11,7 +11,7 @@ int main() {
 	SceneStack& sceneStack = SceneStack::Instance();
 	sceneStack.Push(std::make_shared<TitleScene>());
 
-
+	window.InitTimer();
 	while (!window.ShouldClose()) {
 		const float deltaTime = window.DeltaTime();
 		window.UpdateTimer();

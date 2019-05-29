@@ -19,11 +19,8 @@
 bool TitleScene::Initialize()
 {
 	spriteRenderer.Init(1000, "Res/Shaders/Sprite.vert", "Res/Shaders/Sprite.frag");
-	GLenum result = glGetError();
 	sprites.reserve(100);
-
 	Sprite spr(Texture::Image2D::Create("Res/Images/TitleBg.tga"));
-
 	spr.Scale(glm::vec2(2));
 	sprites.push_back(spr);
 	return true;
