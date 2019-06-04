@@ -159,7 +159,8 @@ namespace GLFWEW {
 		GAMEPAD_BUTTON_UP,		///< 上ボタン.
 		GAMEPAD_BUTTON_RIGHT,	///< 右ボタン.
 		GAMEPAD_BUTTON_DOWN,	///< 下ボタン.
-		GAMEPAD_BUTTON_LEFT,	///< 左ボタン.		
+		GAMEPAD_BUTTON_LEFT,	///< 左ボタン.
+		GAMEPAD_BUTTON_GUIDE,
 	};
 
 	/**
@@ -210,6 +211,7 @@ namespace GLFWEW {
 				{ GAMEPAD_BUTTON_DOWN, GamePad::DPAD_DOWN },
 				{ GAMEPAD_BUTTON_LEFT, GamePad::DPAD_LEFT },
 				{ GAMEPAD_BUTTON_RIGHT, GamePad::DPAD_RIGHT },
+				{ GAMEPAD_BUTTON_GUIDE, GamePad::GUIDE },
 			};
 
 			for (const auto& e : keyMap) {
@@ -240,6 +242,7 @@ namespace GLFWEW {
 				{ GLFW_KEY_DOWN, GamePad::DPAD_DOWN },
 				{ GLFW_KEY_LEFT, GamePad::DPAD_LEFT },
 				{ GLFW_KEY_RIGHT, GamePad::DPAD_RIGHT },
+				{ GLFW_KEY_ESCAPE, GamePad::GUIDE },
 			};
 
 			for (const auto& e : keyMap) {

@@ -22,6 +22,7 @@ struct GamePad
 	static const uint32_t Y = 0x0100;
 	static const uint32_t L = 0x0200;
 	static const uint32_t R = 0x0400;
+	static const uint32_t GUIDE = 0x0800;
 
 	uint32_t buttons = 0;	///< 押されているあいだフラグが立つ. 
 	uint32_t buttonDown = 0;	///< 押された瞬間だけフラグが立つ. 
