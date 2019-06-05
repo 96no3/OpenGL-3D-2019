@@ -5,6 +5,7 @@
 #include "StatusScene.h"
 #include "GameOverScene.h"
 #include "GLFWEW.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 ///**
 //* コンストラクタ.
@@ -27,6 +28,8 @@ bool MainGameScene::Initialize()
 
 	fontRenderer.Init(1000);
 	fontRenderer.LoadFromFile("Res/Fonts/font.fnt");
+
+	meshBuffer.Init(1'000'000 * sizeof(Mesh::Vertex), 3'000'000 * sizeof(GLushort));
 
 	return true;
 }
@@ -86,6 +89,14 @@ void MainGameScene::Render()
 	const glm::vec2 screenSize(window.Width(), window.Height());
 	spriteRenderer.Draw(screenSize);
 	fontRenderer.Draw(screenSize);
+
+	const glm::vec3 cameraPos(-5, 3, 5);
+	const glm::vec3 targetPos(0, 0, 0);
+	const glm::mat4 matView = glm::lookAt(cameraPos, targetPos, glm::vec3(0, 1, 0));
+	const float aspectRatio = static_cast<float>(window.Width()) / static_cast<float>(window.Height());
+	const glm::mat4 matProj = glm::perspective(glm::radians(30.0f), aspectRatio, 1.0f, 1000.0f);
+	const glm::mat4 matModel(1);
+	Mesh::Draw(meshBuffer.GetFile("Cube"), matProj * matView, matModel);
 }
 //
 ///**
