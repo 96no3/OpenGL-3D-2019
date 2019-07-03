@@ -18,8 +18,8 @@ namespace Mesh {
 	// 先行宣言.
 	class Mesh;
 	using MeshPtr = std::shared_ptr<Mesh>;
-	class MeshBuffer;
-	using MeshBufferPtr = std::shared_ptr<MeshBuffer>;
+	class Buffer;
+	using BufferPtr = std::shared_ptr<Buffer>;
 
 	/**
 	* 頂点データ.
