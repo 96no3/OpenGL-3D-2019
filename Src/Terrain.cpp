@@ -59,7 +59,7 @@ namespace Terrain {
 	float HeightMap::Height(const glm::vec3& pos) const {
 
 		// 座標が高さマップの範囲内に収まるように切り上げ、または切り捨てる.
-		const glm::vec2 fpos = glm::clamp(glm::vec2(pos.x, pos.y), glm::vec2(0, 0), glm::vec2(size) - glm::vec2(1));
+		const glm::vec2 fpos = glm::clamp(glm::vec2(pos.x, pos.z), glm::vec2(0, 0), glm::vec2(size) - glm::vec2(1));
 
 		// 「高さ」はfposが含まれる正方形の左上頂点を基準として計算するので、左上の座標を求める.
 		// マップは右下がプラス方向で、正方形の大きさは1.0x1.0とする.
@@ -112,7 +112,7 @@ namespace Terrain {
 	*   |／|
 	*   a--b
 	*/
-	bool HeightMap::CreateMesh(Mesh::Buffer& meshBuffer, const char* meshName, const char* texName = nullptr) const {
+	bool HeightMap::CreateMesh(Mesh::Buffer& meshBuffer, const char* meshName, const char* texName) const {
 
 		if (heights.empty()) {
 			std::cerr << "[エラー]" << __func__ << "：ハイトマップが読み込まれていません.\n";

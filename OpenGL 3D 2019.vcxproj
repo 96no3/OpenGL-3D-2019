@@ -166,6 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Res\fonts\font_0.tga" />
+    <Image Include="Res\Images\Terrain00.tga" />
     <Image Include="Res\Images\TitleBg.tga" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

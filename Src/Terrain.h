@@ -33,7 +33,7 @@ namespace Terrain {
 		glm::ivec2 size = glm::ivec2();  ///< ハイトマップの大きさ.
 		std::vector<float> heights;      ///< 高さデータ.
 
-		glm::vec3 CalcNormal(int x, int z) const;
+		glm::vec3 CalcNormal(int, int) const;
 	};
 
 } // namespace Terrain
