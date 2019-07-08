@@ -30,6 +30,7 @@ bool MainGameScene::Initialize()
 	fontRenderer.LoadFromFile("Res/Fonts/font.fnt");
 
 	meshBuffer.Init(1'000'000 * sizeof(Mesh::Vertex), 3'000'000 * sizeof(GLushort));
+	meshBuffer.LoadMesh("Res/Models/red_pine_tree.gltf");
 
 	// ハイトマップを作成する.
 	if (!heightMap.LoadFromFile("Res/Images/Terrain00.tga", 20.0f, 0.5f)) {
@@ -142,6 +143,11 @@ void MainGameScene::Render()
 	const glm::mat4 matModel = glm::translate(glm::mat4(1), cubePos);
 	Mesh::Draw(meshBuffer.GetFile("Cube"), matProj * matView, matModel);
 	Mesh::Draw(meshBuffer.GetFile("Terrain01"), matProj * matView, glm::mat4(1));
+
+	glm::vec3 treePos(110, 0, 110);
+	treePos.y = heightMap.Height(treePos);
+	const glm::mat4 matTreeModel = glm::translate(glm::mat4(1), treePos) * glm::scale(glm::mat4(1), glm::vec3(3));
+	Mesh::Draw(meshBuffer.GetFile("Res/Models/red_pine_tree.gltf"), matProj * matView, matTreeModel);
 }
 //
 ///**

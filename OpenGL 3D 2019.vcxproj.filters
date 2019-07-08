@@ -21,6 +21,9 @@
     <Filter Include="Res\Fonts">
       <UniqueIdentifier>{d8c645ce-7e90-4d73-8acf-3cdb59db448d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\json11">
+      <UniqueIdentifier>{fc72a732-5487-45fa-a82f-3ffe3db27fbe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -64,6 +67,9 @@
     </ClCompile>
     <ClCompile Include="Src\Terrain.cpp">
       <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\json11\json11.cpp">
+      <Filter>Src\json11</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +117,9 @@
     </ClInclude>
     <ClInclude Include="Src\Terrain.h">
       <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\json11\json11.hpp">
+      <Filter>Src\json11</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
