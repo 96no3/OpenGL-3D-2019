@@ -141,13 +141,15 @@ void MainGameScene::Render()
 	glm::vec3 cubePos(0, 0, 0);
 	cubePos.y = heightMap.Height(cubePos);
 	const glm::mat4 matModel = glm::translate(glm::mat4(1), cubePos);
-	Mesh::Draw(meshBuffer.GetFile("Cube"), matProj * matView, matModel);
-	Mesh::Draw(meshBuffer.GetFile("Terrain01"), matProj * matView, glm::mat4(1));
+	meshBuffer.SetViewProjectionMatrix(matProj * matView);
+	//Mesh::Draw(meshBuffer.GetFile("Cube"), matProj * matView, matModel);
+	Mesh::Draw(meshBuffer.GetFile("Cube"), matModel);
+	Mesh::Draw(meshBuffer.GetFile("Terrain01"), glm::mat4(1));
 
 	glm::vec3 treePos(110, 0, 110);
 	treePos.y = heightMap.Height(treePos);
 	const glm::mat4 matTreeModel = glm::translate(glm::mat4(1), treePos) * glm::scale(glm::mat4(1), glm::vec3(3));
-	Mesh::Draw(meshBuffer.GetFile("Res/Models/red_pine_tree.gltf"), matProj * matView, matTreeModel);
+	Mesh::Draw(meshBuffer.GetFile("Res/Models/red_pine_tree.gltf"), matTreeModel);
 }
 //
 ///**

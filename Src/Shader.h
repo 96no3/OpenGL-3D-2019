@@ -67,7 +67,8 @@ namespace Shader {
 
 		void Reset(GLuint programId);
 		bool IsNull() const;
-		void Use();
+		void Use() const;
+		void Unuse() const;
 		void BindTexture(GLuint, GLuint);
 		void SetLightList(const LightList&);
 		void SetViewProjectionMatrix(const glm::mat4&);

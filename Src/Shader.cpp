@@ -223,11 +223,22 @@ namespace Shader {
 
 	/**
 	* プログラム・オブジェクトをグラフィックス・パイプラインに割り当てる.
+	*
+	* プログラム・オブジェクトを使い終わったらglUseProgram(0)を実行して解除すること.
 	*/
-	void Program::Use() {
+	void Program::Use() const 
+	{
 		if (id) {
 			glUseProgram(id);
 		}
+	}
+
+	/**
+	* プログラム・オブジェクトをグラフィックス・パイプラインから解除する.
+	*/
+	void Program::Unuse() const 
+	{
+		glUseProgram(0);
 	}
 
 	/**

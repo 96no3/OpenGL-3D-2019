@@ -71,6 +71,9 @@
     <ClCompile Include="Src\json11\json11.cpp">
       <Filter>Src\json11</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Actor.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Scene.h">
@@ -120,6 +123,9 @@
     </ClInclude>
     <ClInclude Include="Src\json11\json11.hpp">
       <Filter>Src\json11</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Actor.h">
+      <Filter>Src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

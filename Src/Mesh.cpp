@@ -567,13 +567,24 @@ namespace Mesh {
 	}
 
 	/**
+	* シェーダーにビュー・プロダクション行列を設定する.
+	*
+	* @param matVP	ビュー・プロダクション行列.
+	*/
+	void Buffer::SetViewProjectionMatrix(const glm::mat4& matVP) const 
+	{
+		progStaticMesh->Use();
+		progStaticMesh->SetViewProjectionMatrix(matVP);
+		progStaticMesh->Unuse();
+	}
+
+	/**
 	* メッシュを描画する.
 	*
 	* @param file	描画するファイル.
-	* @param matVP	描画に使用するビュープロジェクション行列.
 	* @param matM	描画に使用するモデル行列.
 	*/
-	void Draw(const FilePtr& file, const glm::mat4& matVP, const glm::mat4& matM) {
+	void Draw(const FilePtr& file, const glm::mat4& matM) {
 
 		if (!file || file->meshes.empty() || file->materials.empty()) {
 			return;
@@ -584,7 +595,7 @@ namespace Mesh {
 				p.vao->Bind();
 				const Material& m = file->materials[p.material];
 				m.program->Use();
-				m.program->SetViewProjectionMatrix(matVP);
+				//m.program->SetViewProjectionMatrix(matVP);
 				m.program->SetModelMatrix(matM);
 				glActiveTexture(GL_TEXTURE0);
 				// テクスチャがあるときは、そのテクスチャIDを設定する. ないときは0を設定する.
