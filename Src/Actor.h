@@ -51,4 +51,24 @@ private:
 };
 using StaticMeshActorPtr = std::shared_ptr<StaticMeshActor>;
 
+/**
+* アクターをまとめて操作するクラス.
+*/
+class ActorList
+{
+public:
+	ActorList() = default;
+	~ActorList() = default;
+
+	void Reserve(size_t);
+	void Add(const ActorPtr&);
+	bool Remove(const ActorPtr&);
+	void Update(float deltaTime);
+	void UpdateDrawData(float deltaTime);
+	void Draw();
+
+private:
+	std::vector<ActorPtr> actors;
+};	
+
 #endif	// ACTOR_H_INCLUDED

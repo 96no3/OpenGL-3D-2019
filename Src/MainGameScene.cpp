@@ -6,6 +6,8 @@
 #include "GameOverScene.h"
 #include "GLFWEW.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/constants.hpp>
+#include <random>
 
 ///**
 //* コンストラクタ.
@@ -32,6 +34,7 @@ bool MainGameScene::Initialize()
 	meshBuffer.Init(1'000'000 * sizeof(Mesh::Vertex), 3'000'000 * sizeof(GLushort));
 	meshBuffer.LoadMesh("Res/Models/red_pine_tree.gltf");
 	meshBuffer.LoadMesh("Res/Models/bikuni.gltf");
+	meshBuffer.LoadMesh("Res/Models/oni_small.gltf");
 
 	// ハイトマップを作成する.
 	if (!heightMap.LoadFromFile("Res/Images/Terrain00.tga", 20.0f, 0.5f)) {
@@ -44,6 +47,47 @@ bool MainGameScene::Initialize()
 	glm::vec3 startPos(100, 0, 100);
 	startPos.y = heightMap.Height(startPos);
 	player = std::make_shared<StaticMeshActor>(meshBuffer.GetFile("Res/Models/bikuni.gltf"), "player", 20, startPos);
+
+	std::mt19937 rand;
+	rand.seed(0);
+
+	// 敵を配置.
+	{
+		const size_t oniCount = 100;
+		enemies.Reserve(oniCount);
+		const Mesh::FilePtr mesh = meshBuffer.GetFile("Res/Models/oni_small.gltf");
+		for (size_t i = 0; i < oniCount; ++i) {
+			// 敵の位置を(50,50)-(150,150)の範囲からランダムに選択.
+			glm::vec3 position(0);
+			position.x = std::uniform_real_distribution<float>(50, 150)(rand);
+			position.z = std::uniform_real_distribution<float>(50, 150)(rand);
+			position.y = heightMap.Height(position);
+			// 敵の向きをランダムに選択.
+			glm::vec3 rotation(0);
+			rotation.y = std::uniform_real_distribution<float>(0, 6.3f)(rand);
+			StaticMeshActorPtr p = std::make_shared<StaticMeshActor>(mesh, "kooni", 13, position, rotation);
+			enemies.Add(p);
+		}
+	}
+
+	// 木を配置.
+	{
+		const size_t treeCount = 1000;
+		enemies.Reserve(treeCount);
+		const Mesh::FilePtr mesh = meshBuffer.GetFile("Res/Models/red_pine_tree.gltf");
+		for (size_t i = 0; i < treeCount; ++i) {
+			// 木の位置を(0,0)-(200,200)の範囲からランダムに選択.
+			glm::vec3 position(0);
+			position.x = std::uniform_real_distribution<float>(0, 200)(rand);
+			position.z = std::uniform_real_distribution<float>(0, 200)(rand);
+			position.y = heightMap.Height(position);
+			// 木の向きをランダムに選択.
+			glm::vec3 rotation(0);
+			rotation.y = std::uniform_real_distribution<float>(0, 6.3f)(rand);
+			StaticMeshActorPtr p = std::make_shared<StaticMeshActor>(mesh, "tree", 1, position, rotation, glm::vec3(2));
+			trees.Add(p);
+		}
+	}
 
 	return true;
 }
@@ -108,7 +152,11 @@ void MainGameScene::Update(float deltaTime)
 
 	// プレイヤーの状態を更新.
 	player->Update(deltaTime);
+	enemies.Update(deltaTime);
+	trees.Update(deltaTime);
 	player->UpdateDrawData(deltaTime);
+	enemies.UpdateDrawData(deltaTime);
+	trees.UpdateDrawData(deltaTime);
 
 	spriteRenderer.BeginUpdate();
 	for (const Sprite& e : sprites)
@@ -155,12 +203,14 @@ void MainGameScene::Render()
 	Mesh::Draw(meshBuffer.GetFile("Cube"), matModel);
 	Mesh::Draw(meshBuffer.GetFile("Terrain01"), glm::mat4(1));
 
-	glm::vec3 treePos(110, 0, 110);
+	/*glm::vec3 treePos(110, 0, 110);
 	treePos.y = heightMap.Height(treePos);
 	const glm::mat4 matTreeModel = glm::translate(glm::mat4(1), treePos) * glm::scale(glm::mat4(1), glm::vec3(3));
-	Mesh::Draw(meshBuffer.GetFile("Res/Models/red_pine_tree.gltf"), matTreeModel);
+	Mesh::Draw(meshBuffer.GetFile("Res/Models/red_pine_tree.gltf"), matTreeModel);*/
 
 	player->Draw();
+	enemies.Draw();
+	trees.Draw();
 }
 //
 ///**
