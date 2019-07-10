@@ -30,6 +30,10 @@ Actor::Actor(const std::string& name, int hp, const glm::vec3& pos, const glm::v
 void Actor::Update(float deltaTime){
 
 	position += velocity * deltaTime;
+
+	// 衝突判定の更新.
+	colWorld = colLocal;
+	colWorld.center += position;
 }
 
 /**
@@ -166,6 +170,76 @@ void ActorList::Draw()
 	for (const ActorPtr& e : actors) {
 		if (e && e->health > 0) {
 			e->Draw();
+		}
+	}
+}
+
+
+/**
+* 衝突判定を行う.
+*
+* @param a			衝突判定のアクターその1.
+* @param b			衝突判定のアクターその2.
+* @param handler	衝突した場合に実行される関数.
+*/
+void DetectCollision(const ActorPtr& a, const ActorPtr& b, CollisionHandlerType handler) 
+{
+	if (a->health <= 0 || b->health <= 0) {
+		return;
+	}
+	if (Collision::TestSphereSphere(a->colWorld, b->colWorld)) {
+		handler(a, b, b->colWorld.center);
+	}
+}
+
+/**
+* 衝突判定を行う.
+*
+* @param a			衝突判定のアクター.
+* @param b			衝突判定のアクターリスト.
+* @param handler	衝突した場合に実行される関数.
+*/
+void DetectCollision(const ActorPtr& a, ActorList& b, CollisionHandlerType handler)
+{
+	if (a->health <= 0) {
+		return;
+	}
+	for (const ActorPtr& actorB : b) {
+		if (actorB->health <= 0) {
+			continue;
+		}
+		if (Collision::TestSphereSphere(a->colWorld, actorB->colWorld)) {
+			handler(a, actorB, actorB->colWorld.center);
+			if (a->health <= 0) {
+				break;
+			}
+		}
+	}
+}
+
+/**
+* 衝突判定を行う.
+*
+* @param a			衝突判定のアクターリストその1.
+* @param b			衝突判定のアクターリストその2.
+* @param handler	衝突した場合に実行される関数.
+*/
+void DetectCollision(ActorList& a, ActorList& b, CollisionHandlerType handler)
+{
+	for (const ActorPtr& actorA : a) {
+		if (actorA->health <= 0) {
+			continue;
+		}
+		for (const ActorPtr& actorB : b) {
+			if (actorB->health <= 0) {
+				continue;
+			}
+			if (Collision::TestSphereSphere(actorA->colWorld, actorB->colWorld)) {
+				handler(actorA, actorB, actorB->colWorld.center);
+				if (actorA->health <= 0) {
+					break;
+				}
+			}
 		}
 	}
 }
