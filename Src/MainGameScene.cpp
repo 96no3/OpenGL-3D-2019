@@ -31,6 +31,7 @@ bool MainGameScene::Initialize()
 
 	meshBuffer.Init(1'000'000 * sizeof(Mesh::Vertex), 3'000'000 * sizeof(GLushort));
 	meshBuffer.LoadMesh("Res/Models/red_pine_tree.gltf");
+	meshBuffer.LoadMesh("Res/Models/bikuni.gltf");
 
 	// ハイトマップを作成する.
 	if (!heightMap.LoadFromFile("Res/Images/Terrain00.tga", 20.0f, 0.5f)) {
@@ -39,6 +40,10 @@ bool MainGameScene::Initialize()
 	if (!heightMap.CreateMesh(meshBuffer,"Terrain01")) {
 		return false;
 	}
+
+	glm::vec3 startPos(100, 0, 100);
+	startPos.y = heightMap.Height(startPos);
+	player = std::make_shared<StaticMeshActor>(meshBuffer.GetFile("Res/Models/bikuni.gltf"), "player", 20, startPos);
 
 	return true;
 }
@@ -101,6 +106,10 @@ void MainGameScene::Update(float deltaTime)
 		camera.position = camera.target + glm::vec3(0, 50, 50);
 	}
 
+	// プレイヤーの状態を更新.
+	player->Update(deltaTime);
+	player->UpdateDrawData(deltaTime);
+
 	spriteRenderer.BeginUpdate();
 	for (const Sprite& e : sprites)
 	{
@@ -150,6 +159,8 @@ void MainGameScene::Render()
 	treePos.y = heightMap.Height(treePos);
 	const glm::mat4 matTreeModel = glm::translate(glm::mat4(1), treePos) * glm::scale(glm::mat4(1), glm::vec3(3));
 	Mesh::Draw(meshBuffer.GetFile("Res/Models/red_pine_tree.gltf"), matTreeModel);
+
+	player->Draw();
 }
 //
 ///**
