@@ -9,6 +9,7 @@
 #include "Mesh.h"
 #include "Terrain.h"
 #include "Actor.h"
+#include "PlayerActor.h"
 #include <vector>
 
 /**
@@ -31,7 +32,8 @@ private:
 	FontRenderer fontRenderer;
 	Mesh::Buffer meshBuffer;
 	Terrain::HeightMap heightMap;
-	StaticMeshActorPtr player;
+	//StaticMeshActorPtr player;
+	PlayerActorPtr player;
 	ActorList enemies;
 	ActorList trees;
 	ActorList objects;

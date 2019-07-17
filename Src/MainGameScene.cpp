@@ -39,6 +39,10 @@ void PlayerCollisionHandler(const ActorPtr& a, const ActorPtr& b, const glm::vec
 		const float distance = radiusSum - glm::length(v) + 0.01f;
 		a->position += vn * distance;
 		a->colWorld.s.center += vn * distance;
+
+		if (a->velocity.y < 0 && vn.y >= glm::cos(glm::radians(60.0f))) {
+			a->velocity.y = 0;			
+		}
 	}
 	else {
 		// 移動を取り消す（距離が近すぎる場合の例外処理）.
@@ -87,11 +91,10 @@ bool MainGameScene::Initialize()
 
 	glm::vec3 startPos(100, 0, 100);
 	startPos.y = heightMap.Height(startPos);
-	player = std::make_shared<StaticMeshActor>(meshBuffer.GetFile("Res/Models/bikuni.gltf"), "player", 20, startPos);
-	/*player->colLocal = Collision::Sphere{ glm::vec3(0), 0.5f };*/
-	player->colLocal = Collision::CreateSphere(glm::vec3(0, 0.7f, 0), 0.7f);
+	/*player = std::make_shared<StaticMeshActor>(meshBuffer.GetFile("Res/Models/bikuni.gltf"), "player", 20, startPos);*/
+	player = std::make_shared<PlayerActor>(meshBuffer.GetFile("Res/Models/bikuni.gltf"), startPos, glm::vec3(0), &heightMap);
 
-
+	//player->colLocal = Collision::CreateSphere(glm::vec3(0, 0.7f, 0), 0.7f);
 
 	std::mt19937 rand;
 	rand.seed(0);
@@ -140,15 +143,17 @@ bool MainGameScene::Initialize()
 
 	// 石壁を配置.
 	{
+		const float pi = 3.14f;
 		/*const size_t objectCount = 1000;
 		objects.Reserve(objectCount);*/
 		const Mesh::FilePtr meshStoneWall = meshBuffer.GetFile("Res/Models/wall_stone.gltf");
 
 		glm::vec3 position = startPos + glm::vec3(0, 0, -65);
-		position.y = heightMap.Height(position);
-		glm::vec3 rotation= glm::vec3(0, 0.5f, 0);
+		position.y = heightMap.Height(position);		
+		glm::vec3 rotation = glm::vec3(0, pi * 0.5f, 0);
 		StaticMeshActorPtr p = std::make_shared<StaticMeshActor>(meshStoneWall, "StoneWall", 100, position, rotation, glm::vec3(4));
-		p->colLocal = Collision::CreateOBB(glm::vec3(0), glm::vec3(1, 0, 0), glm::vec3(0, 1, 0), glm::vec3(0, 0, -1), glm::vec3(8, 8, 2.0f));
+		glm::vec3 rectSize = glm::vec3(2, 2, 0.5f) * 4.0f;
+		p->colLocal = Collision::CreateOBB(glm::vec3(0), glm::vec3(1, 0, 0), glm::vec3(0, 1, 0), glm::vec3(0, 0, -1), rectSize);
 		objects.Add(p);
 
 		//for (size_t i = 0; i < objectCount; ++i) {
@@ -193,13 +198,18 @@ void MainGameScene::ProcessInput() {
 		velocity.z = -1;
 	}
 	if (velocity.x || velocity.z) {
-		//velocity = normalize(velocity) * 20.0f;
 		velocity = normalize(velocity);
 		player->rotation.y = std::atan2(-velocity.z, velocity.x) + glm::radians(90.0f);
 		velocity *= 6.0f;
 	}
-	//camera.velocity = velocity;
-	player->velocity = velocity;
+	//player->velocity = velocity;
+	player->velocity.x = velocity.x;
+	player->velocity.z = velocity.z;
+
+	// ジャンプ.
+	if (gamepad.buttonDown && GamePad::B) {
+		player->jump();
+	}
 
 	if (window.GetGamePad().buttonDown & GamePad::X) {
 		SceneStack::Instance().Push(std::make_shared<StatusScene>());
@@ -240,11 +250,11 @@ void MainGameScene::Update(float deltaTime)
 	trees.Update(deltaTime);
 	objects.Update(deltaTime);
 
-	player->position.y = heightMap.Height(player->position);
+	//player->position.y = heightMap.Height(player->position);
 	DetectCollision(player, enemies, PlayerCollisionHandler);
 	DetectCollision(player, trees, PlayerCollisionHandler);
 	DetectCollision(player, objects, PlayerCollisionHandler);
-	player->position.y = heightMap.Height(player->position);
+	//player->position.y = heightMap.Height(player->position);
 
 	player->UpdateDrawData(deltaTime);
 	enemies.UpdateDrawData(deltaTime);
