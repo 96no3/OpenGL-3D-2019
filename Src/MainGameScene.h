@@ -34,6 +34,7 @@ private:
 	StaticMeshActorPtr player;
 	ActorList enemies;
 	ActorList trees;
+	ActorList objects;
 
 	struct Camera {
 		glm::vec3 target = glm::vec3(100, 0, 100);

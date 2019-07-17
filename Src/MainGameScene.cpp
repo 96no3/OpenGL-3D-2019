@@ -75,6 +75,7 @@ bool MainGameScene::Initialize()
 	meshBuffer.LoadMesh("Res/Models/red_pine_tree.gltf");
 	meshBuffer.LoadMesh("Res/Models/bikuni.gltf");
 	meshBuffer.LoadMesh("Res/Models/oni_small.gltf");
+	meshBuffer.LoadMesh("Res/Models/wall_stone.gltf");
 
 	// ハイトマップを作成する.
 	if (!heightMap.LoadFromFile("Res/Images/Terrain00.tga", 20.0f, 0.5f)) {
@@ -89,6 +90,8 @@ bool MainGameScene::Initialize()
 	player = std::make_shared<StaticMeshActor>(meshBuffer.GetFile("Res/Models/bikuni.gltf"), "player", 20, startPos);
 	/*player->colLocal = Collision::Sphere{ glm::vec3(0), 0.5f };*/
 	player->colLocal = Collision::CreateSphere(glm::vec3(0, 0.7f, 0), 0.7f);
+
+
 
 	std::mt19937 rand;
 	rand.seed(0);
@@ -117,7 +120,7 @@ bool MainGameScene::Initialize()
 	// 木を配置.
 	{
 		const size_t treeCount = 1000;
-		enemies.Reserve(treeCount);
+		trees.Reserve(treeCount);
 		const Mesh::FilePtr mesh = meshBuffer.GetFile("Res/Models/red_pine_tree.gltf");
 		for (size_t i = 0; i < treeCount; ++i) {
 			// 木の位置を(0,0)-(200,200)の範囲からランダムに選択.
@@ -133,6 +136,35 @@ bool MainGameScene::Initialize()
 			p->colLocal = Collision::CreateCapsule(glm::vec3(0, 0.5f, 0), glm::vec3(0, 7.5f, 0), 0.5f);
 			trees.Add(p);
 		}
+	}
+
+	// 石壁を配置.
+	{
+		/*const size_t objectCount = 1000;
+		objects.Reserve(objectCount);*/
+		const Mesh::FilePtr meshStoneWall = meshBuffer.GetFile("Res/Models/wall_stone.gltf");
+
+		glm::vec3 position = startPos + glm::vec3(0, 0, -65);
+		position.y = heightMap.Height(position);
+		glm::vec3 rotation= glm::vec3(0, 0.5f, 0);
+		StaticMeshActorPtr p = std::make_shared<StaticMeshActor>(meshStoneWall, "StoneWall", 100, position, rotation, glm::vec3(4));
+		p->colLocal = Collision::CreateOBB(glm::vec3(0), glm::vec3(1, 0, 0), glm::vec3(0, 1, 0), glm::vec3(0, 0, -1), glm::vec3(8, 8, 2.0f));
+		objects.Add(p);
+
+		//for (size_t i = 0; i < objectCount; ++i) {
+		//	// 石壁の位置を(0,0)-(200,200)の範囲からランダムに選択.
+		//	glm::vec3 position(0);
+		//	position.x = std::uniform_real_distribution<float>(0, 200)(rand);
+		//	position.z = std::uniform_real_distribution<float>(0, 200)(rand);
+		//	position.y = heightMap.Height(position);
+		//	// 石壁の向きをランダムに選択.
+		//	glm::vec3 rotation(0);
+		//	rotation.y = std::uniform_real_distribution<float>(0, 6.3f)(rand);
+		//	StaticMeshActorPtr p = std::make_shared<StaticMeshActor>(mesh, "tree", 1, position, rotation, glm::vec3(2));
+		//	//p->colLocal = Collision::Sphere{ glm::vec3(0), 0.5f };
+		//	p->colLocal = Collision::CreateCapsule(glm::vec3(0, 0.5f, 0), glm::vec3(0, 7.5f, 0), 0.5f);
+		//	objects.Add(p);
+		//}
 	}
 
 	return true;
@@ -202,19 +234,22 @@ void MainGameScene::Update(float deltaTime)
 		camera.position = camera.target + glm::vec3(0, 50, 50);
 	}
 
-	// プレイヤーの状態を更新.
+	// Actorの状態を更新.
 	player->Update(deltaTime);
 	enemies.Update(deltaTime);
 	trees.Update(deltaTime);
+	objects.Update(deltaTime);
 
 	player->position.y = heightMap.Height(player->position);
 	DetectCollision(player, enemies, PlayerCollisionHandler);
 	DetectCollision(player, trees, PlayerCollisionHandler);
+	DetectCollision(player, objects, PlayerCollisionHandler);
 	player->position.y = heightMap.Height(player->position);
 
 	player->UpdateDrawData(deltaTime);
 	enemies.UpdateDrawData(deltaTime);
 	trees.UpdateDrawData(deltaTime);
+	objects.UpdateDrawData(deltaTime);
 
 	spriteRenderer.BeginUpdate();
 	for (const Sprite& e : sprites)
@@ -271,8 +306,9 @@ void MainGameScene::Render()
 
 	player->Draw();
 	enemies.Draw();
+	objects.Draw();
 	glDisable(GL_CULL_FACE);
-	trees.Draw();
+	trees.Draw();	
 }
 //
 ///**
