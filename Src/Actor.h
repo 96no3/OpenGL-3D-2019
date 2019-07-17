@@ -31,8 +31,10 @@ public:
 	glm::vec3 scale = glm::vec3(1);
 	glm::vec3 velocity = glm::vec3(0); ///< 速度.
 	int health = 0;                    ///< 体力.
-	Collision::Sphere colLocal;        ///< 衝突判定形状.
-	Collision::Sphere colWorld;        ///< colLocalをワールド空間に移した値.
+	/*Collision::Sphere colLocal;        ///< 衝突判定形状.
+	Collision::Sphere colWorld;        ///< colLocalをワールド空間に移した値.*/
+	Collision::Shape colLocal;        ///< 衝突判定形状.
+	Collision::Shape colWorld;        ///< colLocalをワールド空間に移した値.
 };
 using ActorPtr = std::shared_ptr<Actor>;
 

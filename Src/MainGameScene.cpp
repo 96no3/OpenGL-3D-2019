@@ -18,22 +18,34 @@
 */
 void PlayerCollisionHandler(const ActorPtr& a, const ActorPtr& b, const glm::vec3& p) 
 {
-	const glm::vec3 v = a->colWorld.center - p;
+	const glm::vec3 v = a->colWorld.s.center - p;
 	// 衝突位置との距離が近すぎないか調べる.
 	if (dot(v, v) > FLT_EPSILON) {
 		// aをbに重ならない位置まで移動.
 		const glm::vec3 vn = normalize(v);
-		const float radiusSum = a->colWorld.r + b->colWorld.r;
+		/*const float radiusSum = a->colWorld.r + b->colWorld.r;*/
+		float radiusSum = a->colWorld.s.r;
+
+		switch (b->colWorld.type)
+		{
+		case Collision::Shape::Type::sphere:
+			radiusSum += b->colWorld.s.r;
+			break;
+		case Collision::Shape::Type::capsule:
+			radiusSum += b->colWorld.c.r;
+			break;
+		}
+
 		const float distance = radiusSum - glm::length(v) + 0.01f;
 		a->position += vn * distance;
-		a->colWorld.center += vn * distance;
+		a->colWorld.s.center += vn * distance;
 	}
 	else {
 		// 移動を取り消す（距離が近すぎる場合の例外処理）.
 		const float deltaTime = static_cast<float>(GLFWEW::Window::Instance().DeltaTime());
 		const glm::vec3 deltaVelocity = a->velocity * deltaTime;
 		a->position -= deltaVelocity;
-		a->colWorld.center -= deltaVelocity;
+		a->colWorld.s.center -= deltaVelocity;
 	}
 }
 
@@ -75,7 +87,8 @@ bool MainGameScene::Initialize()
 	glm::vec3 startPos(100, 0, 100);
 	startPos.y = heightMap.Height(startPos);
 	player = std::make_shared<StaticMeshActor>(meshBuffer.GetFile("Res/Models/bikuni.gltf"), "player", 20, startPos);
-	player->colLocal = Collision::Sphere{ glm::vec3(0), 0.5f };
+	/*player->colLocal = Collision::Sphere{ glm::vec3(0), 0.5f };*/
+	player->colLocal = Collision::CreateSphere(glm::vec3(0, 0.7f, 0), 0.7f);
 
 	std::mt19937 rand;
 	rand.seed(0);
@@ -95,7 +108,8 @@ bool MainGameScene::Initialize()
 			glm::vec3 rotation(0);
 			rotation.y = std::uniform_real_distribution<float>(0, 6.3f)(rand);
 			StaticMeshActorPtr p = std::make_shared<StaticMeshActor>(mesh, "kooni", 13, position, rotation);
-			p->colLocal = Collision::Sphere{ glm::vec3(0), 1.0f };
+			//p->colLocal = Collision::Sphere{ glm::vec3(0), 1.0f };
+			p->colLocal = Collision::CreateCapsule(glm::vec3(0, 0.5f, 0), glm::vec3(0, 1, 0), 0.5f);
 			enemies.Add(p);
 		}
 	}
@@ -115,7 +129,8 @@ bool MainGameScene::Initialize()
 			glm::vec3 rotation(0);
 			rotation.y = std::uniform_real_distribution<float>(0, 6.3f)(rand);
 			StaticMeshActorPtr p = std::make_shared<StaticMeshActor>(mesh, "tree", 1, position, rotation, glm::vec3(2));
-			p->colLocal = Collision::Sphere{ glm::vec3(0), 0.5f };
+			//p->colLocal = Collision::Sphere{ glm::vec3(0), 0.5f };
+			p->colLocal = Collision::CreateCapsule(glm::vec3(0, 0.5f, 0), glm::vec3(0, 7.5f, 0), 0.5f);
 			trees.Add(p);
 		}
 	}
