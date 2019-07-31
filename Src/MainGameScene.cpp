@@ -78,7 +78,8 @@ bool MainGameScene::Initialize()
 
 	meshBuffer.Init(1'000'000 * sizeof(Mesh::Vertex), 3'000'000 * sizeof(GLushort));
 	meshBuffer.LoadMesh("Res/Models/red_pine_tree.gltf");
-	meshBuffer.LoadMesh("Res/Models/bikuni.gltf");
+	//meshBuffer.LoadMesh("Res/Models/bikuni.gltf");
+	meshBuffer.LoadSkeletalMesh("Res/Models/bikuni.gltf");
 	//meshBuffer.LoadMesh("Res/Models/oni_small.gltf");
 	meshBuffer.LoadSkeletalMesh("Res/Models/oni_small.gltf");
 	meshBuffer.LoadMesh("Res/Models/wall_stone.gltf");
@@ -94,8 +95,9 @@ bool MainGameScene::Initialize()
 	glm::vec3 startPos(100, 0, 100);
 	startPos.y = heightMap.Height(startPos);
 	/*player = std::make_shared<StaticMeshActor>(meshBuffer.GetFile("Res/Models/bikuni.gltf"), "player", 20, startPos);*/
-	player = std::make_shared<PlayerActor>(meshBuffer.GetFile("Res/Models/bikuni.gltf"), startPos, glm::vec3(0), &heightMap);
+	//player = std::make_shared<PlayerActor>(meshBuffer.GetFile("Res/Models/bikuni.gltf"), startPos, glm::vec3(0), &heightMap);
 	//player->colLocal = Collision::CreateSphere(glm::vec3(0, 0.7f, 0), 0.7f);
+	player = std::make_shared<PlayerActor>(&heightMap, meshBuffer, startPos);
 
 	std::mt19937 rand;
 	rand.seed(0);
@@ -188,33 +190,34 @@ void MainGameScene::ProcessInput() {
 	GLFWEW::Window& window = GLFWEW::Window::Instance();
 
 	// プレイヤー操作.
-	const GamePad gamepad = window.GetGamePad();
-	glm::vec3 velocity(0);
-	if (gamepad.buttons & GamePad::DPAD_LEFT) {
-		velocity.x = -1;
-	}
-	else if (gamepad.buttons & GamePad::DPAD_RIGHT) {
-		velocity.x = 1;
-	}
-	if (gamepad.buttons & GamePad::DPAD_DOWN) {
-		velocity.z = 1;
-	}
-	else if (gamepad.buttons & GamePad::DPAD_UP) {
-		velocity.z = -1;
-	}
-	if (velocity.x || velocity.z) {
-		velocity = normalize(velocity);
-		player->rotation.y = std::atan2(-velocity.z, velocity.x) + glm::radians(90.0f);
-		velocity *= 6.0f;
-	}
-	//player->velocity = velocity;
-	player->velocity.x = velocity.x;
-	player->velocity.z = velocity.z;
+	//const GamePad gamepad = window.GetGamePad();
+	//glm::vec3 velocity(0);
+	//if (gamepad.buttons & GamePad::DPAD_LEFT) {
+	//	velocity.x = -1;
+	//}
+	//else if (gamepad.buttons & GamePad::DPAD_RIGHT) {
+	//	velocity.x = 1;
+	//}
+	//if (gamepad.buttons & GamePad::DPAD_DOWN) {
+	//	velocity.z = 1;
+	//}
+	//else if (gamepad.buttons & GamePad::DPAD_UP) {
+	//	velocity.z = -1;
+	//}
+	//if (velocity.x || velocity.z) {
+	//	velocity = normalize(velocity);
+	//	player->rotation.y = std::atan2(-velocity.z, velocity.x) + glm::radians(90.0f);
+	//	velocity *= 6.0f;
+	//}
+	////player->velocity = velocity;
+	//player->velocity.x = velocity.x;
+	//player->velocity.z = velocity.z;
 
-	// ジャンプ.
-	if (gamepad.buttonDown && GamePad::B) {
-		player->jump();
-	}
+	//// ジャンプ.
+	//if (gamepad.buttonDown && GamePad::B) {
+	//	player->jump();
+	//}
+	player->ProcessInput();
 
 	if (window.GetGamePad().buttonDown & GamePad::X) {
 		SceneStack::Instance().Push(std::make_shared<StatusScene>());

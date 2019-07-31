@@ -27,6 +27,9 @@
     <Filter Include="Src\SkeletalMesh">
       <UniqueIdentifier>{b494fcce-37f9-49dc-99b9-710954c59949}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Res\Models">
+      <UniqueIdentifier>{e4ea8529-1141-4782-aa8c-d3c8fd5fe8c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -183,6 +186,9 @@
     </None>
     <None Include="Res\Shaders\SkeletalMesh.vert">
       <Filter>Res\Shaders</Filter>
+    </None>
+    <None Include="Res\Models\oni_small.gltf">
+      <Filter>Res\Models</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
