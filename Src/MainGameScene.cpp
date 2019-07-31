@@ -1,10 +1,11 @@
 /**
 * @file MainGameScene.cpp
 */
+#include "GLFWEW.h"
 #include "MainGameScene.h"
 #include "StatusScene.h"
 #include "GameOverScene.h"
-#include "GLFWEW.h"
+#include "SkeletalMesh/SkeletalMeshActor.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/constants.hpp>
 #include <random>
@@ -78,7 +79,8 @@ bool MainGameScene::Initialize()
 	meshBuffer.Init(1'000'000 * sizeof(Mesh::Vertex), 3'000'000 * sizeof(GLushort));
 	meshBuffer.LoadMesh("Res/Models/red_pine_tree.gltf");
 	meshBuffer.LoadMesh("Res/Models/bikuni.gltf");
-	meshBuffer.LoadMesh("Res/Models/oni_small.gltf");
+	//meshBuffer.LoadMesh("Res/Models/oni_small.gltf");
+	meshBuffer.LoadSkeletalMesh("Res/Models/oni_small.gltf");
 	meshBuffer.LoadMesh("Res/Models/wall_stone.gltf");
 
 	// ハイトマップを作成する.
@@ -93,7 +95,6 @@ bool MainGameScene::Initialize()
 	startPos.y = heightMap.Height(startPos);
 	/*player = std::make_shared<StaticMeshActor>(meshBuffer.GetFile("Res/Models/bikuni.gltf"), "player", 20, startPos);*/
 	player = std::make_shared<PlayerActor>(meshBuffer.GetFile("Res/Models/bikuni.gltf"), startPos, glm::vec3(0), &heightMap);
-
 	//player->colLocal = Collision::CreateSphere(glm::vec3(0, 0.7f, 0), 0.7f);
 
 	std::mt19937 rand;
@@ -103,7 +104,8 @@ bool MainGameScene::Initialize()
 	{
 		const size_t oniCount = 100;
 		enemies.Reserve(oniCount);
-		const Mesh::FilePtr mesh = meshBuffer.GetFile("Res/Models/oni_small.gltf");
+		//const Mesh::FilePtr mesh = meshBuffer.GetFile("Res/Models/oni_small.gltf");
+		
 		for (size_t i = 0; i < oniCount; ++i) {
 			// 敵の位置を(50,50)-(150,150)の範囲からランダムに選択.
 			glm::vec3 position(0);
@@ -113,7 +115,10 @@ bool MainGameScene::Initialize()
 			// 敵の向きをランダムに選択.
 			glm::vec3 rotation(0);
 			rotation.y = std::uniform_real_distribution<float>(0, 6.3f)(rand);
-			StaticMeshActorPtr p = std::make_shared<StaticMeshActor>(mesh, "kooni", 13, position, rotation);
+			//StaticMeshActorPtr p = std::make_shared<StaticMeshActor>(mesh, "kooni", 13, position, rotation);
+			const Mesh::SkeletalMeshPtr mesh = meshBuffer.GetSkeletalMesh("oni_small");
+			SkeletalMeshActorPtr p = std::make_shared<SkeletalMeshActor>(mesh, "kooni", 13, position, rotation);
+			p->GetMesh()->Play("Run");
 			//p->colLocal = Collision::Sphere{ glm::vec3(0), 1.0f };
 			p->colLocal = Collision::CreateCapsule(glm::vec3(0, 0.5f, 0), glm::vec3(0, 1, 0), 0.5f);
 			enemies.Add(p);

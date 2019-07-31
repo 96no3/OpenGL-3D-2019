@@ -74,6 +74,8 @@ namespace Shader {
 		void SetViewProjectionMatrix(const glm::mat4&);
 		void SetModelMatrix(const glm::mat4&);
 		//void Draw(const Mesh& mesh, const glm::vec3& translate, const glm::vec3& rotate, const glm::vec3& scale);
+		/// プログラムIDを取得する.
+		GLuint Get() const { return id; }
 
 	private:
 		//GLint id;	// プログラムID.

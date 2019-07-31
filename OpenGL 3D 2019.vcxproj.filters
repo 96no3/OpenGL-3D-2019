@@ -24,6 +24,9 @@
     <Filter Include="Src\json11">
       <UniqueIdentifier>{fc72a732-5487-45fa-a82f-3ffe3db27fbe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\SkeletalMesh">
+      <UniqueIdentifier>{b494fcce-37f9-49dc-99b9-710954c59949}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -79,6 +82,15 @@
     </ClCompile>
     <ClCompile Include="Src\PlayerActor.cpp">
       <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\SkeletalMesh\SkeletalMesh.cpp">
+      <Filter>Src\SkeletalMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\SkeletalMesh\SkeletalMeshActor.cpp">
+      <Filter>Src\SkeletalMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\SkeletalMesh\UniformBuffer.cpp">
+      <Filter>Src\SkeletalMesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +151,15 @@
     <ClInclude Include="Src\PlayerActor.h">
       <Filter>Src</Filter>
     </ClInclude>
+    <ClInclude Include="Src\SkeletalMesh\SkeletalMesh.h">
+      <Filter>Src\SkeletalMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\SkeletalMesh\SkeletalMeshActor.h">
+      <Filter>Src\SkeletalMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\SkeletalMesh\UniformBuffer.h">
+      <Filter>Src\SkeletalMesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -155,6 +176,12 @@
       <Filter>Res\Shaders</Filter>
     </None>
     <None Include="Res\Shaders\StaticMesh.frag">
+      <Filter>Res\Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\SkeletalMesh.frag">
+      <Filter>Res\Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\SkeletalMesh.vert">
       <Filter>Res\Shaders</Filter>
     </None>
   </ItemGroup>

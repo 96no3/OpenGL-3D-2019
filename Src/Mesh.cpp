@@ -4,6 +4,7 @@
 #define NOMINMAX
 
 #include "Mesh.h"
+#include "SkeletalMesh/SkeletalMesh.h"
 #include "Json11/json11.hpp"
 #include <glm/gtc/quaternion.hpp>
 #include <fstream>
@@ -185,6 +186,13 @@ namespace Mesh {
 			return false;
 		}
 
+		// スケルタルメッシュ用のシェーダーを読み込む.
+		progSkeletalMesh = Shader::Program::Create("Res/Shaders/SkeletalMesh.vert", "Res/Shaders/SkeletalMesh.frag");
+		if (progSkeletalMesh->IsNull()) {
+			return false;
+		}
+		SkeletalAnimation::BindUniformBlock(progSkeletalMesh);
+
 		vboEnd = 0;
 		iboEnd = 0;
 		files.reserve(100);
@@ -245,9 +253,9 @@ namespace Mesh {
 		std::shared_ptr<VertexArrayObject> vao = std::make_shared<VertexArrayObject>();
 		vao->Create(vbo.Id(), ibo.Id());
 		vao->Bind();
-		vao->VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), offsetof(Vertex, position));
-		vao->VertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), offsetof(Vertex, texCoord));
-		vao->VertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), offsetof(Vertex, normal));
+		vao->VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), vOffset + offsetof(Vertex, position));
+		vao->VertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), vOffset + offsetof(Vertex, texCoord));
+		vao->VertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), vOffset + offsetof(Vertex, normal));
 		vao->Unbind();
 
 		// プリミティブのメンバ変数を設定.
@@ -256,7 +264,8 @@ namespace Mesh {
 		p.count = static_cast<GLsizei>(count);
 		p.type = type;
 		p.indices = reinterpret_cast<const GLvoid*>(iOffset);
-		p.baseVertex = vOffset / sizeof(Vertex);
+		//p.baseVertex = vOffset / sizeof(Vertex);
+		p.baseVertex = 0;
 		p.vao = vao;
 		p.material = 0; // マテリアルは0番で固定.
 
@@ -277,6 +286,7 @@ namespace Mesh {
 		m.baseColor = color;
 		m.texture = texture;
 		m.program = progStaticMesh;
+		m.progSkeletalMesh = progSkeletalMesh;
 		return m;
 	}
 
@@ -575,6 +585,8 @@ namespace Mesh {
 	{
 		progStaticMesh->Use();
 		progStaticMesh->SetViewProjectionMatrix(matVP);
+		progSkeletalMesh->Use();
+		progSkeletalMesh->SetViewProjectionMatrix(matVP);
 		progStaticMesh->Unuse();
 	}
 

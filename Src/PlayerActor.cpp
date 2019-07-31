@@ -2,6 +2,7 @@
 * @file PlayerActor.cpp
 */
 #include "PlayerActor.h"
+#include <glm/gtc/matrix_transform.hpp>
 
 /**
 * コンストラクタ.

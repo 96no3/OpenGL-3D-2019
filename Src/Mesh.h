@@ -17,10 +17,17 @@
 namespace Mesh {
 
 	// 先行宣言.
-	class Mesh;
+	struct Mesh;
 	using MeshPtr = std::shared_ptr<Mesh>;
 	class Buffer;
 	using BufferPtr = std::shared_ptr<Buffer>;
+
+	// スケルタルメッシュ用の先行宣言.
+	struct Node;
+	struct ExtendedFile;
+	using ExtendedFilePtr = std::shared_ptr<ExtendedFile>;
+	class SkeletalMesh;
+	using SkeletalMeshPtr = std::shared_ptr<SkeletalMesh>;
 
 	/**
 	* 頂点データ.
@@ -38,6 +45,8 @@ namespace Mesh {
 		glm::vec4 baseColor = glm::vec4(1);
 		Texture::Image2DPtr texture;
 		Shader::ProgramPtr program;
+		// スケルタルメッシュ用のシェーダー.
+		Shader::ProgramPtr progSkeletalMesh;
 	};
 
 	/**
@@ -89,8 +98,11 @@ namespace Mesh {
 		bool LoadMesh(const char* path);
 		FilePtr GetFile(const char* name) const;
 		void SetViewProjectionMatrix(const glm::mat4&) const;
-
 		void AddCube(const char* name);
+
+		// スケルタル・アニメーションに対応したメッシュの読み込みと取得.
+		bool LoadSkeletalMesh(const char* path);
+		SkeletalMeshPtr GetSkeletalMesh(const char* meshName) const;
 
 	private:
 		BufferObject vbo;
@@ -99,6 +111,15 @@ namespace Mesh {
 		GLintptr iboEnd = 0;
 		std::unordered_map<std::string, FilePtr> files;
 		Shader::ProgramPtr progStaticMesh;
+
+		// スケルタル・アニメーションに対応したメッシュを保持するメンバ変数.
+		Shader::ProgramPtr progSkeletalMesh;
+		struct MeshIndex {
+			ExtendedFilePtr file;
+			const Node* node = nullptr;
+		};
+		std::unordered_map<std::string, MeshIndex> meshes;
+		std::unordered_map<std::string, ExtendedFilePtr> extendedFiles;
 	};
 
 	//void Draw(const FilePtr& file, const glm::mat4& matVP, const glm::mat4& matM);
