@@ -249,7 +249,8 @@ void MainGameScene::Update(float deltaTime)
 		camera.target.y = heightMap.Height(camera.target);*/		
 	{
 		camera.target = player->position;
-		camera.position = camera.target + glm::vec3(0, 50, 50);
+		//camera.position = camera.target + glm::vec3(0, 50, 50);
+		camera.position = camera.target + glm::vec3(0, 10, 10);
 	}
 
 	// Actor‚Ìó‘Ô‚ðXV.
@@ -259,9 +260,12 @@ void MainGameScene::Update(float deltaTime)
 	objects.Update(deltaTime);
 
 	//player->position.y = heightMap.Height(player->position);
-	DetectCollision(player, enemies, PlayerCollisionHandler);
+	/*DetectCollision(player, enemies, PlayerCollisionHandler);
 	DetectCollision(player, trees, PlayerCollisionHandler);
-	DetectCollision(player, objects, PlayerCollisionHandler);
+	DetectCollision(player, objects, PlayerCollisionHandler);*/
+	DetectCollision(player, enemies);
+	DetectCollision(player, trees);
+	DetectCollision(player, objects);
 	//player->position.y = heightMap.Height(player->position);
 
 	player->UpdateDrawData(deltaTime);

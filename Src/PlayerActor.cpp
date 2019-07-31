@@ -203,4 +203,41 @@ void PlayerActor::SetBoardingActor(ActorPtr p) {
 	}
 }
 
+/**
+* プレイヤーが乗っている物体を設定する.
+*
+* @param b 乗っている物体.
+* @param p 衝突位置.
+*/
+void PlayerActor::OnHit(const ActorPtr& b, const glm::vec3& p) {
 
+	const glm::vec3 v = colWorld.s.center - p;
+	// 衝突位置との距離が近すぎないか調べる.
+	if (dot(v, v) > FLT_EPSILON) {
+		// thisをbに重ならない位置まで移動.
+		const glm::vec3 vn = normalize(v);
+		float radiusSum = colWorld.s.r;
+		switch (b->colWorld.type)
+		{
+		case Collision::Shape::Type::sphere:
+			radiusSum += b->colWorld.s.r;
+			break;
+		case Collision::Shape::Type::capsule:
+			radiusSum += b->colWorld.c.r;
+			break;
+		/*case Collision::Shape::Type::obb:
+			break;*/
+		}
+		const float distance = radiusSum - glm::length(v) + 0.01f;
+		position += vn * distance;
+		colWorld.s.center += vn * distance;
+	}
+	else {
+		// 移動を取り消す(距離が近すぎる場合の例外処理).
+		const float deltaTime = static_cast<float>(GLFWEW::Window::Instance().DeltaTime());
+		const glm::vec3 deltaVelocity = velocity * deltaTime;
+		position -= deltaVelocity;
+		colWorld.s.center -= deltaVelocity;
+	}
+	SetBoardingActor(b);
+}

@@ -11,6 +11,9 @@
 #include <memory>
 #include <functional>
 
+class Actor;
+using ActorPtr = std::shared_ptr<Actor>;
+
 /**
 * シーンに配置するオブジェクト.
 */
@@ -23,7 +26,7 @@ public:
 	virtual void Update(float deltaTime);
 	virtual void UpdateDrawData(float deltaTime);
 	virtual void Draw();
-
+	virtual void OnHit(const ActorPtr&, const glm::vec3&) {}
 
 	std::string name;                  ///< アクターの名前.
 	glm::vec3 position = glm::vec3(0);
@@ -88,8 +91,8 @@ private:
 };
 
 using CollisionHandlerType = std::function<void(const ActorPtr&, const ActorPtr&, const glm::vec3&)>;
-void DetectCollision(const ActorPtr& a, const ActorPtr& b, CollisionHandlerType handler);
-void DetectCollision(const ActorPtr& a, ActorList& b, CollisionHandlerType handler);
-void DetectCollision(ActorList& a, ActorList& b, CollisionHandlerType handler);
+void DetectCollision(const ActorPtr& a, const ActorPtr& b, CollisionHandlerType handler = nullptr);
+void DetectCollision(const ActorPtr& a, ActorList& b, CollisionHandlerType handler = nullptr);
+void DetectCollision(ActorList& a, ActorList& b, CollisionHandlerType handler = nullptr);
 
 #endif	// ACTOR_H_INCLUDED
