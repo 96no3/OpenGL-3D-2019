@@ -76,6 +76,10 @@ bool MainGameScene::Initialize()
 	fontRenderer.Init(1000);
 	fontRenderer.LoadFromFile("Res/Fonts/font.fnt");
 
+	// BGMを再生する.
+	bgm = Audio::Engine::Instance().Prepare("Res/Audio/BGM/gameBGM.wav");
+	bgm->Play(Audio::Flag_Loop);
+
 	meshBuffer.Init(1'000'000 * sizeof(Mesh::Vertex), 3'000'000 * sizeof(GLushort));
 	meshBuffer.LoadMesh("Res/Models/red_pine_tree.gltf");
 	//meshBuffer.LoadMesh("Res/Models/bikuni.gltf");
@@ -221,9 +225,12 @@ void MainGameScene::ProcessInput() {
 
 	if (window.GetGamePad().buttonDown & GamePad::X) {
 		SceneStack::Instance().Push(std::make_shared<StatusScene>());
+		Audio::Engine::Instance().Prepare("Res/Audio/SE/CliclOk.wav")->Play();
 	}
 	else if (window.GetGamePad().buttonDown & GamePad::START) {
-		SceneStack::Instance().Replace(std::make_shared<GameOverScene>());
+		Audio::Engine::Instance().Prepare("Res/Audio/SE/Click2.wav")->Play();
+		timer = 1.0f;
+		//SceneStack::Instance().Replace(std::make_shared<GameOverScene>());
 	}
 	
 	/*if (!flag) {
@@ -287,6 +294,17 @@ void MainGameScene::Update(float deltaTime)
 	fontRenderer.BeginUpdate();
 	fontRenderer.AddString(glm::vec2(-w * 0.5f + 32, h * 0.5f - lineHeight), L"メインゲーム画面");
 	fontRenderer.EndUpdate();
+
+	// シーン切り替え待ち.
+	if (timer > 0) {
+		timer -= deltaTime;
+		if (timer <= 0) {
+			timer = 0;
+			bgm->Stop();
+			SceneStack::Instance().Replace(std::make_shared<GameOverScene>());
+			return;
+		}
+	}
 }
 
 /**

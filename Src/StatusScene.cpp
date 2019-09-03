@@ -3,6 +3,7 @@
 */
 #include "StatusScene.h"
 #include "GLFWEW.h"
+#include "Audio/Audio.h"
 
 /**
 * コンストラクタ.
@@ -31,6 +32,7 @@ bool StatusScene::Initialize()
 void StatusScene::ProcessInput() {
 	GLFWEW::Window& window = GLFWEW::Window::Instance();
 	if (window.GetGamePad().buttonDown & GamePad::X) {
+		Audio::Engine::Instance().Prepare("Res/Audio/SE/ClickNo.wav")->Play();
 		SceneStack::Instance().Pop();
 	}
 }

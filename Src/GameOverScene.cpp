@@ -27,6 +27,10 @@ bool GameOverScene::Initialize()
 	fontRenderer.Init(1000);
 	fontRenderer.LoadFromFile("Res/Fonts/font.fnt");
 
+	// BGMを再生する.
+	bgm = Audio::Engine::Instance().Prepare("Res/Audio/BGM/ED.wav");
+	bgm->Play(Audio::Flag_Loop);
+
 	return true;
 }
 
@@ -36,7 +40,9 @@ bool GameOverScene::Initialize()
 void GameOverScene::ProcessInput() {
 	GLFWEW::Window& window = GLFWEW::Window::Instance();
 	if (window.GetGamePad().buttonDown & GamePad::START) {
-		SceneStack::Instance().Replace(std::make_shared<TitleScene>());
+		Audio::Engine::Instance().Prepare("Res/Audio/SE/toTitle.wav")->Play();
+		timer = 1.0f;
+		//SceneStack::Instance().Replace(std::make_shared<TitleScene>());
 	}
 }
 
@@ -61,6 +67,17 @@ void GameOverScene::Update(float deltaTime)
 	fontRenderer.BeginUpdate();
 	fontRenderer.AddString(glm::vec2(-w * 0.5f + 32, h * 0.5f - lineHeight), L"ゲームオーバー画面");
 	fontRenderer.EndUpdate();
+
+	// シーン切り替え待ち.
+	if (timer > 0) {
+		timer -= deltaTime;
+		if (timer <= 0) {
+			timer = 0;
+			bgm->Stop();
+			SceneStack::Instance().Replace(std::make_shared<TitleScene>());
+			return;
+		}
+	}
 }
 
 /**

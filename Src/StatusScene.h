@@ -6,6 +6,7 @@
 #include "Scene.h"
 #include "Font.h"
 
+
 /**
 * ステータス画面.
 */

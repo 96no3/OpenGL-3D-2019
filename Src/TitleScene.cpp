@@ -27,6 +27,10 @@ bool TitleScene::Initialize()
 	fontRenderer.Init(1000);
 	fontRenderer.LoadFromFile("Res/Fonts/font.fnt");
 
+	// BGM‚ðÄ¶‚·‚é.
+	bgm = Audio::Engine::Instance().Prepare("Res/Audio/BGM/OPmusic.wav");
+	bgm->Play(Audio::Flag_Loop);
+
 	return true;
 }
 
@@ -36,7 +40,7 @@ bool TitleScene::Initialize()
 void TitleScene::ProcessInput() {
 	GLFWEW::Window& window = GLFWEW::Window::Instance();
 	if (window.GetGamePad().buttonDown & GamePad::START) {
-		Audio::Engine::Instance().Prepare("Res/Audio/Start.wav")->Play();
+		Audio::Engine::Instance().Prepare("Res/Audio/SE/Start.wav")->Play();
 		timer = 1.0f;
 		//SceneStack::Instance().Replace(std::make_shared<MainGameScene>());
 	}
@@ -70,6 +74,7 @@ void TitleScene::Update(float deltaTime) {
 		timer -= deltaTime;
 		if (timer <= 0) {
 			timer = 0;
+			bgm->Stop();
 			SceneStack::Instance().Replace(std::make_shared<MainGameScene>());
 			return;
 		}

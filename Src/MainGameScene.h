@@ -11,6 +11,7 @@
 #include "Actor.h"
 #include "PlayerActor.h"
 #include <vector>
+#include "Audio/Audio.h"
 
 /**
 * ƒƒCƒ“ƒQ[ƒ€‰æ–Ê.
@@ -45,6 +46,9 @@ private:
 		glm::vec3 velocity = glm::vec3(0);
 	};
 	Camera camera;
+
+	float timer = 0;
+	Audio::SoundPtr bgm;
 };
 
 #endif // MAINGAMESCENE_H_INCLUDED

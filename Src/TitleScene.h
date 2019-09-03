@@ -29,6 +29,7 @@ private:
 	FontRenderer fontRenderer;
 
 	float timer = 0;
+	Audio::SoundPtr bgm;
 };
 
 #endif // TITLESCENE_H_INCLUDED
