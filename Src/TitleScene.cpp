@@ -36,7 +36,9 @@ bool TitleScene::Initialize()
 void TitleScene::ProcessInput() {
 	GLFWEW::Window& window = GLFWEW::Window::Instance();
 	if (window.GetGamePad().buttonDown & GamePad::START) {
-		SceneStack::Instance().Replace(std::make_shared<MainGameScene>());
+		Audio::Engine::Instance().Prepare("Res/Audio/Start.wav")->Play();
+		timer = 1.0f;
+		//SceneStack::Instance().Replace(std::make_shared<MainGameScene>());
 	}
 }
 
@@ -62,6 +64,16 @@ void TitleScene::Update(float deltaTime) {
 	fontRenderer.Color(glm::vec4(1, 0, 0, 1));
 	fontRenderer.AddString(glm::vec2(-128, 0), L"アクションゲーム");
 	fontRenderer.EndUpdate();
+
+	// シーン切り替え待ち.
+	if (timer > 0) {
+		timer -= deltaTime;
+		if (timer <= 0) {
+			timer = 0;
+			SceneStack::Instance().Replace(std::make_shared<MainGameScene>());
+			return;
+		}
+	}
 }
 
 /**

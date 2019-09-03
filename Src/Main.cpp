@@ -5,10 +5,17 @@
 #include <Windows.h>
 #include "TitleScene.h"
 #include "SkeletalMesh/SkeletalMesh.h"
+#include "Audio/Audio.h"
 
 int main() {
 	GLFWEW::Window& window = GLFWEW::Window::Instance();
 	window.Init(1280, 720, u8"アクションゲーム");
+
+	// 音声再生プログラムを初期化する.
+	Audio::Engine& audioEngine = Audio::Engine::Instance();
+	if (!audioEngine.Initialize()) {
+		return 1;
+	}
 
 	// スケルタル・アニメーションを利用可能にする.
 	Mesh::SkeletalAnimation::Initialize();
@@ -36,6 +43,9 @@ int main() {
 		// スケルタル・アニメーション用データをGPUメモリに転送.
 		Mesh::SkeletalAnimation::UploadUniformData();
 
+		// 音声再生プログラムを更新する.
+		audioEngine.Update();
+
 		// バックバッファを消去する.
 		glClearColor(0.1f, 0.2f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -49,4 +59,7 @@ int main() {
 
 	// スケルタル・アニメーションの利用を終了する.
 	Mesh::SkeletalAnimation::Finalize();
+
+	// 音声再生プログラムを終了する.
+	audioEngine.Finalize();
 }

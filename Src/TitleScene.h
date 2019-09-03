@@ -7,6 +7,7 @@
 #include "Sprite.h"
 #include "Font.h"
 #include <vector>
+#include "Audio/Audio.h"
 
 /**
 * ƒ^ƒCƒgƒ‹‰æ–Ê.
@@ -26,6 +27,8 @@ private:
 	std::vector<Sprite> sprites;
 	SpriteRenderer spriteRenderer;
 	FontRenderer fontRenderer;
+
+	float timer = 0;
 };
 
 #endif // TITLESCENE_H_INCLUDED

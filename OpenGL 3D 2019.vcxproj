@@ -126,6 +126,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Src\Actor.cpp" />
+    <ClCompile Include="Src\Audio\Audio.cpp" />
     <ClCompile Include="Src\BufferObject.cpp" />
     <ClCompile Include="Src\Collision.cpp" />
     <ClCompile Include="Src\Font.cpp" />
@@ -149,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Actor.h" />
+    <ClInclude Include="Src\Audio\Audio.h" />
     <ClInclude Include="Src\BufferObject.h" />
     <ClInclude Include="Src\Collision.h" />
     <ClInclude Include="Src\Font.h" />

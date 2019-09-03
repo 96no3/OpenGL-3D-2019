@@ -30,6 +30,9 @@
     <Filter Include="Res\Models">
       <UniqueIdentifier>{e4ea8529-1141-4782-aa8c-d3c8fd5fe8c4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Audio">
+      <UniqueIdentifier>{cc75f5ab-4591-4003-bbec-b5aba15bede0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -94,6 +97,9 @@
     </ClCompile>
     <ClCompile Include="Src\SkeletalMesh\UniformBuffer.cpp">
       <Filter>Src\SkeletalMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Audio\Audio.cpp">
+      <Filter>Src\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +168,9 @@
     </ClInclude>
     <ClInclude Include="Src\SkeletalMesh\UniformBuffer.h">
       <Filter>Src\SkeletalMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Audio\Audio.h">
+      <Filter>Src\Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
