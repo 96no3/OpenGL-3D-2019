@@ -12,6 +12,8 @@
 #include "PlayerActor.h"
 #include <vector>
 #include "Audio/Audio.h"
+#include <random>
+#include "JizoActor.h"
 
 /**
 * ƒƒCƒ“ƒQ[ƒ€‰æ–Ê.
@@ -28,6 +30,7 @@ public:
 	virtual void Finalize() override {}
 
 private:
+	std::mt19937 rand;
 	std::vector<Sprite> sprites;
 	SpriteRenderer spriteRenderer;
 	FontRenderer fontRenderer;

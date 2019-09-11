@@ -39,7 +39,7 @@ bool GameOverScene::Initialize()
 */
 void GameOverScene::ProcessInput() {
 	GLFWEW::Window& window = GLFWEW::Window::Instance();
-	if (window.GetGamePad().buttonDown & GamePad::START) {
+	if (timer <= 0 && (window.GetGamePad().buttonDown & GamePad::START)) {
 		Audio::Engine::Instance().Prepare("Res/Audio/SE/toTitle.wav")->Play();
 		timer = 1.0f;
 		//SceneStack::Instance().Replace(std::make_shared<TitleScene>());

@@ -8,7 +8,7 @@
 #include "SkeletalMesh/SkeletalMeshActor.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/constants.hpp>
-#include <random>
+//#include <random>
 
 /**
 * 衝突を解決する.
@@ -82,6 +82,7 @@ bool MainGameScene::Initialize()
 
 	meshBuffer.Init(1'000'000 * sizeof(Mesh::Vertex), 3'000'000 * sizeof(GLushort));
 	meshBuffer.LoadMesh("Res/Models/red_pine_tree.gltf");
+	meshBuffer.LoadMesh("Res/Models/jizo_statue.gltf");
 	//meshBuffer.LoadMesh("Res/Models/bikuni.gltf");
 	meshBuffer.LoadSkeletalMesh("Res/Models/bikuni.gltf");
 	//meshBuffer.LoadMesh("Res/Models/oni_small.gltf");
@@ -103,7 +104,7 @@ bool MainGameScene::Initialize()
 	//player->colLocal = Collision::CreateSphere(glm::vec3(0, 0.7f, 0), 0.7f);
 	player = std::make_shared<PlayerActor>(&heightMap, meshBuffer, startPos);
 
-	std::mt19937 rand;
+	//std::mt19937 rand;
 	rand.seed(0);
 
 	// 敵を配置.
@@ -149,6 +150,28 @@ bool MainGameScene::Initialize()
 			//p->colLocal = Collision::Sphere{ glm::vec3(0), 0.5f };
 			p->colLocal = Collision::CreateCapsule(glm::vec3(0, 0.5f, 0), glm::vec3(0, 7.5f, 0), 0.5f);
 			trees.Add(p);
+		}
+	}
+
+	// お地蔵様を配置.
+	{
+		const float pi = 3.14f;
+		const size_t objectCount = 4;
+		//objects.Reserve(objectCount);
+		const Mesh::FilePtr meshJizoStatue = meshBuffer.GetFile("Res/Models/jizo_statue.gltf");
+
+		for (size_t i = 0; i < objectCount; ++i) {
+			// お地蔵様の位置を(0,0)-(50,150)の範囲からランダムに選択.
+			glm::vec3 position(0);
+			position.x = std::uniform_real_distribution<float>(50, 150)(rand);
+			position.z = std::uniform_real_distribution<float>(50, 150)(rand);
+			position.y = heightMap.Height(position);
+			// お地蔵様の向きをランダムに選択.
+			glm::vec3 rotation(0);
+			rotation.y = std::uniform_real_distribution<float>(0, pi*2.0f)(rand);
+			JizoActorPtr p = std::make_shared<JizoActor>(meshJizoStatue, position, i, this);
+			p->scale = glm::vec3(3); // 見つけやすいように拡大.
+			objects.Add(p);
 		}
 	}
 
@@ -227,7 +250,7 @@ void MainGameScene::ProcessInput() {
 		SceneStack::Instance().Push(std::make_shared<StatusScene>());
 		Audio::Engine::Instance().Prepare("Res/Audio/SE/CliclOk.wav")->Play();
 	}
-	else if (window.GetGamePad().buttonDown & GamePad::START) {
+	else if (timer <= 0 && (window.GetGamePad().buttonDown & GamePad::START)) {
 		Audio::Engine::Instance().Prepare("Res/Audio/SE/Click2.wav")->Play();
 		timer = 1.0f;
 		//SceneStack::Instance().Replace(std::make_shared<GameOverScene>());

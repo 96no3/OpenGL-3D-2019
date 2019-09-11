@@ -471,7 +471,7 @@ void SkeletalMesh::Update(float deltaTime, const glm::mat4& matModel, const glm:
 */
 void SkeletalMesh::Draw() const
 {
-	if (!file) {
+	if (!file || uboSize <= 0) {
 		return;
 	}
 

@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <iostream>
+#include <vector>
+
+int main() {
+	const int maxNum = 5;
+	int xs[maxNum];
+	int max,min;
+	int evenNums[maxNum];
+	int oddNums[maxNum];
+	int evenCount = 0;
+	int oddCount = 0;
+
+	std::cout << "int型の数を5回入力してください\n";
+	for (int i = 0; i < maxNum; i++) {
+		std::cout << i+1 <<"回目の入力:";
+		std::cin >> xs[i];
+		// 最大最小処理
+		if (i == 0) {
+			max = xs[i];
+			min = xs[i];
+		}
+		else {
+			if (max < xs[i]) {
+				max = xs[i];
+			}
+			else if (min > xs[i]) {
+				min = xs[i];
+			}
+		}
+		// 奇数偶数処理
+		int tmp = xs[i] % 2;
+		if (tmp == 1) {
+			oddNums[oddCount] = xs[i];
+			oddCount++;
+		}
+		else {
+			evenNums[evenCount] = xs[i];
+			evenCount++;
+		}
+	}
+	std::cout << "あなたの入力した数は「" << xs[0] << "," << xs[1] << "," << xs[2] << "," << xs[3] << "," << xs[4] << "」\n";
+	
+	for (int i = 0; i < maxNum; ++i) {
+		for (int j = i + 1; j < maxNum; ++j) {
+			if (xs[i] > xs[j]) {
+				int tmp = xs[i];
+				xs[i] = xs[j];
+				xs[j] = tmp;
+			}
+		}
+	}
+
+	std::cout << "小さい順にソートすると「" << xs[0] << "," << xs[1] << "," << xs[2] << "," << xs[3] << "," << xs[4] << "」\n";	
+	std::cout << "入力値の最大値は：" << max << "\n" << "入力値の最小値は：" << min << "\n";
+
+	std::cout << "偶数=";
+	if (evenCount != 0) {
+		for (int i = 0; i < evenCount; ++i) {
+			if (i == evenCount - 1) {
+				std::cout << evenNums[i];
+			}
+			else {
+				std::cout << evenNums[i] << ",";
+			}			
+		}
+		std::cout << "\n";
+	}
+	else {
+		std::cout << "なし\n";
+	}
+	
+	std::cout << "奇数=";
+	if (oddCount != 0) {
+		for (int i = 0; i < oddCount; ++i) {
+			if (i == oddCount - 1) {
+				std::cout << oddNums[i];
+			}
+			else {
+				std::cout << oddNums[i] << ",";
+			}
+		}
+		std::cout << "\n";
+	}
+	else {
+		std::cout << "なし\n";
+	}
+	
+	return 0;
+}

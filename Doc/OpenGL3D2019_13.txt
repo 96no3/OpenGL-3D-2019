@@ -1,0 +1,112 @@
+#include <stdio.h>
+#include <vector>
+#include <random>
+#include <time.h>
+
+enum { Empty, Maru, Peke };
+
+int board[3][3] = {
+  { Empty, Empty, Empty },
+  { Empty, Empty, Empty },
+  { Empty, Empty, Empty },
+};
+
+// 盤面を表示する.
+void print_board() {
+	const char c[3] = { '.', 'o', 'x' };
+
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 3; ++j) {
+			/*switch (board[i][j])
+			{
+			case Empty:
+				printf("%c", c[0]);
+				break;
+			case Maru:
+				printf("%c", c[1]);
+				break;
+			case Peke:
+				printf("%c", c[2]);
+				break;
+			default:
+				break;
+			}*/
+			printf("%c ", c[board[i][j]]);
+		}
+		printf("\n");
+	}
+}
+
+// 空のマスのリストを作る.
+std::vector<int> make_empty_list() {
+	std::vector<int> v;
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 3; ++j) {
+			if (board[i][j] == Empty) {
+				v.push_back(i * 10 + j);
+			}
+		}
+	}
+	return v;
+}
+
+// 勝利判定.
+bool is_win(int type) {
+	for (int i = 0; i < 3; ++i) {
+		if (board[i][0] == type && board[i][1] == type && board[i][2] == type) {
+			return true;
+		}
+		if (board[0][i] == type && board[1][i] == type && board[2][i] == type) {
+			return true;
+		}			
+	}
+	if (board[0][0] == type && board[1][1] == type && board[2][2] == type) {
+		return true;
+	}
+	if (board[0][2] == type && board[1][1] == type && board[2][0] == type) {
+		return true;
+	}
+	return false;
+}
+
+int main() {
+	std::mt19937 rand;
+	rand.seed((unsigned int)time(NULL));
+
+	for (;;) {
+		print_board();
+		printf("マルを書く位置を指定してください：");
+		int x, y;
+		while (true) {
+			scanf("%d %d", &x, &y);
+			if (x >= 0 && y >= 0 && x <= 2 && y <= 2) {
+				if (board[y][x] == Empty) {
+					board[y][x] = Maru;
+					break;
+				}
+			}
+			printf("無効な入力値です\n再度、正しい位置を入力してください");
+		}
+
+		if (is_win(Maru)) {
+			printf("あなたの勝ち\n");
+			break;
+		}
+
+		std::vector<int> left = make_empty_list();
+		if (left.empty()) {
+			printf("引き分け\n");
+			break;
+		}
+		
+		const int p = left[std::uniform_int_distribution<>(0, left.size() - 1)(rand)];
+		board[p / 10][p % 10] = Peke;
+
+		if (is_win(Peke)) {
+			printf("あなたの負け\n");
+			break;
+		}
+	}
+	print_board();
+	return 0;
+}
