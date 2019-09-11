@@ -29,7 +29,11 @@ public:
 	virtual void Render() override;
 	virtual void Finalize() override {}
 
+	bool HandleJizoEffects(int id, const glm::vec3& pos);
+
 private:
+	int jizoId = -1; ///< Œ»Ýí“¬’†‚Ì‚¨’n‘ —l‚ÌID.
+	bool achivements[4] = { false,false,false,false }; ///< “G“¢”°ó‘Ô.
 	std::mt19937 rand;
 	std::vector<Sprite> sprites;
 	SpriteRenderer spriteRenderer;

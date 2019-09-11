@@ -22,5 +22,8 @@ void JizoActor::OnHit(const ActorPtr& other, const glm::vec3& p)
 	if (isActivated) {
 		return;
 	}
-	isActivated = true;
+	// 起動に成功したら起動フラグをtrueにする.
+	if (parent->HandleJizoEffects(id, position)) {
+		isActivated = true;
+	}	
 }
