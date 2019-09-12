@@ -34,6 +34,11 @@ void PlayerActor::Update(float deltaTime)
 	//StaticMeshActor::Update(deltaTime);
 	SkeletalMeshActor::Update(deltaTime);
 
+	// 攻撃判定の更新.
+	if (attackCollision) {
+		attackCollision->Update(deltaTime);
+	}
+
 	// 接地判定.
 	static const float gravity = 9.8f;
 	const float groundHeight = heightMap->Height(position);
@@ -100,6 +105,26 @@ void PlayerActor::Update(float deltaTime)
 			state = State::idle;
 		}
 		break;
+
+	case State::attack:
+		attackTimer += deltaTime;
+		if (attackTimer > 0.05f && attackTimer < 0.6f) {
+			if (!attackCollision) {
+				static const float radian = 1.0f;
+				const glm::vec3 front = glm::rotate(glm::mat4(1), rotation.y, glm::vec3(0, 1, 0)) * glm::vec4(0, 0, 1.5f, 1);
+				attackCollision = std::make_shared<Actor>("PlayerAttackCollision", 5, position + front + glm::vec3(0, 1, 0), glm::vec3(0), glm::vec3(radian));
+				attackCollision->colLocal = Collision::CreateSphere(glm::vec3(0), radian);
+			}
+		}
+		else {
+			attackCollision.reset();
+		}
+		if (GetMesh()->IsFinished()) {
+			attackCollision.reset();
+			GetMesh()->Play("Idle");
+			state = State::idle;
+		}
+		break;
 	}
 }
 
@@ -110,6 +135,7 @@ void PlayerActor::ProcessInput() {
 	const GamePad gamepad = GLFWEW::Window::Instance().GetGamePad();
 	CheckRun(gamepad);
 	CheckJump(gamepad);
+	CheckAttack(gamepad);
 }
 
 /**
@@ -189,6 +215,23 @@ void PlayerActor::Jump()
 	velocity.y = 5.0f;
 	boardingActor.reset();
 	isInAir = true;
+}
+
+/**
+* 攻撃操作を処理する.
+*
+* @param gamepad ゲームパッド入力.
+*/
+void PlayerActor::CheckAttack(const GamePad& gamepad) 
+{
+	if (isInAir) {
+		return;
+	}
+	if (gamepad.buttonDown & GamePad::A) {
+		GetMesh()->Play("Attack.Light", false);
+		attackTimer = 0;
+		state = State::attack;
+	}
 }
 
 /**
