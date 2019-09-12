@@ -299,6 +299,44 @@ void MainGameScene::Update(float deltaTime)
 	DetectCollision(player, objects);
 	//player->position.y = heightMap.Height(player->position);
 
+	// プレイヤーの攻撃判定.
+	ActorPtr attackCollision = player->GetAttackCollision();
+	if (attackCollision) {
+		bool hit = false;
+		DetectCollision(attackCollision, enemies,
+						[this, &hit](const ActorPtr& a, const ActorPtr& b, const glm::vec3& p) {
+							SkeletalMeshActorPtr bb = std::static_pointer_cast<SkeletalMeshActor>(b);
+							bb->health -= a->health;
+							if (bb->health <= 0) {
+								bb->colLocal = Collision::Shape{};
+								bb->health = 1;
+								bb->GetMesh()->Play("Down", false);
+							}
+							else {
+								bb->GetMesh()->Play("Hit", false);
+							}
+							hit = true;
+						}
+		);
+		if (hit) {
+			attackCollision->health = 0;
+		}
+	}
+
+	// 死亡アニメーションの終わった敵を消す.
+	for (auto& e : enemies) {
+		SkeletalMeshActorPtr enemy = std::static_pointer_cast<SkeletalMeshActor>(e);
+		Mesh::SkeletalMeshPtr mesh = enemy->GetMesh();
+		if (mesh->IsFinished()) {
+			if (mesh->GetAnimation() == "Down") {
+				enemy->health = 0;
+			}
+			else {
+				mesh->Play("Wait");
+			}
+		}
+	}
+
 	player->UpdateDrawData(deltaTime);
 	enemies.UpdateDrawData(deltaTime);
 	trees.UpdateDrawData(deltaTime);
