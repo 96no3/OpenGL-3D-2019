@@ -90,7 +90,7 @@ bool MainGameScene::Initialize()
 	meshBuffer.LoadMesh("Res/Models/wall_stone.gltf");
 
 	// ハイトマップを作成する.
-	if (!heightMap.LoadFromFile("Res/Images/Terrain00.tga", 20.0f, 0.5f)) {
+	if (!heightMap.LoadFromFile("Res/Images/whiteTerrain.tga", 20.0f, 0.5f)) {
 		return false;
 	}
 	if (!heightMap.CreateMesh(meshBuffer,"Terrain01")) {
@@ -281,7 +281,7 @@ void MainGameScene::Update(float deltaTime)
 	{
 		camera.target = player->position;
 		//camera.position = camera.target + glm::vec3(0, 50, 50);
-		camera.position = camera.target + glm::vec3(0, 10, 10);
+		camera.position = camera.target + glm::vec3(0, 20, 20);
 	}
 
 	// Actorの状態を更新.
@@ -332,8 +332,16 @@ void MainGameScene::Update(float deltaTime)
 				enemy->health = 0;
 			}
 			else {
-				mesh->Play("Wait");
+				mesh->Play("Run");
 			}
+		}
+	}
+
+	// 敵御全滅させたら目的達成フラグをtrueにする.
+	if (jizoId >= 0) {
+		if (enemies.Empty()) {
+			achivements[jizoId] = true;
+			jizoId = -1;
 		}
 	}
 
@@ -443,7 +451,7 @@ bool MainGameScene::HandleJizoEffects(int id, const glm::vec3& pos)
 		rotation.y = std::uniform_real_distribution<float>(0, pi * 2.0f)(rand);
 		const Mesh::SkeletalMeshPtr mesh = meshBuffer.GetSkeletalMesh("oni_small");
 		SkeletalMeshActorPtr p = std::make_shared<SkeletalMeshActor>(mesh, "kooni", 13, position, rotation);
-		p->GetMesh()->Play("Wait");
+		p->GetMesh()->Play("Run");
 		p->colLocal = Collision::CreateCapsule(glm::vec3(0, 0.5f, 0), glm::vec3(0, 1, 0), 0.5f);
 		enemies.Add(p);
 	}

@@ -216,5 +216,8 @@
     <Image Include="Res\Images\Terrain00.tga">
       <Filter>Res\Images</Filter>
     </Image>
+    <Image Include="Res\Images\whiteTerrain.tga">
+      <Filter>Res\Images</Filter>
+    </Image>
   </ItemGroup>
 </Project>

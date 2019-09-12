@@ -173,6 +173,17 @@ void ActorList::Update(float deltaTime)
 			e->Update(deltaTime);
 		}
 	}
+
+	// 死亡したアクターを削除する.
+	for (auto i = actors.begin(); i != actors.end();) {
+		const ActorPtr& e = *i;
+		if (!e || e->health <= 0) {
+			i = actors.erase(i);
+		}
+		else {
+			++i;
+		}
+	}
 }
 
 /**

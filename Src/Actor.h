@@ -79,6 +79,7 @@ public:
 	void Update(float deltaTime);
 	void UpdateDrawData(float deltaTime);
 	void Draw();
+	bool Empty() const { return actors.empty(); }
 
 	// イテレーターを取得する関数.
 	iterator begin() { return actors.begin(); }
