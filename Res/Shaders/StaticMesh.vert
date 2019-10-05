@@ -16,7 +16,7 @@ uniform mat4 matMVP;
 uniform mat4 matModel;
 
 /**
-* メッシュ用頂点シェーダー.
+* スタティックメッシュ用頂点シェーダー.
 */
 void main()
 {

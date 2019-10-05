@@ -11,7 +11,7 @@ out vec4 fragColor;
 uniform sampler2D texColor;
 
 /**
-* メッシュ用フラグメントシェーダー.
+* スタティックメッシュ用フラグメントシェーダー.
 */
 void main()
 {

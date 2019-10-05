@@ -1,8 +1,8 @@
 /**
 * @file Main.cpp
 */
-#include "GLFWEW.h"
 #include <Windows.h>
+#include "GLFWEW.h"
 #include "TitleScene.h"
 #include "SkeletalMesh/SkeletalMesh.h"
 #include "Audio/Audio.h"
@@ -25,7 +25,7 @@ int main() {
 
 	window.InitTimer();
 	while (!window.ShouldClose()) {
-		const float deltaTime = window.DeltaTime();
+		const float deltaTime = static_cast<float>(window.DeltaTime());
 		window.UpdateTimer();
 
 		// スケルタル・アニメーション用データの作成準備.

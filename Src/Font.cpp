@@ -111,7 +111,7 @@ bool FontRenderer::LoadFromFile(const char* path) {
 		// フォントファイルは左上が原点なので、OpenGLの座標系(左下が原点)に変換.
 		info.uv.y = scaleH - info.uv.y - info.size.y;
 
-		if (info.id<characterInfoList.size()) {
+		if (info.id < static_cast<int>(characterInfoList.size())) {
 			characterInfoList[info.id] = info;
 		}
 		++line;

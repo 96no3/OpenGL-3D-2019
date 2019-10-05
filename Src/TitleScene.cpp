@@ -59,8 +59,8 @@ void TitleScene::Update(float deltaTime) {
 	spriteRenderer.EndUpdate();
 
 	const GLFWEW::Window& window = GLFWEW::Window::Instance();
-	const float w = window.Width();
-	const float h = window.Height();
+	const float w = static_cast<float>(window.Width());
+	const float h = static_cast<float>(window.Height());
 	const float lineHeight = fontRenderer.LineHeight();
 	fontRenderer.BeginUpdate();
 	fontRenderer.Color(glm::vec4(1));

@@ -122,7 +122,7 @@ bool MainGameScene::Initialize()
 			position.y = heightMap.Height(position);
 			// 敵の向きをランダムに選択.
 			glm::vec3 rotation(0);
-			rotation.y = std::uniform_real_distribution<float>(0, 6.3f)(rand);
+			rotation.y = std::uniform_real_distribution<float>(0, glm::pi<float>() * 2)(rand);
 			//StaticMeshActorPtr p = std::make_shared<StaticMeshActor>(mesh, "kooni", 13, position, rotation);
 			const Mesh::SkeletalMeshPtr mesh = meshBuffer.GetSkeletalMesh("oni_small");
 			SkeletalMeshActorPtr p = std::make_shared<SkeletalMeshActor>(mesh, "kooni", 13, position, rotation);
@@ -136,7 +136,7 @@ bool MainGameScene::Initialize()
 
 	// 木を配置.
 	{
-		const size_t treeCount = 1000;
+		const size_t treeCount = 200;
 		trees.Reserve(treeCount);
 		const Mesh::FilePtr mesh = meshBuffer.GetFile("Res/Models/red_pine_tree.gltf");
 		for (size_t i = 0; i < treeCount; ++i) {
@@ -384,8 +384,7 @@ void MainGameScene::Render()
 {
 	const GLFWEW::Window& window = GLFWEW::Window::Instance();
 	const glm::vec2 screenSize(window.Width(), window.Height());
-	spriteRenderer.Draw(screenSize);
-	fontRenderer.Draw(screenSize);
+	spriteRenderer.Draw(screenSize);	
 
 	/*const glm::vec3 cameraPos(-5, 3, 5);
 	const glm::vec3 targetPos(0, 0, 0);*/
@@ -418,7 +417,9 @@ void MainGameScene::Render()
 	enemies.Draw();
 	objects.Draw();
 	glDisable(GL_CULL_FACE);
-	trees.Draw();	
+	trees.Draw();
+
+	fontRenderer.Draw(screenSize);
 }
 
 /**

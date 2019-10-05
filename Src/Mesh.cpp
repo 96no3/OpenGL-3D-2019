@@ -603,7 +603,7 @@ namespace Mesh {
 		}
 		const Mesh& mesh = file->meshes[0];
 		for (const Primitive& p : mesh.primitives) {
-			if (p.material < file->materials.size()) {
+			if (p.material < static_cast<int>(file->materials.size())) {
 				p.vao->Bind();
 				const Material& m = file->materials[p.material];
 				m.program->Use();
