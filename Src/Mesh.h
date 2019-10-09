@@ -104,6 +104,8 @@ namespace Mesh {
 		bool LoadSkeletalMesh(const char* path);
 		SkeletalMeshPtr GetSkeletalMesh(const char* meshName) const;
 
+		const Shader::ProgramPtr& GetStaticMeshShader() const { return progStaticMesh; }
+
 	private:
 		BufferObject vbo;
 		BufferObject ibo;
@@ -122,7 +124,6 @@ namespace Mesh {
 		std::unordered_map<std::string, ExtendedFilePtr> extendedFiles;
 	};
 
-	//void Draw(const FilePtr& file, const glm::mat4& matVP, const glm::mat4& matM);
 	void Draw(const FilePtr& file, const glm::mat4& matM);
 
 } // namespace Mesh

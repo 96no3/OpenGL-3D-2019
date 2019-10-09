@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <random>
+#include <time.h>
+
+#define CARD_NUM 52
+#define SUIT_NUM 13
+
+struct Card
+{
+	int no;
+	char suit;
+};
+
+void InitCard(Card* card) 
+{
+	for (int i = 0; i < CARD_NUM; i++) {
+		card[i].no = i % SUIT_NUM + 1;
+
+		switch (i / SUIT_NUM)
+		{
+		case 0:
+			card[i].suit = 's';
+			break;
+		case 1:
+			card[i].suit = 'h';
+			break;
+		case 2:
+			card[i].suit = 'q';
+			break;
+		case 3:
+			card[i].suit = 'd';
+			break;
+		default:
+			break;
+		}
+	}
+}
+
+void ShuffleCard(Card* card) 
+{
+	std::mt19937 rand;
+	rand.seed((unsigned int)time(NULL));
+
+	for (int i = 0; i < CARD_NUM; i++) {
+		int r = std::uniform_int_distribution<>(0, CARD_NUM - 1)(rand);
+
+		int tmp_num = card[i].no;
+		char tmp_suit = card[i].suit;
+
+		card[i].no = card[r].no;
+		card[i].suit = card[r].suit;
+		card[r].no = tmp_num;
+		card[r].suit = tmp_suit;
+	}
+}
+
+void PrintCard(Card* card, int num) 
+{
+	printf("--start---------\n");
+	for (int i = 0; i < num; i++) {
+		printf("%2d枚目: %c %2d \n", i + 1, card[i].suit, card[i].no);
+	}
+	printf("--end---------\n");
+}
+
+int main() {
+	Card card[CARD_NUM];
+	InitCard(card);
+	PrintCard(card, CARD_NUM);
+	ShuffleCard(card);
+	PrintCard(card, CARD_NUM);
+	PrintCard(card, 5);
+	return 0;
+}

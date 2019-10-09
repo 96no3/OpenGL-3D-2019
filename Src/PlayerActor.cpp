@@ -13,8 +13,6 @@
 * @param pos 経過時間.
 * @param rot 経過時間.
 */
-//PlayerActor::PlayerActor(const Mesh::FilePtr& mesh, const glm::vec3& pos, const glm::vec3& rot, const Terrain::HeightMap* hm):
-//	StaticMeshActor(mesh,"Player",20,pos,rot),heightMap(hm)
 PlayerActor::PlayerActor(const Terrain::HeightMap* hm, const Mesh::Buffer& buffer,const glm::vec3& pos, const glm::vec3& rot)
 	:SkeletalMeshActor(buffer.GetSkeletalMesh("Bikuni"),"Player",13,pos,rot), heightMap(hm)
 {
@@ -31,7 +29,6 @@ PlayerActor::PlayerActor(const Terrain::HeightMap* hm, const Mesh::Buffer& buffe
 void PlayerActor::Update(float deltaTime) 
 {
 	// 座標の更新.
-	//StaticMeshActor::Update(deltaTime);
 	SkeletalMeshActor::Update(deltaTime);
 
 	// 攻撃判定の更新.

@@ -3,7 +3,6 @@
 */
 #ifndef PLAYERACTOR_H_INCLUDED
 #define PLAYERACTOR_H_INCLUDED
-//#include "Actor.h"
 #include "GLFWEW.h"
 #include "SkeletalMesh/SkeletalMeshActor.h"
 #include "Terrain.h"
@@ -12,10 +11,9 @@
 /**
 * プレイヤーアクター.
 */
-class PlayerActor :public SkeletalMeshActor /*StaticMeshActor*/ 
+class PlayerActor :public SkeletalMeshActor
 {
 public:
-	//PlayerActor(const Mesh::FilePtr& mesh, const glm::vec3& pos, const glm::vec3& rot, const Terrain::HeightMap* hm);
 	PlayerActor(const Terrain::HeightMap* hm, const Mesh::Buffer& buffer,
 				const glm::vec3& pos, const glm::vec3& rot = glm::vec3(0));
 	virtual ~PlayerActor() = default;

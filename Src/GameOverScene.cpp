@@ -42,7 +42,6 @@ void GameOverScene::ProcessInput() {
 	if (timer <= 0 && (window.GetGamePad().buttonDown & GamePad::START)) {
 		Audio::Engine::Instance().Prepare("Res/Audio/SE/toTitle.wav")->Play();
 		timer = 1.0f;
-		//SceneStack::Instance().Replace(std::make_shared<TitleScene>());
 	}
 }
 

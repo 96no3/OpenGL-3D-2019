@@ -14,6 +14,7 @@
 #include "Audio/Audio.h"
 #include <random>
 #include "JizoActor.h"
+#include "Light.h"
 
 /**
 * ƒƒCƒ“ƒQ[ƒ€‰æ–Ê.
@@ -40,11 +41,13 @@ private:
 	FontRenderer fontRenderer;
 	Mesh::Buffer meshBuffer;
 	Terrain::HeightMap heightMap;
-	//StaticMeshActorPtr player;
 	PlayerActorPtr player;
 	ActorList enemies;
 	ActorList trees;
 	ActorList objects;
+
+	LightBuffer lightBuffer;
+	ActorList lights;
 
 	struct Camera {
 		glm::vec3 target = glm::vec3(100, 0, 100);

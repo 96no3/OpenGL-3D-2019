@@ -104,6 +104,9 @@
     <ClCompile Include="Src\JizoActor.cpp">
       <Filter>Src</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Light.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Scene.h">
@@ -178,13 +181,13 @@
     <ClInclude Include="Src\JizoActor.h">
       <Filter>Src</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Light.h">
+      <Filter>Src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Res\Shaders\Sprite.vert">
-      <Filter>Res\Shaders</Filter>
-    </None>
-    <None Include="Res\Shaders\Sprite.frag">
       <Filter>Res\Shaders</Filter>
     </None>
     <None Include="Res\fonts\font.fnt">
@@ -193,17 +196,20 @@
     <None Include="Res\Shaders\StaticMesh.vert">
       <Filter>Res\Shaders</Filter>
     </None>
-    <None Include="Res\Shaders\StaticMesh.frag">
-      <Filter>Res\Shaders</Filter>
-    </None>
-    <None Include="Res\Shaders\SkeletalMesh.frag">
-      <Filter>Res\Shaders</Filter>
-    </None>
     <None Include="Res\Shaders\SkeletalMesh.vert">
       <Filter>Res\Shaders</Filter>
     </None>
     <None Include="Res\Models\oni_small.gltf">
       <Filter>Res\Models</Filter>
+    </None>
+    <None Include="Res\Shaders\Sprite.frag">
+      <Filter>Res\Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\SkeletalMesh.frag">
+      <Filter>Res\Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\StaticMesh.frag">
+      <Filter>Res\Shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
