@@ -116,6 +116,17 @@ bool MainGameScene::Initialize()
 		lights.Add(std::make_shared<PointLightActor>("PointLight", color, position));
 	}
 
+	for (int i = 0; i < 50; ++i) {
+		glm::vec3 color(0, 5, 0);
+		glm::vec3 position(0);
+		position.x = static_cast<float>(std::uniform_int_distribution<>(80, 120)(rand));
+		position.z = static_cast<float>(std::uniform_int_distribution<>(80, 120)(rand));
+		position.y = heightMap.Height(position) + 2;
+		glm::vec3 direction(glm::normalize(glm::vec3(1, -1, 1)));
+		lights.Add(std::make_shared<SpotLightActor>("SpotLight", color, position, direction,
+			glm::radians(30.0f), glm::radians(20.0f)));
+	}
+
 	// 敵を配置.
 	{
 		const size_t oniCount = 100;
@@ -143,7 +154,7 @@ bool MainGameScene::Initialize()
 
 	// 木を配置.
 	{
-		const size_t treeCount = 200;
+		const size_t treeCount = 500;
 		trees.Reserve(treeCount);
 		const Mesh::FilePtr mesh = meshBuffer.GetFile("Res/Models/red_pine_tree.gltf");
 		for (size_t i = 0; i < treeCount; ++i) {
