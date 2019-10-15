@@ -90,7 +90,7 @@ bool MainGameScene::Initialize()
 	lightBuffer.BindToShader(meshBuffer.GetTerrainShader());
 	
 	// ハイトマップを作成する.
-	if (!heightMap.LoadFromFile("Res/Images/Terrain.tga", 20.0f, 0.5f)) {
+	if (!heightMap.LoadFromFile("Res/Images/whiteTerrain.tga", 20.0f, 0.5f)) {
 		return false;
 	}
 	if (!heightMap.CreateMesh(meshBuffer,"Terrain01")) {
@@ -241,7 +241,7 @@ void MainGameScene::Update(float deltaTime)
 	// カメラの状態を更新.		
 	{
 		camera.target = player->position;
-		camera.position = camera.target + glm::vec3(0, 100, 20);
+		camera.position = camera.target + glm::vec3(0, 20, 20);
 	}
 
 	// Actorの状態を更新.

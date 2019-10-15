@@ -503,7 +503,8 @@ void SkeletalMesh::Draw() const
 			for (int i = 0; i < sizeof(m.texture) / sizeof(m.texture[0]); ++i) {
 				glActiveTexture(GL_TEXTURE0 + i);
 				if (m.texture[i]) {
-					glBindTexture(GL_TEXTURE_2D, m.texture[i]->Get());
+					//glBindTexture(GL_TEXTURE_2D, m.texture[i]->Get());
+					glBindTexture(m.texture[i]->Target(), m.texture[i]->Get());
 				}
 				else {
 					glBindTexture(GL_TEXTURE_2D, 0);

@@ -10,7 +10,7 @@ layout(location=3) in vec3 inRawPosition;
 
 out vec4 fragColor;
 
-uniform sampler2D texColor[4];
+uniform sampler2D texColorArray[4];
 uniform isamplerBuffer texPointLightIndex;
 uniform isamplerBuffer texSpotLightIndex;
 
@@ -95,12 +95,12 @@ void main()
 
   //fragColor = texture(texColor, inTexCoord);
   // 地形テクスチャを合成.
-  vec4 ratio = texture(texColor[0], inTexCoord);
+  vec4 ratio = texture(texColorArray[0], inTexCoord);
   float baseRatio = max(0.0, 1.0 - ratio.r - ratio.g);
   vec2 uv = inTexCoord * 10.0;
-  fragColor.rgb = texture(texColor[1],uv).rgb * baseRatio;
-  fragColor.rgb += texture(texColor[2],uv).rgb * ratio.r;
-  fragColor.rgb += texture(texColor[3],uv).rgb * ratio.g;
+  fragColor.rgb = texture(texColorArray[1],uv).rgb * baseRatio;
+  fragColor.rgb += texture(texColorArray[2],uv).rgb * ratio.r;
+  fragColor.rgb += texture(texColorArray[3],uv).rgb * ratio.g;
   fragColor.a = 1.0;
 
   fragColor.rgb *= lightColor;

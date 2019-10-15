@@ -187,7 +187,7 @@ namespace Shader {
 			//glUseProgram(0);
 		}
 		for (GLint i = 0; i < 8; ++i) {
-			std::string name("texColor[");
+			std::string name("texColorArray[");
 			name += static_cast<char>('0' + i);
 			name += ']';
 			const GLint texColorLoc = glGetUniformLocation(id, name.c_str());
