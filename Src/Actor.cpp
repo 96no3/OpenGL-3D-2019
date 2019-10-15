@@ -135,7 +135,7 @@ void StaticMeshActor::Draw()
 void StaticMeshActor::SetPointLightList(const std::vector<int>& v) 
 {
 	pointLightCount = v.size();
-	for (int i = 0; i < 8 && static_cast<int>(v.size()); ++i) {
+	for (int i = 0; i < 8 && i < static_cast<int>(v.size()); ++i) {
 		pointLightIndex[i] = v[i];
 	}
 }
@@ -148,7 +148,7 @@ void StaticMeshActor::SetPointLightList(const std::vector<int>& v)
 void StaticMeshActor::SetSpotLightList(const std::vector<int>& v) 
 {
 	spotLightCount = v.size();
-	for (int i = 0; i < 8 && static_cast<int>(v.size()); ++i) {
+	for (int i = 0; i < 8 && i < static_cast<int>(v.size()); ++i) {
 		spotLightIndex[i] = v[i];
 	}
 }

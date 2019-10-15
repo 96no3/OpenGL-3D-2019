@@ -211,6 +211,12 @@
     <None Include="Res\Shaders\StaticMesh.frag">
       <Filter>Res\Shaders</Filter>
     </None>
+    <None Include="Res\Shaders\Terrain.vert">
+      <Filter>Res\Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\Terrain.frag">
+      <Filter>Res\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Res\Images\TitleBg.tga">
@@ -223,6 +229,18 @@
       <Filter>Res\Images</Filter>
     </Image>
     <Image Include="Res\Images\whiteTerrain.tga">
+      <Filter>Res\Images</Filter>
+    </Image>
+    <Image Include="Res\Images\Terrain_Ratio.tga">
+      <Filter>Res\Images</Filter>
+    </Image>
+    <Image Include="Res\Images\Terrain_Soil.tga">
+      <Filter>Res\Images</Filter>
+    </Image>
+    <Image Include="Res\Images\Terrain_Rock.tga">
+      <Filter>Res\Images</Filter>
+    </Image>
+    <Image Include="Res\Images\Terrain_Plant.tga">
       <Filter>Res\Images</Filter>
     </Image>
   </ItemGroup>

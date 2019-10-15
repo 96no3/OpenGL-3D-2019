@@ -11,10 +11,10 @@ out vec4 fragColor;
 
 uniform sampler2D texColor;
 
-uniform int pointLightCount;
+uniform int pointLightCount;	// ポイントライトの数.
 uniform int pointLightIndex[8];
 
-uniform int spotLightCount;
+uniform int spotLightCount;		// スポットライトの数.
 uniform int spotLightIndex[8];
 
 struct AmbientLight
@@ -50,7 +50,7 @@ layout(std140) uniform LightUniformBlock
 };
 
 /**
-* StaticMesh fragment shader.
+* スタティックメッシュ用フラグメントシェーダー.
 */
 void main()
 {

@@ -78,19 +78,19 @@ bool MainGameScene::Initialize()
 	bgm = Audio::Engine::Instance().Prepare("Res/Audio/BGM/gameBGM.wav");
 	bgm->Play(Audio::Flag_Loop);
 
-	meshBuffer.Init(1'000'000 * sizeof(Mesh::Vertex), 3'000'000 * sizeof(GLushort));
-
-	lightBuffer.Init(1);
-	lightBuffer.BindToShader(meshBuffer.GetStaticMeshShader());
-
+	meshBuffer.Init(1'000'000 * sizeof(Mesh::Vertex), 3'000'000 * sizeof(GLushort));	
 	meshBuffer.LoadMesh("Res/Models/red_pine_tree.gltf");
 	meshBuffer.LoadMesh("Res/Models/jizo_statue.gltf");
 	meshBuffer.LoadSkeletalMesh("Res/Models/bikuni.gltf");
 	meshBuffer.LoadSkeletalMesh("Res/Models/oni_small.gltf");
 	meshBuffer.LoadMesh("Res/Models/wall_stone.gltf");
+
+	lightBuffer.Init(1);
+	lightBuffer.BindToShader(meshBuffer.GetStaticMeshShader());
+	lightBuffer.BindToShader(meshBuffer.GetTerrainShader());
 	
 	// ハイトマップを作成する.
-	if (!heightMap.LoadFromFile("Res/Images/whiteTerrain.tga", 20.0f, 0.5f)) {
+	if (!heightMap.LoadFromFile("Res/Images/Terrain.tga", 20.0f, 0.5f)) {
 		return false;
 	}
 	if (!heightMap.CreateMesh(meshBuffer,"Terrain01")) {
@@ -126,6 +126,10 @@ bool MainGameScene::Initialize()
 		lights.Add(std::make_shared<SpotLightActor>("SpotLight", color, position, direction,
 			glm::radians(30.0f), glm::radians(20.0f)));
 	}
+
+	lights.Update(0);
+	lightBuffer.Update(lights, glm::vec3(0.1f, 0.05f, 0.15f));
+	heightMap.UpdateLightIndex(lights);
 
 	// 敵を配置.
 	{
@@ -195,11 +199,12 @@ bool MainGameScene::Initialize()
 	// 石壁を配置.
 	{		
 		const Mesh::FilePtr meshStoneWall = meshBuffer.GetFile("Res/Models/wall_stone.gltf");
-		glm::vec3 position = startPos + glm::vec3(0, 0, -65);
-		position.y = heightMap.Height(position);		
+		const glm::vec3 basePos(1, 0, 4);
+		glm::vec3 position = basePos;
+		position.y = heightMap.Height(position) + 4;
 		glm::vec3 rotation = glm::vec3(0, glm::pi<float>() * 0.5f, 0);
-		StaticMeshActorPtr p = std::make_shared<StaticMeshActor>(meshStoneWall, "StoneWall", 100, position, rotation, glm::vec3(4));
-		glm::vec3 rectSize = glm::vec3(2, 2, 0.5f) * 4.0f;
+		StaticMeshActorPtr p = std::make_shared<StaticMeshActor>(meshStoneWall, "StoneWall", 100, position, rotation, glm::vec3(2));
+		glm::vec3 rectSize = glm::vec3(2, 2, 0.5f) * 2.0f;
 		p->colLocal = Collision::CreateOBB(glm::vec3(0), glm::vec3(1, 0, 0), glm::vec3(0, 1, 0), glm::vec3(0, 0, -1), rectSize);
 		objects.Add(p);
 	}
@@ -236,7 +241,7 @@ void MainGameScene::Update(float deltaTime)
 	// カメラの状態を更新.		
 	{
 		camera.target = player->position;
-		camera.position = camera.target + glm::vec3(0, 20, 20);
+		camera.position = camera.target + glm::vec3(0, 100, 20);
 	}
 
 	// Actorの状態を更新.

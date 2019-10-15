@@ -493,11 +493,20 @@ void SkeletalMesh::Draw() const
 				continue;
 			}
 			m.progSkeletalMesh->Use();
-			if (m.texture) {
+			/*if (m.texture) {
 				const GLuint texId = m.texture->Get();
 				if (prevTexId != texId) {
 					m.progSkeletalMesh->BindTexture(0, texId);
 					prevTexId = texId;
+				}
+			}*/
+			for (int i = 0; i < sizeof(m.texture) / sizeof(m.texture[0]); ++i) {
+				glActiveTexture(GL_TEXTURE0 + i);
+				if (m.texture[i]) {
+					glBindTexture(GL_TEXTURE_2D, m.texture[i]->Get());
+				}
+				else {
+					glBindTexture(GL_TEXTURE_2D, 0);
 				}
 			}
 			const GLint locMaterialColor = glGetUniformLocation(m.progSkeletalMesh->Get(), "materialColor");
