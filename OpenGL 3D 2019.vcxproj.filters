@@ -107,6 +107,9 @@
     <ClCompile Include="Src\Light.cpp">
       <Filter>Src</Filter>
     </ClCompile>
+    <ClCompile Include="Src\GameClearScene.cpp">
+      <Filter>Src\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Scene.h">
@@ -184,6 +187,9 @@
     <ClInclude Include="Src\Light.h">
       <Filter>Src</Filter>
     </ClInclude>
+    <ClInclude Include="Src\GameClearScene.h">
+      <Filter>Src\Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -241,6 +247,9 @@
       <Filter>Res\Images</Filter>
     </Image>
     <Image Include="Res\Images\Terrain_Plant.tga">
+      <Filter>Res\Images</Filter>
+    </Image>
+    <Image Include="Res\Images\clearBG.tga">
       <Filter>Res\Images</Filter>
     </Image>
   </ItemGroup>

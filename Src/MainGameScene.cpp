@@ -5,6 +5,7 @@
 #include "MainGameScene.h"
 #include "StatusScene.h"
 #include "GameOverScene.h"
+#include "GameClearScene.h"
 #include "SkeletalMesh/SkeletalMeshActor.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/constants.hpp>
@@ -393,6 +394,25 @@ void MainGameScene::Update(float deltaTime)
 			jizoId = -1;
 		}
 	}
+	// 全ての目的達成フラグがtrueになっていたらメッセージを表示.
+	int achivedCount = 0;
+	for (auto e : achivements) {
+		if (e) {
+			++achivedCount;
+		}
+	}
+	if (isClear) {
+		clearTimer -= deltaTime;
+		if (clearTimer <= 0) {
+			SceneStack::Instance().Replace(std::make_shared<GameClearScene>());
+			return;
+		}
+	}
+	else if (achivedCount >= 4) {
+		Audio::Engine::Instance().Prepare("Res/Audio/SE/Result.wav")->Play();
+		isClear = true;
+		clearTimer = 3;
+	}
 
 	player->UpdateDrawData(deltaTime);
 	enemies.UpdateDrawData(deltaTime);
@@ -412,6 +432,10 @@ void MainGameScene::Update(float deltaTime)
 	const float lineHeight = fontRenderer.LineHeight();
 	fontRenderer.BeginUpdate();
 	fontRenderer.AddString(glm::vec2(-w * 0.5f + 32, h * 0.5f - lineHeight), L"メインゲーム画面");
+	fontRenderer.Color(glm::vec4(0,1,1,1));
+	if (isClear) {
+		fontRenderer.AddString(glm::vec2(-32 * 4, 0), L"ゲームクリア！！");
+	}
 	fontRenderer.EndUpdate();
 
 	// シーン切り替え待ち.

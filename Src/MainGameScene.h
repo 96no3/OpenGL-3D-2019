@@ -35,6 +35,9 @@ public:
 private:
 	int jizoId = -1; ///< 現在戦闘中のお地蔵様のID.
 	bool achivements[4] = { false,false,false,false }; ///< 敵討伐状態.
+	bool isClear = false; // ゲームクリアフラグ
+	float clearTimer = 0;
+
 	std::mt19937 rand;
 	std::vector<Sprite> sprites;
 	SpriteRenderer spriteRenderer;
