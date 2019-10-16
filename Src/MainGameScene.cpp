@@ -197,16 +197,82 @@ bool MainGameScene::Initialize()
 	}
 
 	// êŒï«Çîzíu.
-	{		
+	{
+		const int maze[27][25] = {
+			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+			{2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
+			{2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
+			{2,0,0,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,0,0,2},
+			{2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
+			{2,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,0,2},
+			{2,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,0,2},
+			{2,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,0,2},
+			{2,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,0,2},
+			{2,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,0,2},
+			{2,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,0,2},
+			{2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
+			{2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
+			{2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
+			{2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
+			{2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
+			{2,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,2},
+			{2,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,2},
+			{2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
+			{2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
+			{2,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,2},
+			{2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
+			{2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
+			{2,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,2},
+			{2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
+			{2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2},
+			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+		};
+
 		const Mesh::FilePtr meshStoneWall = meshBuffer.GetFile("Res/Models/wall_stone.gltf");
-		const glm::vec3 basePos(1, 0, 4);
-		glm::vec3 position = basePos;
+		const glm::vec3 baseXPos(4, 0, 1);
+		const glm::vec3 baseYPos(1, 0, -4);
+		glm::vec3 rectSize = glm::vec3(2, 2, 0.5f) * 2.0f;
+		glm::vec3 position = baseXPos;
+		for (int y = 0; y < 27; ++y) {
+			for (int x = 0; x < 25; ++x) {
+				if (maze[y][x] & 1) {					
+					if (y == 26) {
+						position = baseXPos + glm::vec3(x * 8, 0, y * 8 - 10);
+					}
+					else {
+						position = baseXPos + glm::vec3(x * 8, 0, y * 8);
+					}					
+					position.y = heightMap.Height(position) + 4;
+					StaticMeshActorPtr p = std::make_shared<StaticMeshActor>(
+						meshStoneWall, "StoneWall", 100, position, glm::vec3(0, 0, 0), glm::vec3(2));
+					p->colLocal = Collision::CreateOBB(glm::vec3(0, 0, 0),
+						glm::vec3(1, 0, 0), glm::vec3(0, 1, 0), glm::vec3(0, 0, -1), rectSize);
+					objects.Add(p);
+				}
+				if (maze[y][x] & 2) {
+					if (x == 24) {
+						position = baseYPos + glm::vec3(x * 8 + 6, 0, y * 8);
+					}
+					else {
+						position = baseYPos + glm::vec3(x * 8, 0, y * 8);
+					}					
+					position.y = heightMap.Height(position) + 4;
+					StaticMeshActorPtr p = std::make_shared<StaticMeshActor>(
+						meshStoneWall, "StoneWall", 100, position, glm::vec3(0, glm::pi<float>() * 0.5f, 0), glm::vec3(2));
+					p->colLocal = Collision::CreateOBB(glm::vec3(0, 0, 0),
+						glm::vec3(1, 0, 0), glm::vec3(0, 1, 0), glm::vec3(0, 0, -1), rectSize);
+					objects.Add(p);
+				}
+			}
+		}
+
+		/*glm::vec3 position = baseYPos;
 		position.y = heightMap.Height(position) + 4;
 		glm::vec3 rotation = glm::vec3(0, glm::pi<float>() * 0.5f, 0);
 		StaticMeshActorPtr p = std::make_shared<StaticMeshActor>(meshStoneWall, "StoneWall", 100, position, rotation, glm::vec3(2));
 		glm::vec3 rectSize = glm::vec3(2, 2, 0.5f) * 2.0f;
 		p->colLocal = Collision::CreateOBB(glm::vec3(0), glm::vec3(1, 0, 0), glm::vec3(0, 1, 0), glm::vec3(0, 0, -1), rectSize);
-		objects.Add(p);
+		objects.Add(p);*/
 	}
 
 	return true;
