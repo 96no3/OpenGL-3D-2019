@@ -182,12 +182,19 @@ namespace Shader {
 		glUseProgram(id);
 		const GLint texColorLoc = glGetUniformLocation(id, "texColor");
 		if (texColorLoc >= 0) {
-			//glUseProgram(id);
 			glUniform1i(texColorLoc, 0);
-			//glUseProgram(0);
 		}
 		for (GLint i = 0; i < 8; ++i) {
 			std::string name("texColorArray[");
+			name += static_cast<char>('0' + i);
+			name += ']';
+			const GLint texColorLoc = glGetUniformLocation(id, name.c_str());
+			if (texColorLoc >= 0) {
+				glUniform1i(texColorLoc, i);
+			}
+		}
+		for (GLint i = 0; i < 8; ++i) {
+			std::string name("texNormalArray[");
 			name += static_cast<char>('0' + i);
 			name += ']';
 			const GLint texColorLoc = glGetUniformLocation(id, name.c_str());

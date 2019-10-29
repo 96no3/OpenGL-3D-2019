@@ -255,5 +255,14 @@
     <Image Include="Res\Images\TitleBg.dds">
       <Filter>Res\Images</Filter>
     </Image>
+    <Image Include="Res\Images\Terrain_Soil_Normal.tga">
+      <Filter>Res\Images</Filter>
+    </Image>
+    <Image Include="Res\Images\Terrain_Rock_Normal.tga">
+      <Filter>Res\Images</Filter>
+    </Image>
+    <Image Include="Res\Images\Terrain_Plant_Normal.tga">
+      <Filter>Res\Images</Filter>
+    </Image>
   </ItemGroup>
 </Project>
