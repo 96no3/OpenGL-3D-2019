@@ -53,6 +53,25 @@ layout(std140) uniform LightUniformBlock
   SpotLight spotLight[100];
 };
 
+const float iorAir = 1.000293; // 空気の屈折率.
+const float iorWater = 1.333;  // 水の屈折率.
+
+const float eta = iorAir / iorWater;
+const float f0 = (1.0 - eta) * (1.0 - eta) / ((1.0 + eta) * (1.0 + eta));
+
+/**
+* シュリック近似式によってフレネル係数を計算する.
+*
+* @param v カメラベクトル.
+* @param n 法線ベクトル.
+*
+* @return  フレネル係数.
+*/
+float GetFresnelFactor(vec3 v, vec3 n)
+{
+  return f0 + (1.0 - f0) * pow(1.0 - dot(v,n), 5.0);
+}
+
 /**
 * Water用フラグメントシェーダー.
 */
@@ -101,10 +120,15 @@ void main()
 	}
   }
 
-  fragColor.rgb *= lightColor * 5;
+  fragColor.rgb *= lightColor;
 
   vec3 cameraVector = normalize(cameraPosition - inPosition);
   vec3 reflectionVector = 2.0 * max(dot(cameraVector,normal), 0.0) * normal - cameraVector;
   vec3 environmentColor = texture(texCubeMap, reflectionVector).rgb;
-  fragColor.rgb += environmentColor; 
+  //fragColor.rgb += environmentColor;
+  float brightness = 8.0;
+  float opacity = 0.6;
+  float f = GetFresnelFactor(cameraVector, normal);
+  fragColor.rgb += environmentColor * f * brightness;
+  fragColor.a = clamp(opacity + f * (1.0 - opacity), 0.0, 1.0);
 }

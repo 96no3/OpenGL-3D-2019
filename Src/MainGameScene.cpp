@@ -111,7 +111,7 @@ bool MainGameScene::Initialize()
 
 	// ライトを配置
 	lights.Add(std::make_shared<DirectionalLightActor>("DirectonalLight",
-		glm::vec3(0.2f), glm::normalize(glm::vec3(1, -2, -1))));
+		glm::vec3(0.15f, 0.25f, 0.2f) * 4.0f, glm::normalize(glm::vec3(1, -1, -1))));
 
 	for (int i = 0; i < 50; ++i) {
 		glm::vec3 color(1, 0.8f, 0.5f);

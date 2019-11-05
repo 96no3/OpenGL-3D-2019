@@ -201,7 +201,7 @@ namespace Shader {
 			name += ']';
 			const GLint texColorLoc = glGetUniformLocation(id, name.c_str());
 			if (texColorLoc >= 0) {
-				glUniform1i(texColorLoc, i);
+				glUniform1i(texColorLoc, i + 8); // normal用のユニフォーム変数はインデックス[8]以降に設定
 			}
 		}
 
