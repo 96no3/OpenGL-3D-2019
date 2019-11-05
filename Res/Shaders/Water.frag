@@ -126,7 +126,7 @@ void main()
   vec3 reflectionVector = 2.0 * max(dot(cameraVector,normal), 0.0) * normal - cameraVector;
   vec3 environmentColor = texture(texCubeMap, reflectionVector).rgb;
   //fragColor.rgb += environmentColor;
-  float brightness = 8.0;
+  float brightness = 4.0;
   float opacity = 0.6;
   float f = GetFresnelFactor(cameraVector, normal);
   fragColor.rgb += environmentColor * f * brightness;

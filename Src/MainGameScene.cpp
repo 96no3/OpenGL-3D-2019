@@ -85,6 +85,20 @@ bool MainGameScene::Initialize()
 	meshBuffer.LoadSkeletalMesh("Res/Models/bikuni.gltf");
 	meshBuffer.LoadSkeletalMesh("Res/Models/oni_small.gltf");
 	meshBuffer.LoadMesh("Res/Models/wall_stone.gltf");
+
+	// FBOを作成する.
+	const GLFWEW::Window& window = GLFWEW::Window::Instance();
+	fboMain = FramebufferObject::Create(window.Width(), window.Height());
+	Mesh::FilePtr rt = meshBuffer.AddPlane("RenderTarget");
+	if (rt) {
+		rt->materials[0].program = Shader::Program::Create(
+			"Res/Shaders/DepthOfField.vert", "Res/Shaders/DepthOfField.frag");
+		rt->materials[0].texture[0] = fboMain->GetColorTexture();
+		rt->materials[0].texture[1] = fboMain->GetDepthTexture();
+	}
+	if (!rt || !rt->materials[0].program) {
+		return false;
+	}
 	
 	// ハイトマップを作成する.
 	if (!heightMap.LoadFromFile("Res/Images/Terrain.tga", 20.0f, 0.5f)) {
@@ -111,7 +125,7 @@ bool MainGameScene::Initialize()
 
 	// ライトを配置
 	lights.Add(std::make_shared<DirectionalLightActor>("DirectonalLight",
-		glm::vec3(0.15f, 0.25f, 0.2f) * 4.0f, glm::normalize(glm::vec3(1, -1, -1))));
+		glm::vec3(0.15f, 0.25f, 0.2f) * 3.0f, glm::normalize(glm::vec3(1, -1, -1))));
 
 	for (int i = 0; i < 50; ++i) {
 		glm::vec3 color(1, 0.8f, 0.5f);
@@ -313,7 +327,8 @@ void MainGameScene::Update(float deltaTime)
 	// カメラの状態を更新.		
 	{
 		camera.target = player->position;
-		camera.position = camera.target + glm::vec3(0, 20, 20);
+		//camera.position = camera.target + glm::vec3(0, 20, 20);
+		camera.position = camera.target + glm::vec3(0, 8, 13);
 	}
 
 	// Actorの状態を更新.
@@ -463,12 +478,17 @@ void MainGameScene::Render()
 	const GLFWEW::Window& window = GLFWEW::Window::Instance();
 	const glm::vec2 screenSize(window.Width(), window.Height());
 	spriteRenderer.Draw(screenSize);
-
-	glEnable(GL_CULL_FACE);
-	glEnable(GL_DEPTH_TEST);
-
+	
 	lightBuffer.Upload();
 	lightBuffer.Bind();
+
+	// FBOに描画.
+	glBindFramebuffer(GL_FRAMEBUFFER, fboMain->GetFramebuffer());
+	glClearColor(0.5f, 0.6f, 0.8f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
 
 	const glm::mat4 matView = glm::lookAt(camera.position, camera.target, camera.up);
 	const float aspectRatio = static_cast<float>(window.Width()) / static_cast<float>(window.Height());
@@ -492,7 +512,20 @@ void MainGameScene::Render()
 
 	Mesh::Draw(meshBuffer.GetFile("Water"), glm::mat4(1)); // 半透明メッシュはできるだけ最後に描画
 
-	fontRenderer.Draw(screenSize);
+	// デフォルトのフレームバッファに描画.
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glDisable(GL_CULL_FACE);
+		glDisable(GL_DEPTH_TEST);
+		glDisable(GL_BLEND);
+
+		Mesh::FilePtr mesh = meshBuffer.GetFile("RenderTarget");
+		Mesh::Draw(mesh, glm::mat4(1));
+
+		fontRenderer.Draw(screenSize);
+	}
 }
 
 /**

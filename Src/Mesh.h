@@ -103,6 +103,7 @@ namespace Mesh {
 		void SetTime(double) const;
 
 		void AddCube(const char* name);
+		FilePtr AddPlane(const char* name);
 
 		// スケルタル・アニメーションに対応したメッシュの読み込みと取得.
 		bool LoadSkeletalMesh(const char* path);

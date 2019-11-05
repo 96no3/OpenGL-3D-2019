@@ -110,6 +110,9 @@
     <ClCompile Include="Src\GameClearScene.cpp">
       <Filter>Src\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="Src\FramebufferObject.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Scene.h">
@@ -190,6 +193,9 @@
     <ClInclude Include="Src\GameClearScene.h">
       <Filter>Src\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="Src\FramebufferObject.h">
+      <Filter>Src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -224,6 +230,12 @@
       <Filter>Res\Shaders</Filter>
     </None>
     <None Include="Res\Shaders\Water.frag">
+      <Filter>Res\Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\DepthOfField.vert">
+      <Filter>Res\Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\DepthOfField.frag">
       <Filter>Res\Shaders</Filter>
     </None>
   </ItemGroup>

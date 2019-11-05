@@ -130,6 +130,7 @@
     <ClCompile Include="Src\BufferObject.cpp" />
     <ClCompile Include="Src\Collision.cpp" />
     <ClCompile Include="Src\Font.cpp" />
+    <ClCompile Include="Src\FramebufferObject.cpp" />
     <ClCompile Include="Src\GameClearScene.cpp" />
     <ClCompile Include="Src\GameOverScene.cpp" />
     <ClCompile Include="Src\GLFWEW.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="Src\BufferObject.h" />
     <ClInclude Include="Src\Collision.h" />
     <ClInclude Include="Src\Font.h" />
+    <ClInclude Include="Src\FramebufferObject.h" />
     <ClInclude Include="Src\GameClearScene.h" />
     <ClInclude Include="Src\GameOverScene.h" />
     <ClInclude Include="Src\GamePad.h" />
@@ -185,6 +187,8 @@
     <None Include="Res\Models\oni_small.gltf">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </None>
+    <None Include="Res\Shaders\DepthOfField.frag" />
+    <None Include="Res\Shaders\DepthOfField.vert" />
     <None Include="Res\Shaders\SkeletalMesh.frag" />
     <None Include="Res\Shaders\SkeletalMesh.vert" />
     <None Include="Res\Shaders\Sprite.frag" />

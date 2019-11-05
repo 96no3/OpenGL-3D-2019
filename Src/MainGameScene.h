@@ -15,6 +15,7 @@
 #include <random>
 #include "JizoActor.h"
 #include "Light.h"
+#include "FramebufferObject.h"
 
 /**
 * ƒƒCƒ“ƒQ[ƒ€‰æ–Ê.
@@ -51,6 +52,8 @@ private:
 
 	LightBuffer lightBuffer;
 	ActorList lights;
+
+	FramebufferObjectPtr fboMain;
 
 	struct Camera {
 		glm::vec3 target = glm::vec3(100, 0, 100);

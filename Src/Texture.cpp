@@ -318,23 +318,31 @@ namespace Texture {
 	/**
 	* 2Dテクスチャを作成する.
 	*
-	* @param width   テクスチャの幅(ピクセル数).
-	* @param height  テクスチャの高さ(ピクセル数).
-	* @param data    テクスチャデータへのポインタ.
-	* @param format  転送元画像のデータ形式.
-	* @param type	 転送元画像のデータ格納形式.
+	* @param width			テクスチャの幅(ピクセル数).
+	* @param height			テクスチャの高さ(ピクセル数).
+	* @param data			テクスチャデータへのポインタ.
+	* @param format			転送元画像のデータ形式.
+	* @param type			転送元画像のデータ格納形式.
+	* @param internalFormat	GPU側のデータ形式.
 	*
 	* @retval 0以外  作成したテクスチャ・オブジェクトのID.
 	* @retval 0      テクスチャの作成に失敗.
 	*/
 	GLuint CreateImage2D(GLsizei width, GLsizei height, const GLvoid* data, GLenum format, GLenum type)
 	{
+		return CreateImage2D(width, height, data, format, type, GL_RGBA8);
+	}
+
+	GLuint CreateImage2D(GLsizei width, GLsizei height, const GLvoid* data,
+		GLenum format, GLenum type, GLenum internalFormat)
+	{
 		GLuint id;
 
 		glGenTextures(1, &id);
 		glBindTexture(GL_TEXTURE_2D, id);
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, format, type, data);
+		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, format, type, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, data);
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
 		const GLenum result = glGetError();
