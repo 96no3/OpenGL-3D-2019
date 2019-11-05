@@ -223,6 +223,9 @@
     <None Include="Res\Shaders\Terrain.frag">
       <Filter>Res\Shaders</Filter>
     </None>
+    <None Include="Res\Shaders\Water.frag">
+      <Filter>Res\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Res\Images\TitleBg.tga">
@@ -262,6 +265,15 @@
       <Filter>Res\Images</Filter>
     </Image>
     <Image Include="Res\Images\Terrain_Plant_Normal.tga">
+      <Filter>Res\Images</Filter>
+    </Image>
+    <Image Include="Res\Images\Terrain.tga">
+      <Filter>Res\Images</Filter>
+    </Image>
+    <Image Include="Res\Images\cubemap_nx.tga">
+      <Filter>Res\Images</Filter>
+    </Image>
+    <Image Include="Res\Images\Terrain_Water_Normal.tga">
       <Filter>Res\Images</Filter>
     </Image>
   </ItemGroup>

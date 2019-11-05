@@ -85,19 +85,24 @@ bool MainGameScene::Initialize()
 	meshBuffer.LoadSkeletalMesh("Res/Models/bikuni.gltf");
 	meshBuffer.LoadSkeletalMesh("Res/Models/oni_small.gltf");
 	meshBuffer.LoadMesh("Res/Models/wall_stone.gltf");
-
-	lightBuffer.Init(1);
-	lightBuffer.BindToShader(meshBuffer.GetStaticMeshShader());
-	lightBuffer.BindToShader(meshBuffer.GetTerrainShader());
 	
 	// ハイトマップを作成する.
-	if (!heightMap.LoadFromFile("Res/Images/whiteTerrain.tga", 20.0f, 0.5f)) {
+	if (!heightMap.LoadFromFile("Res/Images/Terrain.tga", 20.0f, 0.5f)) {
 		return false;
 	}
 	if (!heightMap.CreateMesh(meshBuffer,"Terrain01")) {
 		return false;
+	}	// 水面の高さは要調整
+	if (!heightMap.CreateWaterMesh(meshBuffer, "Water",-6)) {
+		return false;
 	}
 
+	lightBuffer.Init(1);
+	lightBuffer.BindToShader(meshBuffer.GetStaticMeshShader());
+	lightBuffer.BindToShader(meshBuffer.GetTerrainShader());
+	lightBuffer.BindToShader(meshBuffer.GetWaterShader());
+
+	// プレイヤーを配置
 	glm::vec3 startPos(100, 0, 100);
 	startPos.y = heightMap.Height(startPos);
 	player = std::make_shared<PlayerActor>(&heightMap, meshBuffer, startPos);
@@ -468,18 +473,24 @@ void MainGameScene::Render()
 	const glm::mat4 matView = glm::lookAt(camera.position, camera.target, camera.up);
 	const float aspectRatio = static_cast<float>(window.Width()) / static_cast<float>(window.Height());
 	const glm::mat4 matProj = glm::perspective(glm::radians(30.0f), aspectRatio, 1.0f, 1000.0f);
-	glm::vec3 cubePos(0, 0, 0);
+	glm::vec3 cubePos(100, 0, 100);
 	cubePos.y = heightMap.Height(cubePos);
 	const glm::mat4 matModel = glm::translate(glm::mat4(1), cubePos);
 	meshBuffer.SetViewProjectionMatrix(matProj * matView);
+
+	meshBuffer.SetCameraPosition(camera.position);
+	meshBuffer.SetTime(window.Time());
+
 	Mesh::Draw(meshBuffer.GetFile("Cube"), matModel);
-	Mesh::Draw(meshBuffer.GetFile("Terrain01"), glm::mat4(1));
+	Mesh::Draw(meshBuffer.GetFile("Terrain01"), glm::mat4(1));	
 
 	player->Draw();
 	enemies.Draw();
 	objects.Draw();
 	glDisable(GL_CULL_FACE);
 	trees.Draw();
+
+	Mesh::Draw(meshBuffer.GetFile("Water"), glm::mat4(1)); // 半透明メッシュはできるだけ最後に描画
 
 	fontRenderer.Draw(screenSize);
 }

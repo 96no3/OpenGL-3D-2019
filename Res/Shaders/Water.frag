@@ -1,12 +1,10 @@
 /**
-* @file Terrain.frag
+* @file Water.frag
 */
 #version 430
 
 layout(location=0) in vec3 inPosition;
 layout(location=1) in vec2 inTexCoord;
-//layout(location=2) in vec3 inNormal;
-//layout(location=3) in vec3 inRawPosition;
 layout(location=2) in vec3 inTBN[3];
 layout(location=5) in vec3 inRawPosition;
 
@@ -16,6 +14,10 @@ uniform sampler2D texColorArray[4];
 uniform sampler2D texNormalArray[3];
 uniform isamplerBuffer texPointLightIndex;
 uniform isamplerBuffer texSpotLightIndex;
+
+uniform vec3 cameraPosition;
+uniform samplerCube texCubeMap;
+uniform float time;
 
 const ivec2 mapSize = ivec2(200, 200);
 
@@ -52,23 +54,19 @@ layout(std140) uniform LightUniformBlock
 };
 
 /**
-* Terrain用フラグメントシェーダー.
+* Water用フラグメントシェーダー.
 */
 void main()
 {
-  // 地形テクスチャを合成.
-  vec4 ratio = texture(texColorArray[0], inTexCoord);
-  float baseRatio = max(0.0, 1.0 - ratio.r - ratio.g);
-  vec2 uv = inTexCoord * 10.0;
-  fragColor.rgb = texture(texColorArray[1],uv).rgb * baseRatio;
-  fragColor.rgb += texture(texColorArray[2],uv).rgb * ratio.r;
-  fragColor.rgb += texture(texColorArray[3],uv).rgb * ratio.g;
-  fragColor.a = 1.0;
+  vec4 waterColor = vec4(0.15, 0.20, 0.3, 0.6);
+  fragColor = waterColor;
 
   mat3 matTBN = mat3(normalize(inTBN[0]),normalize(inTBN[1]),normalize(inTBN[2]));
-  vec3 normal = (texture(texNormalArray[0],uv).rgb * 2.0 - 1.0) * baseRatio;
-  normal += (texture(texNormalArray[1],uv).rgb * 2.0 - 1.0) * ratio.r;
-  normal += (texture(texNormalArray[2],uv).rgb * 2.0 - 1.0) * ratio.g;
+  vec4 uv = inTexCoord.xyxy * vec4(11.0, 11.0, 5.0, 5.0);
+  vec4 scroll = vec4(-0.01, -0.01, 0.005, 0.005) * time;
+  vec3 normalS = texture(texNormalArray[0], uv.xy + scroll.xy).rgb * 2.0 - 1.0;
+  vec3 normalL = texture(texNormalArray[0], uv.zw + scroll.zw).rgb * 2.0 - 1.0;
+  vec3 normal = normalS * 0.5 + normalL;
   normal = normalize(matTBN * normal);
 
   vec3 lightColor = ambientLight.color.rgb;
@@ -103,5 +101,10 @@ void main()
 	}
   }
 
-  fragColor.rgb *= lightColor;
+  fragColor.rgb *= lightColor * 5;
+
+  vec3 cameraVector = normalize(cameraPosition - inPosition);
+  vec3 reflectionVector = 2.0 * max(dot(cameraVector,normal), 0.0) * normal - cameraVector;
+  vec3 environmentColor = texture(texCubeMap, reflectionVector).rgb;
+  fragColor.rgb += environmentColor; 
 }

@@ -38,6 +38,9 @@ namespace Shader {
 		void SetPointLightIndex(int count, const int* indexList);
 		void SetSpotLightIndex(int count, const int* indexList);
 
+		void SetCameraPosition(const glm::vec3&);
+		void SetTime(float);
+
 		/// プログラムIDを取得する.
 		GLuint Get() const { return id; }
 
@@ -52,6 +55,8 @@ namespace Shader {
 		GLint locPointLightCount = -1;
 		GLint locSpotLightIndex = -1;
 		GLint locSpotLightCount = -1;
+		GLint locCameraPosition = -1;
+		GLint locTime = -1;
 
 		glm::mat4 matVP = glm::mat4(1);	// ビュー・プロジェクション行列.
 	};

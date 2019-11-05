@@ -178,6 +178,8 @@ namespace Shader {
 		locPointLightCount = glGetUniformLocation(id, "pointLightCount");
 		locSpotLightIndex = glGetUniformLocation(id, "spotLightIndex");
 		locSpotLightCount = glGetUniformLocation(id, "spotLightCount");
+		locCameraPosition = glGetUniformLocation(id, "cameraPosition");
+		locTime = glGetUniformLocation(id, "time");
 
 		glUseProgram(id);
 		const GLint texColorLoc = glGetUniformLocation(id, "texColor");
@@ -211,7 +213,10 @@ namespace Shader {
 		if (locTexSpotLightIndex >= 0) {
 			glUniform1i(locTexSpotLightIndex, 5);
 		}
-
+		const GLint locTexCubeMap = glGetUniformLocation(id, "texCubeMap");
+		if (locTexCubeMap >= 0) {
+			glUniform1i(locTexCubeMap, 6);
+		}
 		glUseProgram(0);
 	}
 
@@ -308,6 +313,30 @@ namespace Shader {
 		}
 		if (locSpotLightIndex >= 0 && count > 0) {
 			glUniform1iv(locSpotLightIndex, count, indexList);
+		}
+	}
+
+	/**
+	* カメラ座標を設定する.
+	*
+	* @param pos カメラ座標.
+	*/
+	void Program::SetCameraPosition(const glm::vec3& pos) 
+	{
+		if (locCameraPosition >= 0) {
+			glUniform3fv(locCameraPosition, 1, &pos.x);
+		}
+	}
+
+	/**
+	* 経過時間を設定する.
+	*
+	* @param time 総経過時間.
+	*/
+	void Program::SetTime(float time) 
+	{
+		if (locTime >= 0) {
+			glUniform1f(locTime, time);
 		}
 	}
 

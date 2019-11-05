@@ -193,10 +193,13 @@
     <None Include="Res\Shaders\StaticMesh.vert" />
     <None Include="Res\Shaders\Terrain.frag" />
     <None Include="Res\Shaders\Terrain.vert" />
+    <None Include="Res\Shaders\Water.frag" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Res\fonts\font_0.tga" />
     <Image Include="Res\Images\clearBG.tga" />
+    <Image Include="Res\Images\cubemap_nx.tga" />
+    <Image Include="Res\Images\Terrain.tga" />
     <Image Include="Res\Images\Terrain00.tga" />
     <Image Include="Res\Images\Terrain_Plant.tga" />
     <Image Include="Res\Images\Terrain_Plant_Normal.tga" />
@@ -205,6 +208,7 @@
     <Image Include="Res\Images\Terrain_Rock_Normal.tga" />
     <Image Include="Res\Images\Terrain_Soil.tga" />
     <Image Include="Res\Images\Terrain_Soil_Normal.tga" />
+    <Image Include="Res\Images\Terrain_Water_Normal.tga" />
     <Image Include="Res\Images\TitleBg.dds" />
     <Image Include="Res\Images\TitleBg.tga" />
     <Image Include="Res\Images\whiteTerrain.tga" />

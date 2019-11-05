@@ -309,4 +309,13 @@ namespace GLFWEW {
 		return deltaTime;
 	}
 
+	/**
+	* ‘Œo‰ßŠÔ‚ğæ“¾‚·‚é.
+	*
+	* @return GLFW‚ª‰Šú‰»‚³‚ê‚Ä‚©‚ç‚ÌŒo‰ßŠÔ(•b).
+	*/
+	double Window::Time() const {
+		return glfwGetTime();
+	}
+
 }	// namespace GLFWEW
