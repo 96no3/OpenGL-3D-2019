@@ -492,7 +492,8 @@ void MainGameScene::Render()
 
 	const glm::mat4 matView = glm::lookAt(camera.position, camera.target, camera.up);
 	const float aspectRatio = static_cast<float>(window.Width()) / static_cast<float>(window.Height());
-	const glm::mat4 matProj = glm::perspective(glm::radians(30.0f), aspectRatio, 1.0f, 1000.0f);
+	//const glm::mat4 matProj = glm::perspective(glm::radians(30.0f), aspectRatio, 1.0f, 1000.0f);
+	const glm::mat4 matProj = glm::perspective(camera.fov * 0.5f, aspectRatio, camera.near, camera.far);
 	glm::vec3 cubePos(100, 0, 100);
 	cubePos.y = heightMap.Height(cubePos);
 	const glm::mat4 matModel = glm::translate(glm::mat4(1), cubePos);
@@ -521,7 +522,17 @@ void MainGameScene::Render()
 		glDisable(GL_DEPTH_TEST);
 		glDisable(GL_BLEND);
 
+		camera.Update(matView);
+
 		Mesh::FilePtr mesh = meshBuffer.GetFile("RenderTarget");
+
+		Shader::ProgramPtr prog = mesh->materials[0].program;
+		prog->Use();
+		prog->SetViewInfo(static_cast<float>(window.Width()),
+			static_cast<float>(window.Height()), camera.near, camera.far);
+		prog->SetCameraInfo(camera.focalPlane, camera.focalLength,
+			camera.aperture, camera.sensorSize);
+
 		Mesh::Draw(mesh, glm::mat4(1));
 
 		fontRenderer.Draw(screenSize);
@@ -562,6 +573,22 @@ bool MainGameScene::HandleJizoEffects(int id, const glm::vec3& pos)
 		enemies.Add(p);
 	}
 	return true;
+}
+
+/**
+* カメラのパラメータを更新する.
+*
+* @param matView  更新に利用するビュー行列.
+*/
+void MainGameScene::Camera::Update(const glm::mat4& matView) 
+{
+	const glm::vec4 pos = matView * glm::vec4(target, 1);
+	focalPlane = pos.z * -1000.0f;
+
+	const float imageDistance = sensorSize * 0.5f / glm::tan(fov * 0.5f);
+	focalLength = 1.0f / ((1.0f / focalPlane) + (1.0f / imageDistance));
+
+	aperture = focalLength / fNumber;
 }
 
 //

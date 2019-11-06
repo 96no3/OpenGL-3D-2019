@@ -168,7 +168,11 @@ namespace Shader {
 			locPointLightIndex = -1;
 			locPointLightCount = -1;
 			locSpotLightIndex = -1;
-			locSpotLightCount = -1;			
+			locSpotLightCount = -1;
+			locCameraPosition = -1;
+			locTime = -1;
+			locViewInfo = -1;
+			locCameraInfo = -1;
 			return;
 		}
 		locMatMVP = glGetUniformLocation(id, "matMVP");
@@ -180,6 +184,8 @@ namespace Shader {
 		locSpotLightCount = glGetUniformLocation(id, "spotLightCount");
 		locCameraPosition = glGetUniformLocation(id, "cameraPosition");
 		locTime = glGetUniformLocation(id, "time");
+		locViewInfo = glGetUniformLocation(id, "viewInfo");
+		locCameraInfo = glGetUniformLocation(id, "cameraInfo");
 
 		glUseProgram(id);
 		const GLint texColorLoc = glGetUniformLocation(id, "texColor");
@@ -337,6 +343,36 @@ namespace Shader {
 	{
 		if (locTime >= 0) {
 			glUniform1f(locTime, time);
+		}
+	}
+
+	/**
+	* 画面の情報を設定する.
+	*
+	* @param w    ウィンドウの幅(ピクセル単位).
+	* @param h    ウィンドウの高さ(ピクセル単位).
+	* @param near 最小z距離(m単位).
+	* @param far  最大z距離(m単位).
+	*/
+	void Program::SetViewInfo(float w, float h, float near, float far) 
+	{
+		if (locViewInfo >= 0) {
+			glUniform4f(locViewInfo, 1.0f / w, 1.0f / h, near, far);
+		}
+	}
+
+	/**
+	* カメラの情報を設定する.
+	*
+	* @param focalPlane  焦平面(ピントの合う位置のレンズからの距離.mm単位).
+	* @param focalLength 焦点距離(光が1点に集まる位置のレンズからの距離.mm単位).
+	* @param aperture    開口(光の取入口のサイズ.mm単位).
+	* @param sensorSize  センサーサイズ(光を受けるセンサーの横幅.mm単位)
+	*/
+	void Program::SetCameraInfo(float focalPlane, float focalLength, float aperture, float sensorSize) 
+	{
+		if (locCameraInfo >= 0) {
+			glUniform4f(locCameraInfo, focalPlane, focalLength, aperture, sensorSize);
 		}
 	}
 
