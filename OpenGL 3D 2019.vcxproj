@@ -187,8 +187,12 @@
     <None Include="Res\Models\oni_small.gltf">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </None>
+    <None Include="Res\Shaders\BrightPassFilter.frag" />
     <None Include="Res\Shaders\DepthOfField.frag" />
     <None Include="Res\Shaders\DepthOfField.vert" />
+    <None Include="Res\Shaders\NomalBlur.frag" />
+    <None Include="Res\Shaders\Simple.frag" />
+    <None Include="Res\Shaders\Simple.vert" />
     <None Include="Res\Shaders\SkeletalMesh.frag" />
     <None Include="Res\Shaders\SkeletalMesh.vert" />
     <None Include="Res\Shaders\Sprite.frag" />

@@ -238,6 +238,18 @@
     <None Include="Res\Shaders\DepthOfField.frag">
       <Filter>Res\Shaders</Filter>
     </None>
+    <None Include="Res\Shaders\Simple.vert">
+      <Filter>Res\Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\Simple.frag">
+      <Filter>Res\Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\BrightPassFilter.frag">
+      <Filter>Res\Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\NomalBlur.frag">
+      <Filter>Res\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Res\Images\TitleBg.tga">
