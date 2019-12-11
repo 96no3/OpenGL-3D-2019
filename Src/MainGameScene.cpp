@@ -167,24 +167,24 @@ bool MainGameScene::Initialize()
 
 	// ライトを配置
 	lights.Add(std::make_shared<DirectionalLightActor>("DirectonalLight",
-		glm::vec3(0.15f, 0.25f, 0.2f) * 3.0f, glm::normalize(glm::vec3(1, -1, -1))));
+		glm::vec3(1.0f, 0.94f, 0.91f), glm::normalize(glm::vec3(1, -1, -1))));
 
-	for (int i = 0; i < 50; ++i) {
-		glm::vec3 color(1, 0.8f, 0.5f);
+	for (int i = 0; i < 30; ++i) {
+		glm::vec3 color = glm::vec3(1, 0.8f, 0.5f) * 20.0f;
 		glm::vec3 position(0);
 		position.x = static_cast<float>(std::uniform_int_distribution<>(80, 120)(rand));
 		position.z = static_cast<float>(std::uniform_int_distribution<>(80, 120)(rand));
-		position.y = heightMap.Height(position) + 1;
+		position.y = heightMap.Height(position) + 5;
 		lights.Add(std::make_shared<PointLightActor>("PointLight", color, position));
 	}
 
-	for (int i = 0; i < 50; ++i) {
-		glm::vec3 color(0, 5, 0);
+	for (int i = 0; i < 30; ++i) {
+		glm::vec3 color = glm::vec3(0, 5, 0) * 25.0f;
 		glm::vec3 position(0);
 		position.x = static_cast<float>(std::uniform_int_distribution<>(80, 120)(rand));
 		position.z = static_cast<float>(std::uniform_int_distribution<>(80, 120)(rand));
-		position.y = heightMap.Height(position) + 2;
-		glm::vec3 direction(glm::normalize(glm::vec3(1, -1, 1)));
+		position.y = heightMap.Height(position) + 5;
+		glm::vec3 direction(glm::normalize(glm::vec3(0.25f, -1, 0.25f)));
 		lights.Add(std::make_shared<SpotLightActor>("SpotLight", color, position, direction,
 			glm::radians(30.0f), glm::radians(20.0f)));
 	}

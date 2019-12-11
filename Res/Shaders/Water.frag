@@ -85,7 +85,8 @@ void main()
   vec4 scroll = vec4(-0.01, -0.01, 0.005, 0.005) * time;
   vec3 normalS = texture(texNormalArray[0], uv.xy + scroll.xy).rgb * 2.0 - 1.0;
   vec3 normalL = texture(texNormalArray[0], uv.zw + scroll.zw).rgb * 2.0 - 1.0;
-  vec3 normal = normalS * 0.5 + normalL;
+  float roughness = 0.05; // 水面の荒れ具合.
+  vec3 normal = (normalS * 0.5 + normalL) * vec3(roughness, roughness, 1.0);
   normal = normalize(matTBN * normal);
 
   vec3 lightColor = ambientLight.color.rgb;
@@ -135,6 +136,7 @@ void main()
     0.299,-0.169, 0.500,
     0.587,-0.331,-0.419,
     0.114, 0.500,-0.081) * environmentColor;
+  yuv.r = pow(yuv.r, 3.0); // 中間の明るさ対策
   yuv.r *= GetFresnelFactor(cameraVector, normal) * brightness;
   //fragColor.a = opacity + yuv.r;
   //yuv.r /= fragColor.a; // アルファを乗算した結果を色の加算と等しくする.
