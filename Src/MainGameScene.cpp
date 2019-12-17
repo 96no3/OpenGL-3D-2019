@@ -150,6 +150,11 @@ bool MainGameScene::Initialize()
 			return false;
 		}	
 	}
+	// sampler2DShadowの比較モードを設定する.
+	glBindTexture(GL_TEXTURE_2D, fboShadow->GetDepthTexture()->Get());
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	// ハイトマップを作成する.
 	if (!heightMap.LoadFromFile("Res/Images/Terrain.tga", 20.0f, 0.5f)) {
@@ -560,6 +565,7 @@ void MainGameScene::Render()
 		const glm::mat4 matProj = glm::ortho<float>(-width / 2, width / 2, -height / 2, height / 2, near, far);
 
 		// ビュー・プロジェクション行列を設定してメッシュを描画.
+		meshBuffer.SetShadowViewProjectionMatrix(matProj * matView);
 		meshBuffer.SetViewProjectionMatrix(matProj * matView);
 		RenderMesh();
 	}
@@ -589,6 +595,7 @@ void MainGameScene::Render()
 
 	meshBuffer.SetCameraPosition(camera.position);
 	meshBuffer.SetTime(window.Time());
+	meshBuffer.BindShadowTexture(fboShadow->GetDepthTexture());
 
 	/*Mesh::Draw(meshBuffer.GetFile("Cube"), matModel);
 	Mesh::Draw(meshBuffer.GetFile("Terrain01"), glm::mat4(1));*/	
@@ -603,6 +610,8 @@ void MainGameScene::Render()
 	//Mesh::Draw(meshBuffer.GetFile("Water"), glm::mat4(1)); // 半透明メッシュはできるだけ最後に描画
 
 	RenderMesh();
+
+	meshBuffer.UnbindShadowTexture();
 
 	// 被写界深度エフェクト.
 	{

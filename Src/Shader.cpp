@@ -174,6 +174,7 @@ namespace Shader {
 			locViewInfo = -1;
 			locCameraInfo = -1;
 			locBlurDirection = -1;
+			locMatShadow = -1;
 			return;
 		}
 		locMatMVP = glGetUniformLocation(id, "matMVP");
@@ -188,6 +189,7 @@ namespace Shader {
 		locViewInfo = glGetUniformLocation(id, "viewInfo");
 		locCameraInfo = glGetUniformLocation(id, "cameraInfo");
 		locBlurDirection = glGetUniformLocation(id, "blurDirection");
+		locMatShadow = glGetUniformLocation(id, "matShadow");
 
 		glUseProgram(id);
 		const GLint texColorLoc = glGetUniformLocation(id, "texColor");
@@ -224,6 +226,10 @@ namespace Shader {
 		const GLint locTexCubeMap = glGetUniformLocation(id, "texCubeMap");
 		if (locTexCubeMap >= 0) {
 			glUniform1i(locTexCubeMap, 6);
+		}
+		const GLint locTexShadow = glGetUniformLocation(id, "texShadow");
+		if (locTexShadow >= 0) {
+			glUniform1i(locTexShadow, shadowTextureBindingPoint);
 		}
 		glUseProgram(0);
 	}
@@ -278,6 +284,18 @@ namespace Shader {
 		this->matVP = matVP;
 		if (locMatMVP >= 0) {
 			glUniformMatrix4fv(locMatMVP, 1, GL_FALSE, &matVP[0][0]);
+		}
+	}
+
+	/**
+	* 影の描画に使われるビュー・プロジェクション行列を設定する.
+	*
+	* @param m	設定する影用ビュー・プロジェクション行列.
+	*/
+	void Program::SetShadowViewProjectionMatrix(const glm::mat4& m) 
+	{
+		if (locMatShadow >= 0) {
+			glUniformMatrix4fv(locMatShadow, 1, GL_FALSE, &m[0][0]);
 		}
 	}
 

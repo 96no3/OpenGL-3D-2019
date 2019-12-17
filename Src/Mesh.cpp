@@ -628,6 +628,24 @@ namespace Mesh {
 	}
 
 	/**
+	* シェーダーに影用ビュー・プロダクション行列を設定する.
+	*
+	* @param matVP	影用ビュー・プロダクション行列.
+	*/
+	void Buffer::SetShadowViewProjectionMatrix(const glm::mat4& matVP) const
+	{
+		progStaticMesh->Use();
+		progStaticMesh->SetShadowViewProjectionMatrix(matVP);
+		progSkeletalMesh->Use();
+		progSkeletalMesh->SetShadowViewProjectionMatrix(matVP);
+		progTerrain->Use();
+		progTerrain->SetShadowViewProjectionMatrix(matVP);
+		progWater->Use();
+		progWater->SetShadowViewProjectionMatrix(matVP);
+		progStaticMesh->Unuse();
+	}
+
+	/**
 	* シェーダーにカメラのワールド座標を設定する.
 	*
 	* @param pos カメラのワールド座標.
@@ -662,6 +680,30 @@ namespace Mesh {
 		progWater->Use();
 		progWater->SetTime(ftime);
 		progStaticMesh->Unuse();
+	}
+
+	/**
+	* 影用の深度テクスチャをGLコンテキストに割り当てる.
+	*
+	* @param tex 影用の深度テクスチャ.
+	*/
+	void Buffer::BindShadowTexture(const Texture::InterfacePtr& tex)
+	{
+		shadowTextureTarget = tex->Target();
+		glActiveTexture(GL_TEXTURE0 + Shader::Program::shadowTextureBindingPoint);
+		glBindTexture(shadowTextureTarget, tex->Get());
+	}
+
+	/**
+	* 影用テクスチャの割り当てを解除する.
+	*/
+	void Buffer::UnbindShadowTexture()
+	{
+		if (shadowTextureTarget != GL_NONE) {
+			glActiveTexture(GL_TEXTURE0 + Shader::Program::shadowTextureBindingPoint);
+			glBindTexture(shadowTextureTarget, 0);
+			shadowTextureTarget = GL_NONE;
+		}
 	}
 
 	/**
