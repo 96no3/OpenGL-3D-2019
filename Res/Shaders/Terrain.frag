@@ -62,13 +62,13 @@ void main()
   vec2 uv = inTexCoord * 10.0;
   fragColor.rgb = texture(texColorArray[1],uv).rgb * baseRatio;
   fragColor.rgb += texture(texColorArray[2],uv).rgb * ratio.r;
-  fragColor.rgb += texture(texColorArray[3],uv).rgb * ratio.g;
+  fragColor.rgb += texture(texColorArray[3],uv * 8.0).rgb * ratio.g;
   fragColor.a = 1.0;
 
   mat3 matTBN = mat3(normalize(inTBN[0]),normalize(inTBN[1]),normalize(inTBN[2]));
   vec3 normal = (texture(texNormalArray[0],uv).rgb * 2.0 - 1.0) * baseRatio;
   normal += (texture(texNormalArray[1],uv).rgb * 2.0 - 1.0) * ratio.r;
-  normal += (texture(texNormalArray[2],uv).rgb * 2.0 - 1.0) * ratio.g;
+  normal += (texture(texNormalArray[2],uv * 8.0).rgb * 2.0 - 1.0) * ratio.g;
   normal = normalize(matTBN * normal);
 
   vec3 lightColor = ambientLight.color.rgb;

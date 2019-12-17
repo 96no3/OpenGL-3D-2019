@@ -34,6 +34,8 @@ public:
 	bool HandleJizoEffects(int id, const glm::vec3& pos);
 
 private:
+	void RenderMesh();
+
 	int jizoId = -1; ///< 現在戦闘中のお地蔵様のID.
 	bool achivements[4] = { false,false,false,false }; ///< 敵討伐状態.
 	bool isClear = false; // ゲームクリアフラグ
@@ -56,6 +58,7 @@ private:
 	FramebufferObjectPtr fboMain;
 	FramebufferObjectPtr fboDepthOfField;
 	FramebufferObjectPtr fboBloom[6][2];
+	FramebufferObjectPtr fboShadow;
 
 	struct Camera {
 		glm::vec3 target = glm::vec3(100, 0, 100);

@@ -142,6 +142,15 @@ bool MainGameScene::Initialize()
 		return false;
 	}
 
+	// デプスシャドウマッピング用のFBOを作成する.
+	{
+		fboShadow = FramebufferObject::Create(4096, 4096, GL_NONE, FrameBufferType::depthOnly);
+		if (glGetError()) {
+			std::cout << "[エラー]" << __func__ << ":シャドウ用FBOの作成に失敗.\n";
+			return false;
+		}	
+	}
+
 	// ハイトマップを作成する.
 	if (!heightMap.LoadFromFile("Res/Images/Terrain.tga", 20.0f, 0.5f)) {
 		return false;
@@ -520,6 +529,40 @@ void MainGameScene::Render()
 	const GLFWEW::Window& window = GLFWEW::Window::Instance();
 	const glm::vec2 screenSize(window.Width(), window.Height());
 	//spriteRenderer.Draw(screenSize);
+
+	// 影用FBOに描画.
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, fboShadow->GetFramebuffer());
+		auto tex = fboShadow->GetDepthTexture();
+		glViewport(0, 0, tex->Width(), tex->Height());
+		glClear(GL_DEPTH_BUFFER_BIT);
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE);
+		glDisable(GL_BLEND);
+
+		// ディレクショナル・ライトの向きから影用のビュー行列を作成.
+		// 視点は、カメラの注視点からライトの方向に100ｍ移動した位置に設置する.
+		glm::vec3 direction(0, -1, 0);
+		for (auto e : lights) {
+			if (auto p = std::dynamic_pointer_cast<DirectionalLightActor>(e)) {
+				direction = p->direction;
+				break;
+			}
+		}
+		const glm::vec3 position = camera.target - direction * 100.0f;
+		const glm::mat4 matView = glm::lookAt(position, camera.target, glm::vec3(0, 1, 0));
+
+		// 平行投影によるプロジェクション行列を作成.
+		const float width = 100;  // 描画範囲の幅.
+		const float height = 100; // 描画範囲の高さ.
+		const float near = 10.0f; // 描画範囲の手前側の境界.
+		const float far = 200.0f; // 描画範囲の奥側の境界.
+		const glm::mat4 matProj = glm::ortho<float>(-width / 2, width / 2, -height / 2, height / 2, near, far);
+
+		// ビュー・プロジェクション行列を設定してメッシュを描画.
+		meshBuffer.SetViewProjectionMatrix(matProj * matView);
+		RenderMesh();
+	}
 	
 	lightBuffer.Upload();
 	lightBuffer.Bind();
@@ -539,25 +582,27 @@ void MainGameScene::Render()
 	const float aspectRatio = static_cast<float>(window.Width()) / static_cast<float>(window.Height());
 	//const glm::mat4 matProj = glm::perspective(glm::radians(30.0f), aspectRatio, 1.0f, 1000.0f);
 	const glm::mat4 matProj = glm::perspective(camera.fov * 0.5f, aspectRatio, camera.near, camera.far);
-	glm::vec3 cubePos(100, 0, 100);
+	/*glm::vec3 cubePos(100, 0, 100);
 	cubePos.y = heightMap.Height(cubePos);
-	const glm::mat4 matModel = glm::translate(glm::mat4(1), cubePos);
+	const glm::mat4 matModel = glm::translate(glm::mat4(1), cubePos);*/
 	meshBuffer.SetViewProjectionMatrix(matProj * matView);
 
 	meshBuffer.SetCameraPosition(camera.position);
 	meshBuffer.SetTime(window.Time());
 
-	Mesh::Draw(meshBuffer.GetFile("Cube"), matModel);
-	Mesh::Draw(meshBuffer.GetFile("Terrain01"), glm::mat4(1));	
+	/*Mesh::Draw(meshBuffer.GetFile("Cube"), matModel);
+	Mesh::Draw(meshBuffer.GetFile("Terrain01"), glm::mat4(1));*/	
 
-	player->Draw();
+	/*player->Draw();
 	enemies.Draw();
 	objects.Draw();
 	glDisable(GL_CULL_FACE);
-	trees.Draw();
+	trees.Draw();*/
 
-	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-	Mesh::Draw(meshBuffer.GetFile("Water"), glm::mat4(1)); // 半透明メッシュはできるだけ最後に描画
+	//glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+	//Mesh::Draw(meshBuffer.GetFile("Water"), glm::mat4(1)); // 半透明メッシュはできるだけ最後に描画
+
+	RenderMesh();
 
 	// 被写界深度エフェクト.
 	{
@@ -663,6 +708,18 @@ void MainGameScene::Render()
 
 		fontRenderer.Draw(screenSize);
 	}
+#if 0
+	// デバッグのために、影用の深度テクスチャを表示する.
+	{
+		glDisable(GL_BLEND);
+		Mesh::FilePtr simpleMesh = meshBuffer.GetFile("Simple");
+		simpleMesh->materials[0].texture[0] = fboShadow->GetDepthTexture();
+		glm::mat4 m = glm::scale(
+			glm::translate(glm::mat4(1), glm::vec3(-0.45f, 0, 0)),
+			glm::vec3(0.5f, 0.89f, 1));
+		Mesh::Draw(simpleMesh, m);
+	}
+#endif
 }
 
 /**
@@ -715,6 +772,27 @@ void MainGameScene::Camera::Update(const glm::mat4& matView)
 	focalLength = 1.0f / ((1.0f / focalPlane) + (1.0f / imageDistance));
 
 	aperture = focalLength / fNumber;
+}
+
+/**
+* メッシュを描画する.
+*/
+void MainGameScene::RenderMesh() 
+{
+	glm::vec3 cubePos(100, 0, 100);
+	cubePos.y = heightMap.Height(cubePos);
+	const glm::mat4 matModel = glm::translate(glm::mat4(1), cubePos);
+	Mesh::Draw(meshBuffer.GetFile("Cube"), matModel);
+	Mesh::Draw(meshBuffer.GetFile("Terrain01"), glm::mat4(1));
+
+	player->Draw();
+	enemies.Draw();
+	objects.Draw();
+	//glDisable(GL_CULL_FACE);
+	trees.Draw();
+
+	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+	Mesh::Draw(meshBuffer.GetFile("Water"), glm::mat4(1)); // 半透明メッシュはできるだけ最後に描画
 }
 
 //
