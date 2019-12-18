@@ -468,8 +468,10 @@ void SkeletalMesh::Update(float deltaTime, const glm::mat4& matModel, const glm:
 
 /**
 * スケルタルメッシュを描画する.
+*
+* @param drawType 描画するデータの種類.
 */
-void SkeletalMesh::Draw() const
+void SkeletalMesh::Draw(DrawType drawType) const
 {
 	if (!file || uboSize <= 0) {
 		return;
@@ -489,10 +491,19 @@ void SkeletalMesh::Draw() const
 
 		if (prim.material >= 0 && prim.material < static_cast<int>(file->materials.size())) {
 			const Material& m = file->materials[prim.material];
-			if (!m.progSkeletalMesh) {
+
+			Shader::ProgramPtr program = m.progSkeletalMesh;
+			if (drawType == DrawType::shadow) {
+				program = m.progShadow;
+			}
+
+			//if (!m.progSkeletalMesh) {
+			if (!program) {
 				continue;
 			}
-			m.progSkeletalMesh->Use();
+			//m.progSkeletalMesh->Use();
+			program->Use();
+
 			/*if (m.texture) {
 				const GLuint texId = m.texture->Get();
 				if (prevTexId != texId) {
@@ -982,7 +993,10 @@ bool Buffer::LoadSkeletalMesh(const char* path)
 			if (!texturePath.empty()) {
 				tex = Texture::Image2D::Create(texturePath.c_str());
 			}
-			file.materials.push_back(CreateMaterial(col, tex));
+			//file.materials.push_back(CreateMaterial(col, tex));
+			Material m = CreateMaterial(col, tex);
+			m.progShadow = GetSkeletalShadowShader();
+			file.materials.push_back(m);
 		}
 	}
 

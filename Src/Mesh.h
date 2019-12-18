@@ -44,9 +44,9 @@ namespace Mesh {
 	struct Material {
 		glm::vec4 baseColor = glm::vec4(1);
 		Texture::InterfacePtr texture[16];
-		Shader::ProgramPtr program;
-		// スケルタルメッシュ用のシェーダー.
-		Shader::ProgramPtr progSkeletalMesh;
+		Shader::ProgramPtr program;		
+		Shader::ProgramPtr progSkeletalMesh; // スケルタルメッシュ用のシェーダー.
+		Shader::ProgramPtr progShadow; // 影用のシェーダー.
 	};
 
 	/**
@@ -115,6 +115,10 @@ namespace Mesh {
 		const Shader::ProgramPtr& GetStaticMeshShader() const { return progStaticMesh; }
 		const Shader::ProgramPtr& GetTerrainShader() const { return progTerrain; }
 		const Shader::ProgramPtr& GetWaterShader() const { return progWater; }
+		const Shader::ProgramPtr& GetSkeletalMeshShader() const { return progSkeletalMesh; }
+		const Shader::ProgramPtr& GetShadowShader() const { return progShadow; }
+		const Shader::ProgramPtr& GetNonTexturedShadowShader() const { return progNonTexturedShadow; }
+		const Shader::ProgramPtr& GetSkeletalShadowShader() const { return progSkeletalShadow; }
 
 	private:
 		BufferObject vbo;
@@ -125,6 +129,11 @@ namespace Mesh {
 		Shader::ProgramPtr progStaticMesh;
 		Shader::ProgramPtr progTerrain;
 		Shader::ProgramPtr progWater;
+
+		// 影用のシェーダー.
+		Shader::ProgramPtr progShadow;
+		Shader::ProgramPtr progNonTexturedShadow;
+		Shader::ProgramPtr progSkeletalShadow;
 
 		// スケルタル・アニメーションに対応したメッシュを保持するメンバ変数.
 		Shader::ProgramPtr progSkeletalMesh;
@@ -138,7 +147,15 @@ namespace Mesh {
 		GLenum shadowTextureTarget = GL_NONE;
 	};
 
-	void Draw(const FilePtr& file, const glm::mat4& matM);
+	/*
+	* 描画するデータの種類.
+	*/
+	enum class DrawType {
+		color,  // 通常の描画.
+		shadow, // 影の描画.
+	};
+
+	void Draw(const FilePtr& file, const glm::mat4& matM, DrawType drawType = DrawType::color);
 
 } // namespace Mesh
 

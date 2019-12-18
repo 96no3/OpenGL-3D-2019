@@ -250,6 +250,12 @@
     <None Include="Res\Shaders\NomalBlur.frag">
       <Filter>Res\Shaders</Filter>
     </None>
+    <None Include="Res\Shaders\Shadow.frag">
+      <Filter>Res\Shaders</Filter>
+    </None>
+    <None Include="Res\Shaders\NonTexturedShadow.frag">
+      <Filter>Res\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Res\Images\TitleBg.tga">

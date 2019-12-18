@@ -77,8 +77,10 @@ void Actor::UpdateDrawData(float deltaTime)
 
 /**
 * アクターの描画.
+*
+* @param drawType 描画するデータの種類.
 */
-void Actor::Draw()
+void Actor::Draw(Mesh::DrawType drawType)
 {
 }
 
@@ -103,8 +105,10 @@ StaticMeshActor::StaticMeshActor(const Mesh::FilePtr& m, const std::string& name
 
 /**
 * 描画.
+*
+* @param drawType 描画するデータの種類.
 */
-void StaticMeshActor::Draw() 
+void StaticMeshActor::Draw(Mesh::DrawType drawType)
 {
 	if (mesh) 
 	{
@@ -114,16 +118,18 @@ void StaticMeshActor::Draw()
 		const glm::mat4 matR_XZY = glm::rotate(matR_ZY, rotation.x, glm::vec3(1, 0, 0));
 		const glm::mat4 matS = glm::scale(glm::mat4(1), scale);
 		const glm::mat4 matModel = matT * matR_XZY * matS;
-
+		
 		if (!mesh->materials.empty()) {
-			const Shader::ProgramPtr p = mesh->materials[0].program;
-			if (p) {
-				p->Use();
-				p->SetPointLightIndex(pointLightCount, pointLightIndex);
-				p->SetSpotLightIndex(spotLightCount, spotLightIndex);
+			if (drawType == Mesh::DrawType::color) {
+				const Shader::ProgramPtr p = mesh->materials[0].program;
+				if (p) {
+					p->Use();
+					p->SetPointLightIndex(pointLightCount, pointLightIndex);
+					p->SetSpotLightIndex(spotLightCount, spotLightIndex);
+				}
 			}
-			Mesh::Draw(mesh, matModel);
-		}		
+			Mesh::Draw(mesh, matModel, drawType);
+		}
 	}
 }
 
@@ -264,12 +270,14 @@ void ActorList::UpdateDrawData(float deltaTime)
 
 /**
 * アクターを描画する.
+*
+* @param drawType 描画するデータの種類.
 */
-void ActorList::Draw()
+void ActorList::Draw(Mesh::DrawType drawType)
 {
 	for (const ActorPtr& e : actors) {
 		if (e && e->health > 0) {
-			e->Draw();
+			e->Draw(drawType);
 		}
 	}
 }

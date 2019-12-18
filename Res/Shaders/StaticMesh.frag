@@ -59,7 +59,7 @@ void main()
   fragColor = texture(texColor, inTexCoord);
 
   if (fragColor.a < 0.5) {
-    discard; // ƒ¿’l‚ª0.5ˆÈ‰º‚Ì‚à‚Ì‚Íˆ—‚µ‚È‚¢.
+    discard; // ƒ¿’l‚ª0.5–¢–ž‚Ì‚à‚Ì‚Íˆ—‚µ‚È‚¢.
   }
 
   vec3 normal = normalize(inNormal);

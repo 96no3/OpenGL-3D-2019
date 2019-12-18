@@ -191,6 +191,8 @@
     <None Include="Res\Shaders\DepthOfField.frag" />
     <None Include="Res\Shaders\DepthOfField.vert" />
     <None Include="Res\Shaders\NomalBlur.frag" />
+    <None Include="Res\Shaders\NonTexturedShadow.frag" />
+    <None Include="Res\Shaders\Shadow.frag" />
     <None Include="Res\Shaders\Simple.frag" />
     <None Include="Res\Shaders\Simple.vert" />
     <None Include="Res\Shaders\SkeletalMesh.frag" />

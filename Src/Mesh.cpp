@@ -203,6 +203,15 @@ namespace Mesh {
 			return false;
 		}
 
+		// 影描画用のシェーダー・プログラムを作成.
+		progShadow = Shader::Program::Create("Res/Shaders/StaticMesh.vert", "Res/Shaders/Shadow.frag");
+		progNonTexturedShadow = Shader::Program::Create("Res/Shaders/StaticMesh.vert", "Res/Shaders/NonTexturedShadow.frag");;
+		progSkeletalShadow = Shader::Program::Create("Res/Shaders/SkeletalMesh.vert", "Res/Shaders/Shadow.frag");;
+		if (progShadow->IsNull() || progNonTexturedShadow->IsNull() || progSkeletalShadow->IsNull()) {
+			return false;
+		};
+		
+
 		vboEnd = 0;
 		iboEnd = 0;
 		files.reserve(100);
@@ -297,6 +306,7 @@ namespace Mesh {
 		m.texture[0] = texture;
 		m.program = progStaticMesh;
 		m.progSkeletalMesh = progSkeletalMesh;
+		m.progShadow = progShadow;
 		return m;
 	}
 
@@ -642,6 +652,15 @@ namespace Mesh {
 		progTerrain->SetShadowViewProjectionMatrix(matVP);
 		progWater->Use();
 		progWater->SetShadowViewProjectionMatrix(matVP);
+
+		// 影用シェーダーには通常のビュー・プロジェクション行列を設定する.
+		progShadow->Use();
+		progShadow->SetViewProjectionMatrix(matVP);
+		progNonTexturedShadow->Use();
+		progNonTexturedShadow->SetViewProjectionMatrix(matVP);
+		progSkeletalShadow->Use();
+		progSkeletalShadow->SetViewProjectionMatrix(matVP);
+
 		progStaticMesh->Unuse();
 	}
 
@@ -709,11 +728,12 @@ namespace Mesh {
 	/**
 	* メッシュを描画する.
 	*
-	* @param file	描画するファイル.
-	* @param matM	描画に使用するモデル行列.
+	* @param file	  描画するファイル.
+	* @param matM	  描画に使用するモデル行列.
+	* @param drawType 描画するデータの種類.
 	*/
-	void Draw(const FilePtr& file, const glm::mat4& matM) {
-
+	void Draw(const FilePtr& file, const glm::mat4& matM, DrawType drawType) 
+	{
 		if (!file || file->meshes.empty() || file->materials.empty()) {
 			return;
 		}
@@ -722,9 +742,15 @@ namespace Mesh {
 			if (p.material < static_cast<int>(file->materials.size())) {
 				p.vao->Bind();
 				const Material& m = file->materials[p.material];
-				m.program->Use();
+
+				Shader::ProgramPtr program = m.program;
+				if (drawType == DrawType::shadow) {
+					program = m.progShadow;
+				}
+
+				program->Use();
 				//m.program->SetViewProjectionMatrix(matVP);
-				m.program->SetModelMatrix(matM);
+				program->SetModelMatrix(matM);
 				//glActiveTexture(GL_TEXTURE0);
 				// テクスチャがあるときは、そのテクスチャIDを設定する. ないときは0を設定する.
 				for (int i = 0; i < sizeof(m.texture) / sizeof(m.texture[0]); ++i) {

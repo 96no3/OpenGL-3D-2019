@@ -25,7 +25,7 @@ public:
 
 	virtual void Update(float deltaTime);
 	virtual void UpdateDrawData(float deltaTime);
-	virtual void Draw();
+	virtual void Draw(Mesh::DrawType drawType);
 	virtual void OnHit(const ActorPtr&, const glm::vec3&) {}
 
 	std::string name;                  ///< アクターの名前.
@@ -49,7 +49,7 @@ public:
 					const glm::vec3& rot = glm::vec3(0), const glm::vec3& scale = glm::vec3(1));
 	virtual ~StaticMeshActor() = default;
 
-	virtual void Draw() override;
+	virtual void Draw(Mesh::DrawType drawType) override;
 
 	const Mesh::FilePtr& GetMesh() const { return mesh; }
 	void SetPointLightList(const std::vector<int>& v);
@@ -83,7 +83,7 @@ public:
 	bool Remove(const ActorPtr&);
 	void Update(float deltaTime);
 	void UpdateDrawData(float deltaTime);
-	void Draw();
+	void Draw(Mesh::DrawType drawType);
 	bool Empty() const { return actors.empty(); }
 
 	// イテレーターを取得する関数.

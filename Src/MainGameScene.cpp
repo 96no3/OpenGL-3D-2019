@@ -566,8 +566,8 @@ void MainGameScene::Render()
 
 		// ビュー・プロジェクション行列を設定してメッシュを描画.
 		meshBuffer.SetShadowViewProjectionMatrix(matProj * matView);
-		meshBuffer.SetViewProjectionMatrix(matProj * matView);
-		RenderMesh();
+		//meshBuffer.SetViewProjectionMatrix(matProj * matView);
+		RenderMesh(Mesh::DrawType::shadow);
 	}
 	
 	lightBuffer.Upload();
@@ -609,7 +609,7 @@ void MainGameScene::Render()
 	//glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 	//Mesh::Draw(meshBuffer.GetFile("Water"), glm::mat4(1)); // 半透明メッシュはできるだけ最後に描画
 
-	RenderMesh();
+	RenderMesh(Mesh::DrawType::color);
 
 	meshBuffer.UnbindShadowTexture();
 
@@ -785,23 +785,27 @@ void MainGameScene::Camera::Update(const glm::mat4& matView)
 
 /**
 * メッシュを描画する.
+*
+* @param drawType 描画するデータの種類.
 */
-void MainGameScene::RenderMesh() 
+void MainGameScene::RenderMesh(Mesh::DrawType drawType)
 {
 	glm::vec3 cubePos(100, 0, 100);
 	cubePos.y = heightMap.Height(cubePos);
 	const glm::mat4 matModel = glm::translate(glm::mat4(1), cubePos);
-	Mesh::Draw(meshBuffer.GetFile("Cube"), matModel);
-	Mesh::Draw(meshBuffer.GetFile("Terrain01"), glm::mat4(1));
+	Mesh::Draw(meshBuffer.GetFile("Cube"), matModel, drawType);
+	Mesh::Draw(meshBuffer.GetFile("Terrain01"), glm::mat4(1), drawType);
 
-	player->Draw();
-	enemies.Draw();
-	objects.Draw();
+	player->Draw(drawType);
+	enemies.Draw(drawType);
+	objects.Draw(drawType);
 	//glDisable(GL_CULL_FACE);
-	trees.Draw();
+	trees.Draw(drawType);
 
-	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-	Mesh::Draw(meshBuffer.GetFile("Water"), glm::mat4(1)); // 半透明メッシュはできるだけ最後に描画
+	if (drawType == Mesh::DrawType::color) {
+		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+		Mesh::Draw(meshBuffer.GetFile("Water"), glm::mat4(1), drawType); // 半透明メッシュはできるだけ最後に描画
+	}
 }
 
 //
