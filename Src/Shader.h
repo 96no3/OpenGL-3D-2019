@@ -33,6 +33,7 @@ namespace Shader {
 		void Unuse() const;
 		void BindTexture(GLuint, GLuint);
 		void SetViewProjectionMatrix(const glm::mat4&);
+		void SetInverseViewRotationMatrix(const glm::mat4& matView);
 		void SetModelMatrix(const glm::mat4&);
 
 		void SetPointLightIndex(int count, const int* indexList);
@@ -66,6 +67,7 @@ namespace Shader {
 		GLint locCameraInfo = -1;
 		GLint locBlurDirection = -1;
 		GLint locMatShadow = -1;
+		GLint locMatInverseViewRotation = -1;
 
 		glm::mat4 matVP = glm::mat4(1);	// ビュー・プロジェクション行列.
 	};

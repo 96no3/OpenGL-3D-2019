@@ -140,6 +140,7 @@
     <ClCompile Include="Src\Main.cpp" />
     <ClCompile Include="Src\MainGameScene.cpp" />
     <ClCompile Include="Src\Mesh.cpp" />
+    <ClCompile Include="Src\Particle.cpp" />
     <ClCompile Include="Src\PlayerActor.cpp" />
     <ClCompile Include="Src\Scene.cpp" />
     <ClCompile Include="Src\Shader.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="Src\Light.h" />
     <ClInclude Include="Src\MainGameScene.h" />
     <ClInclude Include="Src\Mesh.h" />
+    <ClInclude Include="Src\Particle.h" />
     <ClInclude Include="Src\PlayerActor.h" />
     <ClInclude Include="Src\Scene.h" />
     <ClInclude Include="Src\Shader.h" />
@@ -192,6 +194,7 @@
     <None Include="Res\Shaders\DepthOfField.vert" />
     <None Include="Res\Shaders\NomalBlur.frag" />
     <None Include="Res\Shaders\NonTexturedShadow.frag" />
+    <None Include="Res\Shaders\Particle.vert" />
     <None Include="Res\Shaders\Shadow.frag" />
     <None Include="Res\Shaders\Simple.frag" />
     <None Include="Res\Shaders\Simple.vert" />
@@ -209,6 +212,7 @@
     <Image Include="Res\fonts\font_0.tga" />
     <Image Include="Res\Images\clearBG.tga" />
     <Image Include="Res\Images\cubemap_nx.tga" />
+    <Image Include="Res\Images\DiskParticle.tga" />
     <Image Include="Res\Images\Terrain.tga" />
     <Image Include="Res\Images\Terrain00.tga" />
     <Image Include="Res\Images\Terrain_Plant.tga" />

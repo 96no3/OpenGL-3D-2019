@@ -87,6 +87,9 @@ bool MainGameScene::Initialize()
 	meshBuffer.LoadSkeletalMesh("Res/Models/oni_small.gltf");
 	meshBuffer.LoadMesh("Res/Models/wall_stone.gltf");
 
+	// パーティクル・システムを初期化する.
+	particleSystem.Init(1000);
+
 	// FBOを作成する.
 	const GLFWEW::Window& window = GLFWEW::Window::Instance();
 	fboMain = FramebufferObject::Create(window.Width(), window.Height(), GL_RGBA16F);
@@ -250,6 +253,37 @@ bool MainGameScene::Initialize()
 			p->colLocal = Collision::CreateCapsule(glm::vec3(0, 0.5f, 0), glm::vec3(0, 7.5f, 0), 0.5f);
 			trees.Add(p);
 		}
+	}
+
+	// パーティクル・システムのテスト用にエミッターを追加.
+	{
+		// エミッター1個目.
+		ParticleEmitterParameter ep;
+		//ep.imagePath = "Res/Images/DiskParticle.tga";
+		ep.imagePath = "Res/Images/FireParticle.tga";
+		ep.tiles = glm::ivec2(2, 2);
+		ep.position = glm::vec3(96.5f, 0, 95.0f);
+		ep.position.y = heightMap.Height(ep.position);
+		ep.emissionsPerSecond = 20.0f;
+		ep.dstFactor = GL_ONE; // 加算合成.
+		ep.gravity = 0;
+		ParticleParameter pp;
+		pp.scale = glm::vec2(0.5f);
+		pp.color = glm::vec4(0.9f, 0.3f, 0.1f, 1.0f);
+		particleSystem.Add(ep, pp);
+	}
+	{
+		// エミッター2個目.
+		ParticleEmitterParameter ep;
+		ep.imagePath = "Res/Images/DiskParticle.tga";
+		ep.position = glm::vec3(97, 0, 100);
+		ep.position.y = heightMap.Height(ep.position);
+		ep.angle = glm::radians(30.0f);
+		ParticleParameter pp;
+		pp.scale = glm::vec2(0.2f);
+		pp.velocity = glm::vec3(0, 3, 0);
+		pp.color = glm::vec4(0.1f, 0.3f, 0.8f, 1.0f);
+		particleSystem.Add(ep, pp);
 	}
 
 	// お地蔵様を配置.
@@ -463,6 +497,9 @@ void MainGameScene::Update(float deltaTime)
 		p->SetSpotLightList(spotLightIndex);
 	}
 
+	// パーティクルの更新
+	particleSystem.Update(deltaTime);
+
 	// 敵御全滅させたら目的達成フラグをtrueにする.
 	if (jizoId >= 0) {
 		if (enemies.Empty()) {
@@ -610,6 +647,7 @@ void MainGameScene::Render()
 	//Mesh::Draw(meshBuffer.GetFile("Water"), glm::mat4(1)); // 半透明メッシュはできるだけ最後に描画
 
 	RenderMesh(Mesh::DrawType::color);
+	particleSystem.Draw(matProj, matView);
 
 	meshBuffer.UnbindShadowTexture();
 

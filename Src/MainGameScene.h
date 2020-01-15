@@ -16,6 +16,7 @@
 #include "JizoActor.h"
 #include "Light.h"
 #include "FramebufferObject.h"
+#include "Particle.h"
 
 /**
 * ƒƒCƒ“ƒQ[ƒ€‰æ–Ê.
@@ -54,6 +55,8 @@ private:
 
 	LightBuffer lightBuffer;
 	ActorList lights;
+
+	ParticleSystem particleSystem;
 
 	FramebufferObjectPtr fboMain;
 	FramebufferObjectPtr fboDepthOfField;

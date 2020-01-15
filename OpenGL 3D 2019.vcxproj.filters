@@ -113,6 +113,9 @@
     <ClCompile Include="Src\FramebufferObject.cpp">
       <Filter>Src</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Particle.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Src\Scene.h">
@@ -196,6 +199,9 @@
     <ClInclude Include="Src\FramebufferObject.h">
       <Filter>Src</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Particle.h">
+      <Filter>Src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -256,6 +262,9 @@
     <None Include="Res\Shaders\NonTexturedShadow.frag">
       <Filter>Res\Shaders</Filter>
     </None>
+    <None Include="Res\Shaders\Particle.vert">
+      <Filter>Res\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Res\Images\TitleBg.tga">
@@ -304,6 +313,9 @@
       <Filter>Res\Images</Filter>
     </Image>
     <Image Include="Res\Images\Terrain_Water_Normal.tga">
+      <Filter>Res\Images</Filter>
+    </Image>
+    <Image Include="Res\Images\DiskParticle.tga">
       <Filter>Res\Images</Filter>
     </Image>
   </ItemGroup>
