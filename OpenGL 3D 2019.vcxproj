@@ -213,6 +213,7 @@
     <Image Include="Res\Images\clearBG.tga" />
     <Image Include="Res\Images\cubemap_nx.tga" />
     <Image Include="Res\Images\DiskParticle.tga" />
+    <Image Include="Res\Images\FireParticle.tga" />
     <Image Include="Res\Images\Terrain.tga" />
     <Image Include="Res\Images\Terrain00.tga" />
     <Image Include="Res\Images\Terrain_Plant.tga" />

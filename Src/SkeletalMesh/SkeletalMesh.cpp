@@ -521,7 +521,8 @@ void SkeletalMesh::Draw(DrawType drawType) const
 					glBindTexture(GL_TEXTURE_2D, 0);
 				}
 			}
-			const GLint locMaterialColor = glGetUniformLocation(m.progSkeletalMesh->Get(), "materialColor");
+			//const GLint locMaterialColor = glGetUniformLocation(m.progSkeletalMesh->Get(), "materialColor");
+			const GLint locMaterialColor = glGetUniformLocation(program->Get(), "materialColor");
 			if (locMaterialColor >= 0) {
 				glUniform4fv(locMaterialColor, 1, &m.baseColor.x);
 			}

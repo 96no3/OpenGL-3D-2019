@@ -157,6 +157,15 @@ bool MainGameScene::Initialize()
 	glBindTexture(GL_TEXTURE_2D, fboShadow->GetDepthTexture()->Get());
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LEQUAL);
+
+	// ボーダーカラーを使って、シャドウテクスチャの範囲外の深度値を最大(1.0)にすることで、
+    // 範囲外の領域に不自然な影が落ちないようにする.
+    // 奥行方向の範囲不足には対応できないので、near、farプレーンの設定は適切にすること.
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	const glm::vec3 borderColor(1.0);
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, &borderColor.x);
+
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	// ハイトマップを作成する.
