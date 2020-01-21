@@ -151,6 +151,7 @@
     <ClCompile Include="Src\StatusScene.cpp" />
     <ClCompile Include="Src\Terrain.cpp" />
     <ClCompile Include="Src\Texture.cpp" />
+    <ClCompile Include="Src\TextWindow.cpp" />
     <ClCompile Include="Src\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +182,7 @@
     <ClInclude Include="Src\StatusScene.h" />
     <ClInclude Include="Src\Terrain.h" />
     <ClInclude Include="Src\Texture.h" />
+    <ClInclude Include="Src\TextWindow.h" />
     <ClInclude Include="Src\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
@@ -224,6 +226,7 @@
     <Image Include="Res\Images\Terrain_Soil.tga" />
     <Image Include="Res\Images\Terrain_Soil_Normal.tga" />
     <Image Include="Res\Images\Terrain_Water_Normal.tga" />
+    <Image Include="Res\Images\TextWindow.tga" />
     <Image Include="Res\Images\TitleBg.dds" />
     <Image Include="Res\Images\TitleBg.tga" />
     <Image Include="Res\Images\whiteTerrain.tga" />

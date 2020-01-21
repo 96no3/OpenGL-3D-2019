@@ -76,6 +76,10 @@ bool MainGameScene::Initialize()
 	fontRenderer.Init(1000);
 	fontRenderer.LoadFromFile("Res/Fonts/font.fnt");
 
+	textWindow.Init("Res/Images/TextWindow.tga",
+		glm::vec2(0, -248), glm::vec2(48, 32), glm::vec2(0));
+	textWindow.Open(L"テキストウィンドウの実験\nこれは改行テスト。\n3行目。\n4\n5\n6");
+
 	// BGMを再生する.
 	bgm = Audio::Engine::Instance().Prepare("Res/Audio/BGM/gameBGM.wav");
 	bgm->Play(Audio::Flag_Loop);
@@ -560,6 +564,8 @@ void MainGameScene::Update(float deltaTime)
 	}
 	fontRenderer.EndUpdate();
 
+	textWindow.Update(deltaTime);
+
 	// シーン切り替え待ち.
 	if (timer > 0) {
 		timer -= deltaTime;
@@ -762,6 +768,7 @@ void MainGameScene::Render()
 		simpleMesh->materials[0].texture[0] = fboBloom[0][0]->GetColorTexture();
 		Mesh::Draw(simpleMesh, glm::mat4(1));
 
+		textWindow.Draw();
 		fontRenderer.Draw(screenSize);
 	}
 #if 0

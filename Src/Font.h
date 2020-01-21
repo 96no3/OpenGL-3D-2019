@@ -27,6 +27,7 @@ public:
 	void EndUpdate();
 	void Draw(const glm::vec2&) const;
 	float LineHeight() const;
+	float XAdvance(wchar_t c) const;
 
 	// 色の設定・取得
 	void Color(const glm::vec4& c) { color = c; }
@@ -48,7 +49,7 @@ private:
 		glm::vec2 uv = glm::vec2(0);      ///< 文字のテクスチャ座標.
 		glm::vec2 size = glm::vec2(0);    ///< 文字の表示サイズ.
 		glm::vec2 offset = glm::vec2(0);  ///< 表示位置の補正値.
-		float xsdvanced = 0;              ///< 次の文字を表示する位置.
+		float xsdvance = 0;              ///< 次の文字を表示する位置.
 	};
 	std::vector<CharacterInfo> characterInfoList;  ///< 文字情報のリスト.
 };

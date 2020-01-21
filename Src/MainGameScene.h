@@ -17,6 +17,7 @@
 #include "Light.h"
 #include "FramebufferObject.h"
 #include "Particle.h"
+#include "TextWindow.h"
 
 /**
 * ƒƒCƒ“ƒQ[ƒ€‰æ–Ê.
@@ -57,6 +58,7 @@ private:
 	ActorList lights;
 
 	ParticleSystem particleSystem;
+	TextWindow textWindow;
 
 	FramebufferObjectPtr fboMain;
 	FramebufferObjectPtr fboDepthOfField;

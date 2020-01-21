@@ -40,7 +40,7 @@ namespace /* unnamed */ {
 	* @param min ¶¬‚·‚é—”‚ÌÅ¬’l.
 	* @param max ¶¬‚·‚é—”‚ÌÅ‘å’l.
 	*/
-	int RandomFloat(float min, float max)
+	float RandomFloat(float min, float max)
 	{
 		return std::uniform_real_distribution<float>(min, max)(randomEngine);
 	}

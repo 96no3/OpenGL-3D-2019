@@ -102,7 +102,7 @@ bool FontRenderer::LoadFromFile(const char* path) {
 		ret = fscanf(fp.get(),
 					 " char id=%d x=%f y=%f width=%f height=%f xoffset=%f yoffset=%f xadvance=%f page=%d chnl=%*d",
 					 &info.id, &info.uv.x, &info.uv.y, &info.size.x, &info.size.y, &info.offset.x, &info.offset.y,
-					 &info.xsdvanced,&info.page);
+					 &info.xsdvance,&info.page);
 		if (ret < 9) {
 			std::cerr << "[エラー]" << __func__ << ":" << path << "の読み込みに失敗（" << line << "行目）.\n";
 			return false;
@@ -167,7 +167,7 @@ bool FontRenderer::AddString(const glm::vec2& position, const wchar_t* str)
 				return false;
 			}
 		}
-		pos.x += info.xsdvanced; // 次の表示位置へ移動。
+		pos.x += info.xsdvance; // 次の表示位置へ移動。
 	}
 	return true;
 }
@@ -198,4 +198,19 @@ void FontRenderer::Draw(const glm::vec2& screenSize) const
 float FontRenderer::LineHeight() const 
 {
 	return lineHeight;
+}
+
+/**
+* 行の高さを取得する.
+*
+* @param c 横幅を調べる文字.
+*
+* @return  文字cの横幅.
+*/
+float FontRenderer::XAdvance(wchar_t c) const 
+{
+	if (c < 0 || c >= characterInfoList.size()) {
+		return 0;
+	}
+	return characterInfoList[c].xsdvance;
 }
