@@ -6,6 +6,7 @@
 #include "TitleScene.h"
 #include "SkeletalMesh/SkeletalMesh.h"
 #include "Audio/Audio.h"
+#include "EventScript.h"
 
 int main() {
 	GLFWEW::Window& window = GLFWEW::Window::Instance();
@@ -23,14 +24,14 @@ int main() {
 	SceneStack& sceneStack = SceneStack::Instance();
 	sceneStack.Push(std::make_shared<TitleScene>());
 
+	EventScriptEngine& scriptEngine = EventScriptEngine::Instance();
+	scriptEngine.Init();
+
 	window.InitTimer();
 	while (!window.ShouldClose()) {
 		const float deltaTime = static_cast<float>(window.DeltaTime());
 		window.UpdateTimer();
-
-		// スケルタル・アニメーション用データの作成準備.
-		Mesh::SkeletalAnimation::ResetUniformData();
-
+		
 		// ESCキーが押されたら終了ウィンドウを表示.
 		if (window.GetGamePad().buttonDown & GamePad::GUIDE) {
 			if (MessageBox(nullptr, "ゲームを終了しますか？", "終了", MB_OKCANCEL) == IDOK) {
@@ -38,7 +39,11 @@ int main() {
 			}
 		}
 
+		// スケルタル・アニメーション用データの作成準備.
+		Mesh::SkeletalAnimation::ResetUniformData();
+
 		sceneStack.Update(deltaTime);
+		scriptEngine.Update(deltaTime);
 
 		// スケルタル・アニメーション用データをGPUメモリに転送.
 		Mesh::SkeletalAnimation::UploadUniformData();
@@ -54,6 +59,7 @@ int main() {
 		glEnable(GL_DEPTH_TEST);
 
 		sceneStack.Render();
+		scriptEngine.Draw();
 		window.SwapBuffers();
 	}
 

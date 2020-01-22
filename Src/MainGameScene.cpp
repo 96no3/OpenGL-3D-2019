@@ -4,6 +4,7 @@
 #include "GLFWEW.h"
 #include "MainGameScene.h"
 #include "StatusScene.h"
+#include "EventScene.h"
 #include "GameOverScene.h"
 #include "GameClearScene.h"
 #include "SkeletalMesh/SkeletalMeshActor.h"
@@ -397,6 +398,9 @@ bool MainGameScene::Initialize()
 		p->colLocal = Collision::CreateOBB(glm::vec3(0), glm::vec3(1, 0, 0), glm::vec3(0, 1, 0), glm::vec3(0, 0, -1), rectSize);
 		objects.Add(p);*/
 	}
+
+	// オープニングスクリプトを実行.
+	SceneStack::Instance().Push(std::make_shared<EventScene>("Res/EventScripts/OpeningScript.txt"));
 
 	return true;
 }

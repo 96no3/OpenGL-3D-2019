@@ -1,0 +1,131 @@
+/**
+* @file EventScript.cpp
+*/
+#define _CRT_SECURE_NO_WARNINGS
+#include "EventScript.h"
+#include "GLFWEW.h"
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <locale.h>
+#include <stdlib.h>
+
+/**
+* スクリプトエンジンのシングルトン・インスタンスを取得する.
+*
+* @return スクリプトエンジンのシングルトン・インスタンス.
+*/
+EventScriptEngine& EventScriptEngine::Instance() 
+{
+	static EventScriptEngine instance;
+	return instance;
+}
+
+/**
+* スクリプトエンジンを初期化する.
+*
+* @retval true  初期化成功.
+* @retval false 初期化失敗.
+*/
+bool EventScriptEngine::Init()
+{
+	if (isInitialized) {
+		std::cerr << "[エラー] EventScriptEngineは既に初期化されています.\n";
+		return false;
+	}
+
+	filename.reserve(256);
+	script.reserve(2048);
+	if (!textWindow.Init("Res/Images/TextWindow.tga",
+		glm::vec2(0, -248), glm::vec2(48, 32), glm::vec2(0))) {
+		std::cerr << "[エラー]" << __func__ << "：スクリプトエンジンの初期化に失敗.\n";
+		return false;
+	}
+	isInitialized = true;
+	return true;
+}
+
+/**
+* イベント・スクリプトを実行する.
+*
+* @param filename スクリプト・ファイル名.
+*
+* @retval true    実行に成功.
+* @retval false   実行に失敗.
+*/
+bool EventScriptEngine::RunScript(const char* filename)
+{
+	if (!isInitialized) {
+		return false;
+	}
+
+	// スクリプトファイルを読み込み、テキストウィンドウ表示のためにwchar_t型に変換する.
+	std::ifstream ifs(filename);
+	if (!ifs) {
+		std::cerr << "[エラー]" << __func__ << "：スクリプトファイル" << filename << "を読み込めません.\n";
+		return false;
+	}
+	std::stringstream ss;
+	// クラスバッファオブジェクト経由でファイル全体を読み込む.
+	ss << ifs.rdbuf();
+	std::string tmp = ss.str();
+	// 変換元の言語を指定.
+	setlocale(LC_CTYPE, "ja-JP");
+	// テキストウィンドウに渡せる形に変換.
+	const size_t size = mbstowcs(nullptr, tmp.c_str(), 0);
+	script.resize(size);
+	mbstowcs(&script[0], tmp.c_str(), size);
+
+	// パラメータを設定.
+	isFinished = false;
+	this->filename = filename;
+
+	// テキストウィンドウにスクリプトを表示.
+	textWindow.Open(script.c_str());
+
+	std::cout << "[INFO]" << __func__ << "：スプリクトファイル" << filename << "を実行.\n";
+	return true;
+}
+
+/**
+* スクリプトエンジンの状態を更新する.
+*
+* @param deltaTime 前回の更新処理からの経過時間(秒).
+*/
+void EventScriptEngine::Update(float deltaTime) 
+{
+	if (!isInitialized) {
+		return;
+	}
+
+	if (textWindow.IsFinished()) {
+		const GamePad gamepad = GLFWEW::Window::Instance().GetGamePad();
+		if (gamepad.buttonDown & (GamePad::A | GamePad::B | GamePad::START)) {
+			textWindow.Close();
+			isFinished = true;
+		}
+	}
+	textWindow.Update(deltaTime);
+}
+
+/**
+* スクリプトエンジンを描画する.
+*/
+void EventScriptEngine::Draw()
+{
+	if (!isInitialized) {
+		return;
+	}
+	textWindow.Draw();
+}
+
+/**
+* スクリプトの実行が完了したかどうか調べる.
+*
+* @retval true    実行完了.
+* @retval false   実行中、またはスクリプトが読み込まれていない.
+*/
+bool EventScriptEngine::IsFinished() const 
+{
+	return isFinished;
+}

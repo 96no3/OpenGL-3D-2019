@@ -9,7 +9,7 @@
 *
 * @param name	シーン名.
 */
-Scene::Scene(const char* name) :name(name)
+Scene::Scene(const char* name) : name(name)
 {
 	std::cout << "Scene コンストラクタ" << name << std::endl;
 }

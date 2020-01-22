@@ -33,6 +33,9 @@
     <Filter Include="Src\Audio">
       <UniqueIdentifier>{cc75f5ab-4591-4003-bbec-b5aba15bede0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Res\EventScripts">
+      <UniqueIdentifier>{ce323a68-c68c-489c-841b-f3e47cf6263f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Src\Main.cpp">
@@ -117,6 +120,12 @@
       <Filter>Src</Filter>
     </ClCompile>
     <ClCompile Include="Src\TextWindow.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\EventScript.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\EventScene.cpp">
       <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -206,6 +215,12 @@
       <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="Src\TextWindow.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\EventScript.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\EventScene.h">
       <Filter>Src</Filter>
     </ClInclude>
   </ItemGroup>
@@ -330,5 +345,10 @@
     <Image Include="Res\Images\TextWindow.tga">
       <Filter>Res\Images</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Res\EventScripts\OpeningScript.txt">
+      <Filter>Res\EventScripts</Filter>
+    </Text>
   </ItemGroup>
 </Project>
