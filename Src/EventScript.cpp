@@ -11,6 +11,84 @@
 #include <stdlib.h>
 
 /**
+* スクリプト命令の引数に値を設定する.
+*
+* @param arg スプリクト命令の引数.
+* @param str 設定する値を含む文字列.
+*/
+void EventScriptEngine::Set(Argument& arg, const char* str) 
+{
+	if (str[0] == '[') {
+		VariableId id;
+		if (sscanf(str, "[%d]", &id) >= 1) {
+			arg = id;
+		}
+	}
+	else {
+		Number n;
+		if (sscanf(str, "%1f", &n) >= 1) {
+			arg = n;
+		}
+	}
+}
+
+/**
+* スクリプト命令の引数に関係演算子を設定する.
+*
+* @param arg スプリクト命令の引数.
+* @param str 設定する値を含む文字列.
+*/
+void EventScriptEngine::SetOperator(Argument& arg, const char* str)
+{
+	if (str[1] == '\0') {
+		switch (str[0])
+		{
+		case '<':
+			arg = Operator::less;
+			break;
+		case '>':
+			arg = Operator::greater;
+			break;
+		}
+	}
+	else if (str[1] == '=' && str[2] == '\0') {
+		switch (str[0])
+		{
+		case '=':
+			arg = Operator::equal;
+			break;
+		case '!':
+			arg = Operator::notEqual;
+			break;
+		case '<':
+			arg = Operator::lessEqual;
+			break;
+		case '>':
+			arg = Operator::greaterEqual;
+			break;
+		}
+	}
+}
+
+/**
+* スクリプト命令の引数から値を取得する.
+*
+* @param arg スプリクト命令の引数.
+*
+* @return    引数から直接・間接に得られた値.
+*/
+EventScriptEngine::Number EventScriptEngine::Get(const Argument& arg) const
+{
+	if (const auto p = std::get_if<VariableId>(&arg)) {
+		return variables[*p];
+	}
+	else if (const auto p = std::get_if<Number>(&arg)) {
+		return *p;
+	}
+	return 0;
+}
+
+/**
 * スクリプトエンジンのシングルトン・インスタンスを取得する.
 *
 * @return スクリプトエンジンのシングルトン・インスタンス.
@@ -82,9 +160,12 @@ bool EventScriptEngine::RunScript(const char* filename)
 	//script.resize(size);
 	//mbstowcs(&script[0], tmp.c_str(), size);
 
-	size_t lineCount = 0;  // 読み込んだ行数.
+	size_t lineCount = 0;          // 読み込んだ行数.
 	std::string line;
 	char buf[1000];
+	char a[20], b[20], op[20];     // スプリクト引数用.
+	std::vector<size_t> jumpStack; // ジャンプ先設定用.
+
 	while (std::getline(ifs, line)) {
 		// 先頭の空白を除去する.
 		line.erase(0, line.find_first_not_of(" \t\n"));
@@ -101,6 +182,42 @@ bool EventScriptEngine::RunScript(const char* filename)
 			inst.type = InstructionType::print;
 			inst.arguments[0] = text;
 			script.push_back(inst);
+			continue;
+		}
+
+		// 代入命令を読み取る.
+		n = sscanf(line.c_str(), "[%19[^]]] = %19s", a, b);
+		if (n >= 2) {
+			inst.type = InstructionType::assign;
+			inst.arguments[0] = static_cast<VariableId>(atoi(a));
+			Set(inst.arguments[1], b);
+			script.push_back(inst);
+			continue;
+		}
+
+		// if命令を読み取る.
+		n = sscanf(line.c_str(), " if %19s %19s %19s", a, op, b);
+		if (n >= 3) {
+			inst.type = InstructionType::beginif;
+			Set(inst.arguments[0], a);
+			SetOperator(inst.arguments[1], op);
+			Set(inst.arguments[2], b);
+			script.push_back(inst);
+
+			// ジャンプ先を設定できるようにif命令の位置を記録.
+			jumpStack.push_back(script.size() - 1);
+			continue;
+		}
+
+		// endif命令を読み取る.
+		if (strncmp(line.c_str(), "endif", 5) == 0) {
+			if (jumpStack.empty()) {
+				std::cerr << "[エラー]" << __func__ << "endifが多すぎます(" << lineCount << "行目).\n";
+				continue;
+			}
+			const size_t p = jumpStack.back();
+			jumpStack.pop_back();
+			script[p].jump = script.size();
 			continue;
 		}
 	}
@@ -171,6 +288,52 @@ void EventScriptEngine::Update(float deltaTime)
 				}
 			}
 			yield = true;
+			break;
+
+		case InstructionType::assign:
+			if (const auto a = std::get_if<VariableId>(&inst.arguments[0])) {
+				variables[*a] = Get(inst.arguments[1]);
+			}
+			++programCounter;
+			break;
+
+		case InstructionType::beginif:
+			if (const auto op = std::get_if<Operator>(&inst.arguments[1])) {
+				// 引数を取り出す.
+				const Number a = Get(inst.arguments[0]);
+				const Number b = Get(inst.arguments[2]);
+
+				// 引数を比較する.
+				bool result = false;
+				switch (*op)
+				{
+				case Operator::equal:
+					result = a == b;
+					break;
+				case Operator::notEqual:
+					result = a != b;
+					break;
+				case Operator::less:
+					result = a < b;
+					break;
+				case Operator::lessEqual:
+					result = a <= b;
+					break;
+				case Operator::greater:
+					result = a > b;
+					break;
+				case Operator::greaterEqual:
+					result = a >= b;
+					break;
+				}
+
+				// 比較結果がfalseならendifの位置にジャンプ.
+				if (!result) {
+					programCounter = inst.jump;
+					break;
+				}
+			}
+			++programCounter;
 			break;
 
 		default:

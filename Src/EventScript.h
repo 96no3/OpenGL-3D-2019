@@ -38,17 +38,33 @@ private:
 		endif,    // if命令の終端.
 	};
 
+	// 関係演算子.
+	enum class Operator {
+		equal,        // ==
+		notEqual,	  // !=
+		less,		  // <
+		lessEqual,	  // <=
+		greater,	  // >
+		greaterEqual, // >=
+	};
+
 	// 引数の型.
 	//using Argument = std::wstring;
 	using Text = std::wstring; // 文章.
 	using VariableId = int;    // 変数(の番号).
 	using Number = double;     // 数値.
-	using Argument = std::variant<Text, VariableId, Number>;
+	using Argument = std::variant<Text, VariableId, Number, Operator>;
+
+	// 引数の設定用.
+	void Set(Argument&, const char*);
+	void SetOperator(Argument&, const char*);
+	Number Get(const Argument&) const;
 
 	// スクリプト命令型.
 	struct Instruction {
 		InstructionType type = InstructionType::nop;
 		Argument arguments[4];
+		size_t jump = 0; // if命令のジャンプ先.
 	};
 
 	std::string filename;
