@@ -347,6 +347,9 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Res\EventScripts\OpeningScript00.txt">
+      <Filter>Res\EventScripts</Filter>
+    </Text>
     <Text Include="Res\EventScripts\OpeningScript.txt">
       <Filter>Res\EventScripts</Filter>
     </Text>

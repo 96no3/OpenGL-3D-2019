@@ -50,6 +50,10 @@ void TextWindow::Update(float deltaTime)
 {
 	// ウィンドウが閉じていたら更新しない.
 	if (!isOpen) {
+		spriteRenderer.BeginUpdate();
+		spriteRenderer.EndUpdate();
+		fontRenderer.BeginUpdate();
+		fontRenderer.EndUpdate();
 		return;
 	}
 

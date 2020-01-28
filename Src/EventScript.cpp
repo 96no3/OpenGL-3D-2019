@@ -65,23 +65,50 @@ bool EventScriptEngine::RunScript(const char* filename)
 		std::cerr << "[エラー]" << __func__ << "：スクリプトファイル" << filename << "を読み込めません.\n";
 		return false;
 	}
-	std::stringstream ss;
-	// クラスバッファオブジェクト経由でファイル全体を読み込む.
-	ss << ifs.rdbuf();
-	std::string tmp = ss.str();
+	//std::stringstream ss;
+	//// クラスバッファオブジェクト経由でファイル全体を読み込む.
+	//ss << ifs.rdbuf();
+	//std::string tmp = ss.str();
+
 	// 変換元の言語を指定.
 	setlocale(LC_CTYPE, "ja-JP");
-	// テキストウィンドウに渡せる形に変換.
-	const size_t size = mbstowcs(nullptr, tmp.c_str(), 0);
-	script.resize(size);
-	mbstowcs(&script[0], tmp.c_str(), size);
+
+	//// テキストウィンドウに渡せる形に変換.
+	//const size_t size = mbstowcs(nullptr, tmp.c_str(), 0);
+	//script.resize(size);
+	//mbstowcs(&script[0], tmp.c_str(), size);
+
+	size_t lineCount = 0;  // 読み込んだ行数.
+	std::string line;
+	char buf[1000];
+	while (std::getline(ifs, line)) {
+		// 先頭の空白を除去する.
+		line.erase(0, line.find_first_not_of(" \t\n"));
+		++lineCount;
+
+		Instruction inst;
+		// print命令を読み込む.
+		int n = sscanf(line.c_str(), "print %999[^\n]", buf);
+		if (n >= 1) {
+			// テキストウィンドウに渡せる形に変換.
+			const size_t size = mbstowcs(nullptr, buf, 0);
+			std::wstring text(size, L'\0');
+			mbstowcs(&text[0], buf, size);
+			inst.type = InstructionType::print;
+			inst.arguments[0] = text;
+			script.push_back(inst);
+			continue;
+		}
+	}
+
+	programCounter = 0;
 
 	// パラメータを設定.
 	isFinished = false;
 	this->filename = filename;
 
-	// テキストウィンドウにスクリプトを表示.
-	textWindow.Open(script.c_str());
+	//// テキストウィンドウにスクリプトを表示.
+	//textWindow.Open(script.c_str());
 
 	std::cout << "[INFO]" << __func__ << "：スプリクトファイル" << filename << "を実行.\n";
 	return true;
@@ -98,13 +125,56 @@ void EventScriptEngine::Update(float deltaTime)
 		return;
 	}
 
-	if (textWindow.IsFinished()) {
+	// スクリプト未設定、または実行終了なら何もしない.
+	if (script.empty() || isFinished) {
+		return;
+	}
+
+	// 命令を実行する.
+	// 実行を中断する場合はyield変換にtrueを設定.
+	for (bool yield = false; !yield;) {
+		// 実行位置(programCounter)がスクリプトの命令数以上なら実行完了.
+		if (programCounter >= script.size()) {
+			isFinished = true;
+			break;
+		}
+
+		const auto& inst = script[programCounter];
+		switch (inst.type)
+		{
+		case InstructionType::print:
+			if (!textWindow.IsOpen()) {
+				// ウィンドウが閉じているので文章を設定.
+				textWindow.Open(inst.arguments[0].c_str());
+			}
+			else {
+				// ウィンドウが開いていたら表示終了を待つ.表示が終了したら、キー入力を待つ.
+				// キー入力があったら、ウィンドウを閉じて、次の命令の処理へ進む.
+				if (textWindow.IsFinished()) {
+					const GamePad gamepad = GLFWEW::Window::Instance().GetGamePad();
+					if (gamepad.buttonDown & (GamePad::A | GamePad::B | GamePad::START)) {
+						textWindow.Close();
+						++programCounter;
+						continue;
+					}
+				}
+			}
+			yield = true;
+			break;
+
+		default:
+			++programCounter;
+			break;
+		}
+	}
+
+	/*if (textWindow.IsFinished()) {
 		const GamePad gamepad = GLFWEW::Window::Instance().GetGamePad();
 		if (gamepad.buttonDown & (GamePad::A | GamePad::B | GamePad::START)) {
 			textWindow.Close();
 			isFinished = true;
 		}
-	}
+	}*/
 	textWindow.Update(deltaTime);
 }
 
