@@ -5,6 +5,7 @@
 #define EVENTSCRIPT_H_INCLUDED
 #include "TextWindow.h"
 #include <string>
+#include <variant>
 #include <vector>
 
 /**
@@ -38,7 +39,11 @@ private:
 	};
 
 	// 引数の型.
-	using Argument = std::wstring;
+	//using Argument = std::wstring;
+	using Text = std::wstring; // 文章.
+	using VariableId = int;    // 変数(の番号).
+	using Number = double;     // 数値.
+	using Argument = std::variant<Text, VariableId, Number>;
 
 	// スクリプト命令型.
 	struct Instruction {
@@ -49,10 +54,11 @@ private:
 	std::string filename;
 	//std::wstring script;
 	std::vector<Instruction> script;
-	size_t programCounter = 0;  // 次に実行する命令の位置.
+	std::vector<double> variables; // スプリクト変数.
+	size_t programCounter = 0;     // 次に実行する命令の位置.
 
-	bool isInitialized = false; // エンジンが初期化されていればtrue.
-	bool isFinished = false;    // スクリプトの実行が終了したらtrue.
+	bool isInitialized = false;    // エンジンが初期化されていればtrue.
+	bool isFinished = false;       // スクリプトの実行が終了したらtrue.
 
 	TextWindow textWindow;
 };

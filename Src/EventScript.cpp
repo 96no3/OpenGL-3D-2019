@@ -41,6 +41,10 @@ bool EventScriptEngine::Init()
 		std::cerr << "[エラー]" << __func__ << "：スクリプトエンジンの初期化に失敗.\n";
 		return false;
 	}
+
+	// スプリクト変数の初期化.
+	variables.resize(100, 0.0);
+
 	isInitialized = true;
 	return true;
 }
@@ -145,7 +149,14 @@ void EventScriptEngine::Update(float deltaTime)
 		case InstructionType::print:
 			if (!textWindow.IsOpen()) {
 				// ウィンドウが閉じているので文章を設定.
-				textWindow.Open(inst.arguments[0].c_str());
+				const auto p = std::get_if<Text>(&inst.arguments[0]);
+				if (!p) {
+					std::cerr << "[エラー]" << __func__ << "print命令の引数はText型でなくてはなりません.\n";
+					++programCounter;
+					break;
+				}
+				//textWindow.Open(inst.arguments[0].c_str());
+				textWindow.Open(p->c_str());
 			}
 			else {
 				// ウィンドウが開いていたら表示終了を待つ.表示が終了したら、キー入力を待つ.
