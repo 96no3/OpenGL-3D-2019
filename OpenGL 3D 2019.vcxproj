@@ -241,7 +241,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Res\EventScripts\OpeningScript.txt" />
+    <Text Include="Res\EventScripts\OpeningScript01.txt" />
     <Text Include="Res\EventScripts\OpeningScript00.txt" />
+    <Text Include="Res\EventScripts\OpeningScript02.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

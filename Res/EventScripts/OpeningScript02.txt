@@ -1,0 +1,25 @@
+print これは1ページ目。Enterを押すと次へ進む。
+[0] = 1
+[1] = 1
+if [0] != 0
+print これは2ページ目。
+endif
+print これは3ページ目。
+if [0] == [1]
+print 関係演算子==
+endif
+if [0] != [1]
+print 関係演算子!=
+endif
+if [0] < [1]
+print 関係演算子<
+endif
+if [0] <= [1]
+print 関係演算子<=
+endif
+if [0] > [1]
+print 関係演算子>
+endif
+if [0] >= [1]
+print 関係演算子>=
+endif

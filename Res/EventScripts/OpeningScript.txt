@@ -1,6 +1,20 @@
 print これは1ページ目。Enterを押すと次へ進む。
 [0] = 1
-if [0] == 0
+[2] = 1
+if [0] == 1
+print 1
+endif
+if [0] == [2]
+print [2] = 1
+endif
+[1] = [0] + 10
+if [1] == 11
+print 11
+endif
+[0] = [1] - [0]
+if [0] == 10
 print これは2ページ目。
 endif
+if [0] != 10
 print これは3ページ目。
+endif

@@ -16,7 +16,7 @@
 * @param arg スプリクト命令の引数.
 * @param str 設定する値を含む文字列.
 */
-void EventScriptEngine::Set(Argument& arg, const char* str) 
+void EventScriptEngine::Set(EventScriptEngine::Argument& arg, const char* str) 
 {
 	if (str[0] == '[') {
 		VariableId id;
@@ -26,7 +26,7 @@ void EventScriptEngine::Set(Argument& arg, const char* str)
 	}
 	else {
 		Number n;
-		if (sscanf(str, "%1f", &n) >= 1) {
+		if (sscanf(str, "%lf", &n) >= 1) {
 			arg = n;
 		}
 	}
@@ -38,7 +38,7 @@ void EventScriptEngine::Set(Argument& arg, const char* str)
 * @param arg スプリクト命令の引数.
 * @param str 設定する値を含む文字列.
 */
-void EventScriptEngine::SetOperator(Argument& arg, const char* str)
+void EventScriptEngine::SetOperator(EventScriptEngine::Argument& arg, const char* str)
 {
 	if (str[1] == '\0') {
 		switch (str[0])
@@ -48,6 +48,18 @@ void EventScriptEngine::SetOperator(Argument& arg, const char* str)
 			break;
 		case '>':
 			arg = Operator::greater;
+			break;
+		case '+':
+			arg = Operator::add;
+			break;
+		case '-':
+			arg = Operator::sub;
+			break;
+		case '*':
+			arg = Operator::mul;
+			break;
+		case '/':
+			arg = Operator::div;
 			break;
 		}
 	}
@@ -77,7 +89,7 @@ void EventScriptEngine::SetOperator(Argument& arg, const char* str)
 *
 * @return    引数から直接・間接に得られた値.
 */
-EventScriptEngine::Number EventScriptEngine::Get(const Argument& arg) const
+EventScriptEngine::Number EventScriptEngine::Get(const EventScriptEngine::Argument& arg) const
 {
 	if (const auto p = std::get_if<VariableId>(&arg)) {
 		return variables[*p];
@@ -160,11 +172,11 @@ bool EventScriptEngine::RunScript(const char* filename)
 	//script.resize(size);
 	//mbstowcs(&script[0], tmp.c_str(), size);
 
-	size_t lineCount = 0;          // 読み込んだ行数.
+	size_t lineCount = 0;             // 読み込んだ行数.
 	std::string line;
 	char buf[1000];
-	char a[20], b[20], op[20];     // スプリクト引数用.
-	std::vector<size_t> jumpStack; // ジャンプ先設定用.
+	char a[20], b[20], c[20], op[20]; // スプリクト引数用.
+	std::vector<size_t> jumpStack;    // ジャンプ先設定用.
 
 	while (std::getline(ifs, line)) {
 		// 先頭の空白を除去する.
@@ -181,6 +193,18 @@ bool EventScriptEngine::RunScript(const char* filename)
 			mbstowcs(&text[0], buf, size);
 			inst.type = InstructionType::print;
 			inst.arguments[0] = text;
+			script.push_back(inst);
+			continue;
+		}
+
+		// 四則演算命令を読み取る.
+		n = sscanf(line.c_str(), "[%19[^]]] = %19[^-=!<>+*/] %19[-=!<>+*/] %19[^-=!<>+*/]", a, b, op, c);
+		if (n >= 4) {
+			inst.type = InstructionType::expression;
+			inst.arguments[0] = static_cast<VariableId>(atoi(a));
+			Set(inst.arguments[1], b);
+			SetOperator(inst.arguments[2], op);
+			Set(inst.arguments[3], c);
 			script.push_back(inst);
 			continue;
 		}
@@ -254,6 +278,7 @@ void EventScriptEngine::Update(float deltaTime)
 	// 命令を実行する.
 	// 実行を中断する場合はyield変換にtrueを設定.
 	for (bool yield = false; !yield;) {
+
 		// 実行位置(programCounter)がスクリプトの命令数以上なら実行完了.
 		if (programCounter >= script.size()) {
 			isFinished = true;
@@ -283,11 +308,50 @@ void EventScriptEngine::Update(float deltaTime)
 					if (gamepad.buttonDown & (GamePad::A | GamePad::B | GamePad::START)) {
 						textWindow.Close();
 						++programCounter;
+
+						// SetVariable,GetVariableのテスト.
+						/*if (programCounter <= script.size()) {
+							double n = GetVariable(0);
+							int c = programCounter;							
+						}
+						if (programCounter == 5) {
+							SetVariable(2, 2);
+						}else if(programCounter == 10) {
+							SetVariable(0, GetVariable(2));
+						}*/
+						
 						continue;
 					}
 				}
 			}
 			yield = true;
+			break;
+
+		case InstructionType::expression:
+			if (const auto a = std::get_if<VariableId>(&inst.arguments[0])) {
+				if (const auto op = std::get_if<Operator>(&inst.arguments[2])) {
+					// 引数を取り出す.
+					const Number b = Get(inst.arguments[1]);
+					const Number c = Get(inst.arguments[3]);
+
+					switch (*op)
+					{
+					case Operator::add:
+						variables[*a] = b + c;
+						break;
+					case Operator::sub:
+						variables[*a] = b - c;
+						break;
+					case Operator::mul:
+						variables[*a] = b * c;
+						break;
+					case Operator::div:
+						variables[*a] = b / c;
+						break;
+					}
+				}				
+			}			
+			++programCounter;
 			break;
 
 		case InstructionType::assign:
@@ -372,4 +436,33 @@ void EventScriptEngine::Draw()
 bool EventScriptEngine::IsFinished() const 
 {
 	return isFinished;
+}
+
+/**
+* スクリプト変数に値を設定する.
+*
+* @param no    変数番号(0～初期化時に設定した最大数).
+* @param value 設定する値.
+*/
+void EventScriptEngine::SetVariable(int no, double value)
+{
+	if (no < 0 || no >= static_cast<int>(variables.size())) {
+		return;
+	}
+	variables[no] = value;
+}
+
+/**
+* スクリプト変数の値を取得する.
+*
+* @param no 変数番号(0～初期化時に設定した最大数).
+*
+* @return   no番の変数に設定されている値.
+*/
+double EventScriptEngine::GetVariable(int no) const 
+{
+	if (no < 0 || no >= static_cast<int>(variables.size())) {
+		return 0;
+	}
+	return variables[no];
 }

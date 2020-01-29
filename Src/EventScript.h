@@ -23,6 +23,9 @@ public:
 
 	bool IsFinished() const;
 
+	void SetVariable(int no, double value);
+	double GetVariable(int no) const;
+
 private:
 	EventScriptEngine() = default;
 	~EventScriptEngine() = default;
@@ -31,11 +34,12 @@ private:
 
 	// 命令の種類.
 	enum class InstructionType {
-		nop,      // 何もしないダミー命令.
-		print,    // 文章を表示.
-		assign,   // 変数に値を設定.
-		beginif,  // if命令の開始.
-		endif,    // if命令の終端.
+		nop,        // 何もしないダミー命令.
+		print,      // 文章を表示.
+		expression, // 演算子.
+		assign,     // 変数に値を設定.
+		beginif,    // if命令の開始.
+		endif,      // if命令の終端.
 	};
 
 	// 関係演算子.
@@ -46,6 +50,11 @@ private:
 		lessEqual,	  // <=
 		greater,	  // >
 		greaterEqual, // >=
+
+		add, // +
+		sub, // -
+		mul, // *
+		div, // /
 	};
 
 	// 引数の型.
