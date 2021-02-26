@@ -360,4 +360,9 @@
       <Filter>Res\EventScripts</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <Object Include="..\..\Models\オリジナル\unitychan.obj">
+      <Filter>Res\Models</Filter>
+    </Object>
+  </ItemGroup>
 </Project>

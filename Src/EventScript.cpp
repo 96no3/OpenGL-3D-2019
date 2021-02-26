@@ -159,6 +159,7 @@ bool EventScriptEngine::RunScript(const char* filename)
 		std::cerr << "[エラー]" << __func__ << "：スクリプトファイル" << filename << "を読み込めません.\n";
 		return false;
 	}
+
 	//std::stringstream ss;
 	//// クラスバッファオブジェクト経由でファイル全体を読み込む.
 	//ss << ifs.rdbuf();
@@ -171,6 +172,8 @@ bool EventScriptEngine::RunScript(const char* filename)
 	//const size_t size = mbstowcs(nullptr, tmp.c_str(), 0);
 	//script.resize(size);
 	//mbstowcs(&script[0], tmp.c_str(), size);
+
+	script.clear(); // 以前のスクリプトを消去.
 
 	size_t lineCount = 0;             // 読み込んだ行数.
 	std::string line;
